@@ -1,0 +1,7 @@
+aid: johnson-controls
+url: https://raw.githubusercontent.com/api-evangelist/johnson-controls/refs/heads/main/apis.yml
+modified: '2026-03-24'
+apis: []
+common:
+  - type: Website
+    url: https://www.johnson-controls.com
