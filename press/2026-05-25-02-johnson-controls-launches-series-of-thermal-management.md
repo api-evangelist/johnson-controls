@@ -1,7 +1,9 @@
 ---
 title: Johnson Controls launches series of thermal management ...
 url: https://www.prnewswire.com/news-releases/johnson-controls-launches-series-of-thermal-management-reference-design-guides-for-gigawatt-scale-ai-data-centers-302676158.html
-date: '2026-05-25'
+published: ''
+date_basis: harvested
+harvested: '2026-05-25'
 query: '"Johnson Controls" press release artificial intelligence'
 position: 2
 source: serpapi-google

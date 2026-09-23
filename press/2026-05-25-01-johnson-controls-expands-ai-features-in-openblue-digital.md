@@ -1,7 +1,9 @@
 ---
 title: Johnson Controls expands AI features in OpenBlue digital ...
 url: https://www.johnsoncontrols.com/media-center/news/press-releases/2024/11/12/johnson-controls-expands-ai-features-in-openblue
-date: '2026-05-25'
+published: '2024-11-12'
+date_basis: url-derived
+harvested: '2026-05-25'
 query: '"Johnson Controls" press release artificial intelligence'
 position: 1
 source: serpapi-google
