@@ -2,6 +2,10 @@ generated: '2026-10-13'
 method: searched
 checked:
 - https://azuremarketplace.microsoft.com/
+- https://brickschema.org/consortium/
+- https://marketing.project-haystack.org/about-us
+- https://www.bacnetinternational.net/btl/
+- https://www.knx.org/community/manufacturers
 marketplace_apps: []
 edges:
 - partner_name: Microsoft Azure Marketplace
@@ -21,3 +25,199 @@ edges:
   seller_name: Johnson Controls
   detected_by: sweep-cloud-marketplaces.py
   detected: '2026-10-13'
+- partner_name: BACnet Testing Laboratories (BTL Listed)
+  partner: null
+  partner_match: register
+  type: register
+  direction: partner-built
+  evidence: https://www.bacnetinternational.net/btl/?m=15
+  category: building automation
+  channel: standard-directory
+  relationship: standard-participant
+  contract_reference:
+    register: BTL Listing of Tested Products (bacnetinternational.net/btl)
+    spec_file: null
+    standard: BACnet (BTL)
+    role: btl-listed-manufacturer
+    registered_name: Johnson Controls Inc.
+    website: http://www.johnsoncontrols.com
+    matched_domain: johnsoncontrols.com
+    matched_by: domain
+    btl_manufacturer_ids:
+    - '15'
+    certified_products:
+    - product: BACnet Advanced Operator Workstation (B-AWS)
+      lapsed: false
+      listed_products:
+      - Facility Explorer Server
+      - Metasys Critical infrastructure Manager
+      - Mxi64
+    - product: BACnet Operator Workstation (B-OWS)
+      lapsed: false
+      listed_products:
+      - Facility Explorer 4.1 BACnet Operator Workstation - B-OWS
+      - Metasys Critical infrastructure Manager
+      - Open Data Server
+    - product: BACnet Building Controller (B-BC)
+      lapsed: false
+      listed_products:
+      - EasyIO and EasyIO Neo Series Controller and EASI series Integrated Controller Actuator
+      - Facility Explorer
+      - Facility Explorer FX80 Series Supervisory Controllers
+      - Facility Explorer FX90 Series Supervisory Controllers
+      - NAE85 Network Automation Engine (NAE),LCS85 LonWorks® Control Server (LCS)
+      - Network Automation Engine
+      - Network Automation Engine (NAE)
+      - Network Control Engine
+      - Network Integration Engine
+      - Open Application Server
+      - SNC Series of Supervisory Controllers
+      - SNE Series of Network Engines, SNC Series of Network Control Engines
+    - product: BACnet Advanced Application Controller (B-AAC)
+      lapsed: false
+      listed_products:
+      - Advanced Application Field Equipment Controller (FAC)
+      - Advanced Application Field Equipment Controller (FAC) | VAV Modular Assembly Controller (VMA)
+      - Advanced Application Programmable Controller (PCA)
+      - Advanced Application Programmable Controller (PCA) | Programmable Controller VAV (PCV)
+      - Color Terminal Equipment Controller
+      - Facility Explorer Critical Environment Controller (CCE)
+      - Facility Explorer Critical Environment Controller (CCM)
+      - Facility Explorer General Purpose Application Controller (F4-CGE)
+      - Facility Explorer General Purpose Application Controller (F4-CGM)
+      - Facility Explorer VAV Box Controller (CVM)
+      - Facility Explorer VAV Box Controller (F4-CVE)
+      - Johnson Controls Smart Equipment Unit Control Board
+    - product: BACnet Application Specific Controller (B-ASC)
+      lapsed: false
+      listed_products:
+      - A525 Series Wall Mount Refrigeration and Defrost Controllers
+      - Advanced Terminal Unit Controller
+      - Advanced Terminal Unit Controller (ATC)
+      - DR5 Refrigerated Case Controllers
+      - EasyIO Neo Series Ethernet Communication Module
+      - EasyIO Neo Series Serial Port Communication Module
+      - FMS-2000 Series Critical Environment Controllers & Monitors
+      - Facility Explorer I/O Expansion Module
+      - JBOC Communication Module BACnet MSTP
+      - MR5 Refrigerated Case Controllers
+      - Metasys I/O Expansion Module
+      - Peak IOM 16UI
+    - product: BACnet Smart Sensor (B-SS)
+      lapsed: false
+      listed_products:
+      - Network CO2 Sensor
+      - Network Sensor
+    - product: BACnet Smart Actuator (B-SA)
+      lapsed: false
+      listed_products:
+      - Input/Output Module (IOM)
+      - Programmable Controller Expansion Input/Output Module (PCX)
+    - product: BACnet Router (B-RTR)
+      lapsed: false
+      listed_products:
+      - BACnet Router
+      - Network Automation Engine (NAE)
+      - Network Control Engine
+      - SNC Series of Supervisory Controllers
+      - SNE Series of Network Engines, SNC Series of Network Control Engines
+    - product: BACnet Gateway (B-GW)
+      lapsed: false
+      listed_products:
+      - Modbus Gateway
+      - VRF Smart Gateway
+    - product: BACnet General (B-GEN)
+      lapsed: false
+      listed_products:
+      - Network Automation Engine (NAE)
+    - product: BACnet Secure Connect Hub (B-SCHUB)
+      lapsed: false
+      listed_products:
+      - Application and Data Server (ADS)
+      - Application and Data Server - Lite - A (ADS-LITE-A)
+      - Application and Data Server - Lite - E (ADS-LITE-E)
+      - Extended Application and Data Server (ADX)
+      - NAE85 Network Automation Engine (NAE),LCS85 LonWorks® Control Server (LCS)
+      - Network Automation Engine (NAE)
+      - SNC Series of Supervisory Controllers
+      - SNE Series of Network Engines, SNC Series of Network Control Engines
+    signal_note: certified_products = one entry per BACnet DEVICE PROFILE with a BTL-listed product (the product
+      type); product names are context, never a count; current listing only (archives.php superseded listings not
+      read)
+    detected_by: sweep-building-automation.py
+    detected: '2026-10-15'
+  detected_by: sweep-building-automation.py
+  first_seen: '2026-10-15'
+- partner_name: BACnet Testing Laboratories (BTL Listed)
+  partner: null
+  partner_match: register
+  type: register
+  direction: partner-built
+  evidence: https://www.bacnetinternational.net/btl/?m=15
+  category: building automation
+  channel: standard-directory
+  relationship: compatible
+  shape: bacnet
+  evidence_kind: conformance-register
+  degree: certified
+  report_only: true
+  contract_reference:
+    register: BTL Listing of Tested Products (bacnetinternational.net/btl)
+    spec_file: null
+    standard: BACnet (BTL)
+    role: btl-listed-bacnet-device
+    registered_name: Johnson Controls Inc.
+    matched_domain: johnsoncontrols.com
+    detected_by: sweep-building-automation.py
+    detected: '2026-10-15'
+  detected_by: sweep-building-automation.py
+  first_seen: '2026-10-15'
+- partner_name: KNX Association (manufacturer members)
+  partner: null
+  partner_match: register
+  type: register
+  direction: partner-built
+  evidence: https://www.knx.org/community/manufacturers
+  category: building automation
+  channel: standard-directory
+  relationship: standard-participant
+  contract_reference:
+    register: KNX Association manufacturer members (knx.org/community/manufacturers)
+    spec_file: null
+    standard: KNX (ISO/IEC 14543-3)
+    role: knx-manufacturer-member
+    registered_name: Johnson Controls International
+    website: https://www.johnsoncontrols.com
+    matched_domain: johnsoncontrols.com
+    matched_by: domain
+    signal_note: 'participation only: membership is not a product certification'
+    detected_by: sweep-building-automation.py
+    detected: '2026-10-15'
+  detected_by: sweep-building-automation.py
+  first_seen: '2026-10-15'
+- partner_name: Brick Consortium (commercial members)
+  partner: brick
+  partner_match: register
+  type: register
+  direction: partner-built
+  evidence: https://brickschema.org/consortium/
+  category: building data semantics
+  channel: standard-directory
+  relationship: standard-participant
+  contract_reference:
+    register: Brick Consortium members (brickschema.org/consortium)
+    spec_file: null
+    standard: Brick Schema
+    role: brick-commercial-member
+    registered_name: Johnson Controls
+    website: https://www.johnsoncontrols.com/
+    matched_domain: johnsoncontrols.com
+    matched_by: domain
+    signal_note: participation only
+    detected_by: sweep-building-automation.py
+    detected: '2026-10-15'
+  detected_by: sweep-building-automation.py
+  first_seen: '2026-10-15'
+source:
+- https://www.bacnetinternational.net/btl/
+- https://www.knx.org/community/manufacturers
