@@ -1,0 +1,41 @@
+slug: johnson-controls
+provider: Johnson Controls
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Manufacturing & Industrial
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Equipment
+  spec_file: johnson-controls-equipment-api-openapi.yml
+  capability_id: BC-700.20
+  capability_id_l1: BC-700
+  capability_name: Hard Facilities Management
+  confidence: 0.7
+  evidence: GET /equipment "Get equipment instances"; GET /equipment/{equipmentId}/upstreamEquipment;
+    GET /spaces/{spaceId}/equipment "Get equipment serving a space"
+  reason: 'The surface exposes the registry and topology of building equipment (HVAC and other plant)
+    and the spaces it serves, including equipment points — the operational model behind building systems
+    management, i.e. Hard Facilities Management. Not fixed-asset accounting: there is no depreciation
+    or financial attribute in evidence.'
+- tag: Equipment
+  spec_file: johnson-controls-equipment-api-openapi.yml
+  capability_id: BC-1040.40
+  capability_id_l1: BC-1040
+  capability_name: Asset Information Management
+  confidence: 0.7
+  evidence: GET /equipment  Get equipment instances; GET /equipment/{equipmentId}/upstreamEquipment  Get
+    upstream equipment; GET /equipment/tree  Get equipment tree*; GET /spaces/{spaceId}/equipment  Get
+    equipment serving a space
+  reason: 'Read access to the equipment register of a building: equipment instances, their hierarchy/upstream-downstream
+    relationships, their points and the spaces they serve. That is physical asset master/technical information
+    management. Not production or maintenance execution — no work orders or schedules appear — so the
+    Asset Information sub-capability is the specific fit.'
