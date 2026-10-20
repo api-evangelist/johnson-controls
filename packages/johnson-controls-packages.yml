@@ -1,0 +1,24 @@
+name: Johnson Controls packages
+generated: '2026-10-20'
+method: searched
+source: https://github.com/jci-metasys
+packages:
+- name: JohnsonControls.Metasys.BasicServices
+  registry: nuget
+  url: https://www.nuget.org/packages/JohnsonControls.Metasys.BasicServices/
+  language: csharp
+  official: false
+  version: 6.0.5
+  published: '2024-10-21'
+  source_repo: https://github.com/jci-metasys/basic-services-dotnet
+  note: Authored by Johnson Controls per NuGet metadata; client for the most common Metasys REST API services.
+  ownership_audit: 'registry metadata names neither the provider''s domain nor its GitHub org: official downgraded (harvest-packages.py --audit)'
+- name: MetasysRestClient
+  registry: powershell-gallery
+  url: https://www.powershellgallery.com/packages/MetasysRestClient
+  language: powershell
+  official: true
+  version: 2.4.0
+  published: '2024-09-10'
+  source_repo: https://github.com/jci-metasys/powershell-metasysrestclient
+  note: Published from the Johnson Controls jci-metasys GitHub org (author Michael Welch).

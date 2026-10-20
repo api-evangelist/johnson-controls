@@ -1,14 +1,14 @@
 aid: johnson-controls
+
 name: Johnson Controls
-description: >-
-  Johnson Controls is a global diversified technology and multi-industrial
-  leader serving customers in over 150 countries, providing products,
-  services, and solutions for buildings (HVAC, fire, security, building
-  automation), energy storage, and connected building platforms (Metasys,
-  OpenBlue). No public, self-service developer portal or OpenAPI is
-  currently published; partner and customer integrations are typically
-  delivered through the OpenBlue and Metasys product lines.
+
+description: Johnson Controls is a global diversified technology and multi-industrial leader serving customers in over 150 countries, providing
+  products, services, and solutions for buildings (HVAC, fire, security, building automation), energy storage, and connected building platforms
+  (Metasys, OpenBlue). Its developer surface is the Metasys REST API, served by each customer's own Metasys site director and documented publicly
+  (with a versioned OpenAPI reference) at jci-metasys.github.io/api-landing.
+
 type: Index
+
 deliveryModel:
   model: unknown
   open_source: false
@@ -20,6 +20,7 @@ deliveryModel:
   - none
   generated: '2026-08-28'
   method: derived
+
 accessModel:
   pricing: unknown
   onboarding: unknown
@@ -31,33 +32,1616 @@ accessModel:
   source: []
   generated: '2026-07-22'
   method: derived
+
 position: Consuming
+
 access: 3rd-Party
+
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/johnson-controls.png
+
 tags:
-  - Building Automation
-  - Energy Storage
-  - Fire & Security
-  - HVAC
-  - Smart Buildings
-  - Fortune 100
+- Building Automation
+- Energy Storage
+- Fire & Security
+- HVAC
+- Smart Buildings
+- Fortune 100
+
 created: '2026-03-24'
-modified: '2026-04-28'
-url: >-
-  https://raw.githubusercontent.com/api-evangelist/johnson-controls/refs/heads/main/apis.yml
+
+modified: '2026-10-20'
+
+url: https://raw.githubusercontent.com/api-evangelist/johnson-controls/refs/heads/main/apis.yml
+
 specificationVersion: '0.23'
-apis: []
-common:
-  - type: DomainSecurity
-    url: security/johnson-controls-domain-security.yml
-  - type: GitHubOrganization
-    url: https://github.com/johnsoncontrols
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/johnson-controls
-  - type: Website
-    url: https://www.johnsoncontrols.com/
-  - type: OpenBlue
-    url: https://www.johnsoncontrols.com/openblue
+
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
+
+common:
+- type: AgenticAccess
+  url: agentic-access/johnson-controls-agentic-access.yml
+- type: Spectral
+  url: rules/johnson-controls-rules.yml
+- type: JSONLD
+  url: json-ld/johnson-controls-context.jsonld
+- type: Vocabulary
+  url: vocabulary/johnson-controls-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/johnson-controls-data-model.yml
+- type: CLI
+  url: cli/johnson-controls-cli.yml
+- type: ChangeLog
+  url: changelog/johnson-controls-changelog.yml
+- type: Conventions
+  url: conventions/johnson-controls-conventions.yml
+- type: Compliance
+  url: https://trust.johnsoncontrols.com/
+- type: Lifecycle
+  url: lifecycle/johnson-controls-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/johnson-controls-problem-types.yml
+- type: Conformance
+  url: conformance/johnson-controls-conformance.yml
+- type: Overlay
+  url: overlays/johnson-controls-metasys-overlay.yaml
+- type: LLMsTxt
+  url: llms/johnson-controls-llms.txt
+- type: Hosts
+  url: hosts/johnson-controls-hosts.yml
+- type: IntegrationEdges
+  url: integrations/johnson-controls-integration-edges.yml
+- type: Vendors
+  url: vendors/johnson-controls-vendors.yml
+- type: SDKs
+  url: packages/johnson-controls-packages.yml
+- type: Packages
+  url: packages/johnson-controls-packages.yml
+- type: Security
+  url: https://www.johnsoncontrols.com/security
+- type: GettingStarted
+  url: https://www.johnsoncontrols.com/services-and-support/fire-maintenance-and-support/connected-sprinkler-service/onboarding
+- type: Authentication
+  url: authentication/johnson-controls-authentication.yml
+- type: TrustCenter
+  url: security/johnson-controls-trust-center.yml
+- type: DomainSecurity
+  url: security/johnson-controls-domain-security.yml
+- type: GitHubOrganization
+  url: https://github.com/johnsoncontrols
+- type: LinkedIn
+  url: https://www.linkedin.com/company/johnson-controls
+- type: Website
+  url: https://www.johnsoncontrols.com/
+- type: OpenBlue
+  url: https://www.johnsoncontrols.com/openblue
+- type: Documentation
+  url: https://jci-metasys.github.io/api-landing/
+- type: GitHubOrganization
+  url: https://github.com/jci-metasys
+- type: Support
+  url: https://www.johnsoncontrols.com/services-and-support
+- type: TermsOfService
+  url: https://www.johnsoncontrols.com/legal/terms
+- type: PrivacyPolicy
+  url: https://www.johnsoncontrols.com/trust-center/privacy
+- type: Login
+  url: https://www.johnsoncontrols.com/login
+- type: Newsroom
+  url: https://www.johnsoncontrols.com/media-center/news
+
+apis:
+- aid: johnson-controls:johnson-controls-activities-api
+  name: Johnson Controls Activities API
+  description: >-
+    This section describes the operations you can perform on activities. Activities
+
+    are a superset of all alarms and audits in a Metasys system. Use activities
+
+    operations to view audits and alarms. Apply filters to further refine the
+
+    results.
+
+
+    ## Activities Event Subscriptions
+
+
+    Subscribe for activity-related events to receive updates when activities are
+
+    created, discarded, acknowledged, or annotated.
+
+
+    #### Subscribing
+
+
+    To subscribe for activity-related events, complete the following steps:
+
+
+    1. Obtain a stream ID using the workflow outlined in the
+       [Streaming](#section/Streaming) section.
+    2. Use [Get Activities](#operation/getActivities) and include a
+       `METASYS-SUBSCRIBE` header with the stream ID.
+
+    **Note:** Any filters added to the original `GET` operation also apply the event
+
+    subscription.
+
+
+    #### Unsubscribing
+
+
+    To unsubscribe from an activities event subscription, complete the following
+
+    steps:
+
+
+    1. Get the `METASYS-SUBSCRIPTION-LOCATION` from the subscribe operation
+       response.
+    2. Issue a
+       [Delete activities subscription](#operation/deleteActivitiesSubscription)
+       request to `METASYS-SUBSCRIPTION-LOCATION`.
+
+    **See also:**
+
+
+    - [Get a stream](#operation/getStream)
+
+    - [Streaming](#tag/streaming)
+
+
+    #### Events
+
+
+    There are five event types sent by the activities subscription: acknowledged,
+
+    annotate, discard, new, and heartbeat.
+
+
+    - `activity.heartbeat` - A heartbeat event is sent to show that the subscription
+      is still alive. A heartbeat is a JSON string with the current UTC date time in
+      ISO 8601 format and is sent every 120 seconds.
+
+      <details>
+        <summary><b>Heartbeat Payload Example</b></summary>
+
+      ```json
+      {
+        "currentTime": "2021-02-16T16:21:10.23Z",
+        "subscriptionIds": ["c569a157-7315-4f32-bc8f-11607f075660"]
+      }
+      ```
+
+      </details>
+
+    - `activity.alarm.ack` - An alarm acknowledge event is sent to indicate that the
+      management status has changed to acknowledged.
+
+      <details>
+        <summary><b>Acknowledged Alarm Payload Example</b></summary>
+
+      ```json
+      {
+        "subscriptionIds": ["788fc8af-ff49-4501-b85b-e3d407a38a9e"],
+        "activity": {
+          "id": "6443a123-ddcd-47e7-9828-d872db6a7b4f",
+          "itemReference": "{hostname}:{deviceHostname}/AHU1.OA_T",
+          "objectName": "OA_T",
+          "activityManagementStatus": "acknowledged",
+          "creationTime": "2021-02-16T20:30:00Z",
+          "spaces": [
+            {
+              "id": "20b27e9a-d721-5e88-9942-85297cc57ea1",
+              "itemReference": "{hostname}:{deviceHostname}/Generic 1.Building 1.Floor 1",
+              "name": "Floor 1",
+              "spaceUrl": "https://metasys-server.example.com/api/v6/space/4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f"
+            }
+          ],
+          "equipment": [
+            {
+              "id": "4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f",
+              "itemReference": "{hostname}:{deviceHostname}/equipment.Engine1",
+              "equipmentName": "Engine1",
+              "shortName": null,
+              "equipmentUrl": "https://metasys-server.example.com/api/v6/equipment/4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f"
+            }
+          ],
+          "objectUrl": "https://metasys-server.example.com/api/v6/objects/16defc31-1333-5379-82e7-576a6f1e8b50",
+          "objectId": "16defc31-1333-5379-82e7-576a6f1e8b50",
+          "alarm": {
+            "message": "",
+            "alarmGeneratorObject": {
+              "objectReference": "{hostname}:{deviceHostname}/AHU1.OA_T.Alarm1",
+              "referencedObject": {
+                "objectUrl": "https://metasys-server.example.com/api/v6/objects/bfcc3fce-a182-53c0-a529-268f8184496b"
+              }
+            },
+            "isAckRequired": true,
+            "acknowledgedTime": "2021-02-16T20:31:02Z",
+            "type": "alarmValueEnumSet.avHiAlarm",
+            "priority": 70,
+            "category": "objectCategoryEnumSet.generalCategory",
+            "annotationsUrl": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f/annotations",
+            "self": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f",
+            "triggerValue": {
+              "item": "2.0",
+              "schema": {
+                "type": "string",
+                "metasysType": "string",
+                "units": {
+                  "id": "unitEnumSet.degF",
+                  "title": "deg F"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "effectivePermission": {
+          "id": "6443a123-ddcd-47e7-9828-d872db6a7b4f",
+          "canAcknowledge": true,
+          "canDiscard": true,
+          "canAnnotate": true
+        }
+      }
+      ```
+
+      </details>
+
+    - `activity.alarm.annotate` - An alarm annotate event is sent when an annotation
+      is added to an alarm activity, providing the information for the annotated
+      alarm.
+
+      <details>
+        <summary><b>Annotate Alarm Payload Example</b></summary>
+
+      ```json
+      {
+        "subscriptionIds": ["788fc8af-ff49-4501-b85b-e3d407a38a9e"],
+        "activity": {
+          "id": "6443a123-ddcd-47e7-9828-d872db6a7b4f",
+          "itemReference": "{hostname}:{deviceHostname}/AHU1.OA_T",
+          "objectName": "OA_T",
+          "activityManagementStatus": "pending",
+          "creationTime": "2021-02-16T20:30:00Z",
+          "spaces": [
+            {
+              "id": "20b27e9a-d721-5e88-9942-85297cc57ea1",
+              "itemReference": "{hostname}:{deviceHostname}/Generic 1.Building 1.Floor 1",
+              "name": "Floor 1",
+              "spaceUrl": "https://metasys-server.example.com/api/v6/space/4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f"
+            }
+          ],
+          "equipment": [
+            {
+              "id": "4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f",
+              "itemReference": "{hostname}:{deviceHostname}/equipment.Engine1",
+              "equipmentName": "Engine1",
+              "shortName": null,
+              "equipmentUrl": "https://metasys-server.example.com/api/v6/equipment/4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f"
+            }
+          ],
+          "objectUrl": "https://metasys-server.example.com/api/v6/objects/16defc31-1333-5379-82e7-576a6f1e8b50",
+          "objectId": "16defc31-1333-5379-82e7-576a6f1e8b50",
+          "alarm": {
+            "message": "",
+            "alarmGeneratorObject": {
+              "objectReference": "{hostname}:{deviceHostname}/AHU1.OA_T.Alarm1",
+              "referencedObject": {
+                "objectUrl": "https://metasys-server.example.com/api/v6/objects/bfcc3fce-a182-53c0-a529-268f8184496b"
+              }
+            },
+            "isAckRequired": true,
+            "acknowledgedTime": "2021-02-16T20:31:02Z",
+            "type": "alarmValueEnumSet.avHiAlarm",
+            "priority": 70,
+            "category": "objectCategoryEnumSet.generalCategory",
+            "annotationsUrl": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f/annotations",
+            "self": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f",
+            "triggerValue": {
+              "item": "2.0",
+              "schema": {
+                "type": "string",
+                "metasysType": "string",
+                "units": {
+                  "id": "unitEnumSet.degF",
+                  "title": "deg F"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "effectivePermission": {
+          "id": "6443a123-ddcd-47e7-9828-d872db6a7b4f",
+          "canAcknowledge": true,
+          "canDiscard": true,
+          "canAnnotate": true
+        }
+      }
+      ```
+
+      </details>
+
+    - `activity.alarm.discard` - An alarm discard event is sent when the management
+      status of an alarm activity changes to discarded.
+
+      <details>
+        <summary><b>Discard Alarm Payload Example</b></summary>
+
+      ```json
+      {
+        "subscriptionIds": ["788fc8af-ff49-4501-b85b-e3d407a38a9e"],
+        "activity": {
+          "id": "6443a123-ddcd-47e7-9828-d872db6a7b4f",
+          "itemReference": "{hostname}:{deviceHostname}/AHU1.OA_T",
+          "objectName": "OA_T",
+          "activityManagementStatus": "discarded",
+          "creationTime": "2021-02-16T20:30:00Z",
+          "spaces": [
+            {
+              "id": "20b27e9a-d721-5e88-9942-85297cc57ea1",
+              "itemReference": "{hostname}:{deviceHostname}/Generic 1.Building 1.Floor 1",
+              "name": "Floor 1",
+              "spaceUrl": "https://metasys-server.example.com/api/v6/space/4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f"
+            }
+          ],
+          "equipment": [
+            {
+              "id": "4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f",
+              "itemReference": "{hostname}:{deviceHostname}/equipment.Engine1",
+              "equipmentName": "Engine1",
+              "shortName": null,
+              "equipmentUrl": "https://metasys-server.example.com/api/v6/equipment/4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f"
+            }
+          ],
+          "objectUrl": "https://metasys-server.example.com/api/v6/objects/16defc31-1333-5379-82e7-576a6f1e8b50",
+          "objectId": "16defc31-1333-5379-82e7-576a6f1e8b50",
+          "alarm": {
+            "message": "",
+            "alarmGeneratorObject": {
+              "objectReference": "{hostname}:{deviceHostname}/AHU1.OA_T.Alarm1",
+              "referencedObject": {
+                "objectUrl": "https://metasys-server.example.com/api/v6/objects/bfcc3fce-a182-53c0-a529-268f8184496b"
+              }
+            },
+            "isAckRequired": true,
+            "acknowledgedTime": "2021-02-16T20:31:02Z",
+            "type": "alarmValueEnumSet.avHiAlarm",
+            "priority": 70,
+            "category": "objectCategoryEnumSet.generalCategory",
+            "annotationsUrl": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f/annotations",
+            "self": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f",
+            "triggerValue": {
+              "item": "2.0",
+              "schema": {
+                "type": "string",
+                "metasysType": "string",
+                "units": {
+                  "id": "unitEnumSet.degF",
+                  "title": "deg F"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "effectivePermission": {
+          "id": "6443a123-ddcd-47e7-9828-d872db6a7b4f",
+          "canAcknowledge": true,
+          "canDiscard": true,
+          "canAnnotate": true
+        }
+      }
+      ```
+
+      </details>
+
+    - `activity.alarm.new` - A new alarm event is sent when an alarm activity is
+      created.
+
+      <details>
+        <summary><b>New Alarm Payload Example</b></summary>
+
+      ```json
+      {
+        "subscriptionIds": ["788fc8af-ff49-4501-b85b-e3d407a38a9e"],
+        "activity": {
+          "id": "6443a123-ddcd-47e7-9828-d872db6a7b4f",
+          "itemReference": "{hostname}:{deviceHostname}/AHU1.OA_T",
+          "objectName": "OA_T",
+          "activityManagementStatus": "pending",
+          "creationTime": "2021-02-16T20:30:00Z",
+          "spaces": [
+            {
+              "id": "20b27e9a-d721-5e88-9942-85297cc57ea1",
+              "itemReference": "{hostname}:{deviceHostname}/Generic 1.Building 1.Floor 1",
+              "name": "Floor 1",
+              "spaceUrl": "https://metasys-server.example.com/api/v6/space/4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f"
+            }
+          ],
+          "equipment": [
+            {
+              "id": "4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f",
+              "itemReference": "{hostname}:{deviceHostname}/equipment.Engine1",
+              "equipmentName": "IDU1",
+              "shortName": null,
+              "equipmentUrl": "https://metasys-server.example.com/api/v6/equipment/4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f"
+            }
+          ],
+          "objectUrl": "https://metasys-server.example.com/api/v6/objects/16defc31-1333-5379-82e7-576a6f1e8b50",
+          "objectId": "16defc31-1333-5379-82e7-576a6f1e8b50",
+          "alarm": {
+            "message": "",
+            "alarmGeneratorObject": {
+              "objectReference": "{hostname}:{deviceHostname}/AHU1.OA_T.Alarm1",
+              "referencedObject": {
+                "objectUrl": "https://metasys-server.example.com/api/v6/objects/bfcc3fce-a182-53c0-a529-268f8184496b"
+              }
+            },
+            "isAckRequired": true,
+            "type": "alarmValueEnumSet.avHiAlarm",
+            "priority": 70,
+            "category": "objectCategoryEnumSet.generalCategory",
+            "annotationsUrl": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f/annotations",
+            "self": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f",
+            "triggerValue": {
+              "item": "2.0",
+              "schema": {
+                "type": "string",
+                "metasysType": "string",
+                "units": {
+                  "id": "unitEnumSet.degF",
+                  "title": "deg F"
+                }
+              }
+            },
+            "description": ""
+          }
+        },
+        "effectivePermission": {
+          "id": "6443a123-ddcd-47e7-9828-d872db6a7b4f",
+          "canAcknowledge": true,
+          "canDiscard": true,
+          "canAnnotate": true
+        }
+      }
+      ```
+
+      </details>
+
+    - `activity.audit.new` - A new audit event is sent when an audit activity is
+      created.
+
+      <details>
+        <summary><b>New Audit Payload Example</b></summary>
+
+      ```json
+      {
+        "subscriptionIds": ["7373cc85-37a5-4ad5-b703-6bc61968aa9a"],
+        "activity": {
+          "id": "128d7db4-8ab6-4232-afe1-026fe06d267f",
+          "itemReference": "{hostname}:{deviceHostname}",
+          "objectName": "MS-NAE5510-3",
+          "activityManagementStatus": "pending",
+          "creationTime": "2021-02-16T16:21:10.23Z",
+          "objectUrl": "https://metasys-server.example.com/api/v6/objects/CDAC85B9-726F-5677-9CBC-ADC77A14E79B",
+          "objectId": "cdac85b9-726f-5677-9cbc-adc77a14e79b",
+          "audit": {
+            "actionType": "auditActionTypeEnumSet.subsystemAuditActionType",
+            "status": null,
+            "preData": null,
+            "postData": {
+              "item": "10.10.198.131",
+              "schema": {
+                "type": "string",
+                "metasysType": "string"
+              }
+            },
+            "parameters": [],
+            "errorString": null,
+            "user": "MetasysSysAgent",
+            "signature": null,
+            "classLevel": "auditClassesEnumSet.userActionAuditClass",
+            "originApplication": "auditOriginAppEnumSet.systemSecurityAuditOriginApp",
+            "description": "auditTrailStringsEnumSet.atstrSecurityUserLoginSuccessful",
+            "annotationsUrl": null,
+            "self": "https://metasys-server.example.com/api/v6/audits/128d7db4-8ab6-4232-afe1-026fe06d267f"
+          }
+        },
+        "effectivePermission": {
+          "id": "128d7db4-8ab6-4232-afe1-026fe06d267f",
+          "canDiscard": true
+        }
+      }
+      ```
+
+        </details>
+
+    - `activity.audit.annotate` - An annotate audit event is sent when an annotation
+      is added to an audit activity, providing the information for the annotated
+      audit.
+
+      <details>
+        <summary><b>Annotate Audit Payload Example</b></summary>
+
+      ```json
+      {
+        "subscriptionIds": ["7373cc85-37a5-4ad5-b703-6bc61968aa9a"],
+        "activity": {
+          "id": "128d7db4-8ab6-4232-afe1-026fe06d267f",
+          "itemReference": "{hostname}:{deviceHostname}",
+          "objectName": "MS-NAE5510-3",
+          "activityManagementStatus": "pending",
+          "creationTime": "2021-02-16T16:21:10.23Z",
+          "objectUrl": "https://metasys-server.example.com/api/v6/objects/CDAC85B9-726F-5677-9CBC-ADC77A14E79B",
+          "objectId": "cdac85b9-726f-5677-9cbc-adc77a14e79b",
+          "audit": {
+            "actionType": "auditActionTypeEnumSet.subsystemAuditActionType",
+            "status": null,
+            "preData": null,
+            "postData": {
+              "item": "10.10.198.131",
+              "schema": {
+                "type": "string",
+                "metasysType": "string"
+              }
+            },
+            "parameters": [],
+            "errorString": null,
+            "user": "MetasysSysAgent",
+            "signature": null,
+            "classLevel": "auditClassesEnumSet.userActionAuditClass",
+            "originApplication": "auditOriginAppEnumSet.systemSecurityAuditOriginApp",
+            "description": "auditTrailStringsEnumSet.atstrSecurityUserLoginSuccessful",
+            "annotationsUrl": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f/annotations",
+            "self": "https://metasys-server.example.com/api/v6/audits/128d7db4-8ab6-4232-afe1-026fe06d267f"
+          }
+        },
+        "effectivePermission": {
+          "id": "128d7db4-8ab6-4232-afe1-026fe06d267f",
+          "canDiscard": true
+        }
+      }
+      ```
+
+      </details>
+
+    - `activity.audit.discard` - An audit discard event is sent when the management
+      status of an audit activity changes to discarded.
+
+      <details>
+        <summary><b>Discard Audit Payload Example</b></summary>
+
+      ```json
+      {
+        "subscriptionIds": ["7373cc85-37a5-4ad5-b703-6bc61968aa9a"],
+        "activity": {
+          "id": "128d7db4-8ab6-4232-afe1-026fe06d267f",
+          "itemReference": "{hostname}:{deviceHostname}",
+          "objectName": "MS-NAE5510-3",
+          "activityManagementStatus": "discarded",
+          "creationTime": "2021-02-16T16:21:10.23Z",
+          "objectUrl": "https://metasys-server.example.com/api/v6/objects/CDAC85B9-726F-5677-9CBC-ADC77A14E79B",
+          "objectId": "cdac85b9-726f-5677-9cbc-adc77a14e79b",
+          "audit": {
+            "actionType": "auditActionTypeEnumSet.subsystemAuditActionType",
+            "status": null,
+            "preData": null,
+            "postData": {
+              "item": "10.10.198.131",
+              "schema": {
+                "type": "string",
+                "metasysType": "string"
+              }
+            },
+            "parameters": [],
+            "errorString": null,
+            "user": "MetasysSysAgent",
+            "signature": null,
+            "classLevel": "auditClassesEnumSet.userActionAuditClass",
+            "originApplication": "auditOriginAppEnumSet.systemSecurityAuditOriginApp",
+            "description": "auditTrailStringsEnumSet.atstrSecurityUserLoginSuccessful",
+            "annotationsUrl": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f/annotations",
+            "self": "https://metasys-server.example.com/api/v6/audits/128d7db4-8ab6-4232-afe1-026fe06d267f"
+          }
+        },
+        "effectivePermission": {
+          "id": "128d7db4-8ab6-4232-afe1-026fe06d267f",
+          "canDiscard": true
+        }
+      }
+      ```
+
+      </details>
+
+    #### Filter Behavior
+
+
+    Filters supplied to an activities request limit the results to activities for
+
+    which the filters apply. When subscribing to an activities request that uses
+
+    filters, the events received are also limited to the same filter criteria.
+
+    Exceptions to this behavior occur when filtering on activity management status,
+
+    such as for `acknowledged` or `discarded` activities. You receive an update
+
+    whenever an activity management change occurs, regardless of filters, because
+
+    the change can impact the original set of activities you subscribed to. For
+
+    example, consider the following scenario:
+
+
+    - You subscribe to `acknowledged` activities and receive all acknowledged
+      activities, receiving updates for any acknowledged thereafter across the
+      stream.
+    - In this state, one of the activities in your original list is `discarded` by
+      another user.
+
+    When this occurs, you receive an `activity.alarm.discard` message for the
+
+    discarded activity even though your filters exclude activities that are
+
+    `discarded`. This is necessary so that you can properly maintain the state of
+
+    activities already received in your application.
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - activities
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-activities-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+- aid: johnson-controls:johnson-controls-alarms-api
+  name: Johnson Controls Alarms API
+  description: >-
+    Alarms alert users to potential problems identified by a Metasys system, for
+
+    example high zone temperatures. Use alarms operations to get object alarms,
+
+    network device alarms, single alarms, alarm collections, and alarm annotations.
+
+    Acknowledge or discard alarms with the edit patch operation. Filter the results
+
+    with the query parameters time, priority, type, category, acknowledgement, and
+
+    page. Sort the results by creation time and priority.
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - alarms
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-alarms-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+- aid: johnson-controls:johnson-controls-audits-api
+  name: Johnson Controls Audits API
+  description: >-
+    How to retrieve, discard, and annotate audits.
+
+
+    ### Relationships
+
+
+    Audits have relationships to other resources in the system. Find information
+
+    about the most important below.
+
+
+    - **objects**
+
+
+    When users or the system affect objects in the Metasys system, such as analog
+
+    inputs, multistate objects, or binary outputs, audits are generated. Those
+
+    "acted upon" objects then relate to those audits. That relationship is returned
+
+    as part of any audit response.
+
+
+    - **equipment instances**
+
+
+    Equipment instance associations to audits build off of the objects association
+
+    explanation. Each equipment instance can contain many points, such as Outdoor
+
+    Air Temperature, Damper Position, or Zone Setpoint. Those points map to actual
+
+    objects in Metasys, as noted above. When users or the system affect those
+
+    objects, audits are generated. If an equipment instance's point is mapped to one
+
+    of those affected objects the instance is then associated with that audit.
+
+
+    In short, an equipment instance contains points which map to Metasys objects
+
+    which are affected by an audited action.
+
+
+    - **spaces**
+
+
+    Space associations to audits build off of the equipment instance association
+
+    explanation. Equipment instances can serve spaces, such as an Air Handler Unit
+
+    (AHU) serving the floor of a building. Therefore, audits associated with a
+
+    particular equipment instance are associated to the spaces they serve.
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - audits
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-audits-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+- aid: johnson-controls:johnson-controls-authentication-api
+  name: Johnson Controls Authentication API
+  description: Operations to get and refresh an access token.
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+- aid: johnson-controls:johnson-controls-equipment-api
+  name: Johnson Controls Equipment API
+  description: >-
+    This section describes the operations you can perform on equipment. Equipment is a broad term for
+    anything that makes a building run, including boilers, chillers, air handling units, lights, meters,
+    and security systems. Use equipment operations to get equipment instances and to list equipment points.
+    Apply filters, sorting, and paging to further refine the results.
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - equipment
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-equipment-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+- aid: johnson-controls:johnson-controls-network-devices-api
+  name: Johnson Controls network devices API
+  description: >-
+    This section describes the operations you can perform on network devices.
+
+    Network devices are physical devices such as coordinators and routers that
+
+    are required for communication between hardware on a computer network. Use
+
+    network device operations to get, list, and delete network devices. Apply
+
+    filters, sorting, and paging to further refine the results.
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - network devices
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-network-devices-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+- aid: johnson-controls:johnson-controls-objects-api
+  name: Johnson Controls Objects API
+  description: >-
+    This section describes the operations you can perform on objects. Objects are
+
+    self-contained functional items in the Metasys system, for a full definition
+
+    refer to the
+
+    [Metasys System Glossary](https://docs.johnsoncontrols.com/bas/r/Metasys/en-US/Metasys-System-Glossary/11.0/O).
+
+    Use objects operations to list, create, edit, and delete objects. Apply filters,
+
+    sorting, and paging to further refine the results. Some operations accept
+
+    subscriptions, see
+
+    [Change of Value Subscriptions](#change-of-value-subscriptions).
+
+
+    ## Batch Subscriptions And Async Operations
+
+
+    ### Change of Value Subscriptions
+
+
+    Subscribe for change of value (COV) events to receive updates when attribute
+
+    values change. Currently, subscriptions are available for
+
+    [Get attribute value](#operation/getObjectAttribute) operations (individual and
+
+    batch).
+
+
+    #### Subscribing
+
+
+    To subscribe for COV events, complete the following steps:
+
+
+    1. Obtain a stream ID using the workflow outlined in the
+       [Streaming](#tag/streaming) section.
+    2. Use one of the following operations and include a `METASYS-SUBSCRIBE` header
+       with the stream ID:
+       - Single attribute: [Get attribute value](#operation/getObjectAttribute)
+       - Multiple attributes: [Batch object operations](#operation/postObjectsBatch)
+
+    **Note:** Any filters added to the original `GET` operation also apply to the event
+
+    subscription.
+
+
+    #### Unsubscribing
+
+
+    To unsubscribe from a COV event, complete the following steps:
+
+
+    1. Get the `METASYS-SUBSCRIPTION-LOCATION` from the subscribe operation
+       response.
+    2. Issue a [Delete COV subscription](#operation/deleteCOVSubscription) request
+       to `METASYS-SUBSCRIPTION-LOCATION`.
+
+    **See also:**
+
+
+    - [Get a stream](#operation/getStream)
+
+    - [Streaming](#tag/streaming)
+
+
+    #### Events
+
+
+    COV Events : There are four event types sent by the COV subscription: heartbeat,
+
+    heartbeatImproved, update, and notification.
+
+
+    ##### Heartbeat
+
+
+    `object.values.heartbeat` - A heartbeat event is sent to show that the
+
+    subscription is still alive. A heartbeat is a JSON string with the current UTC
+
+    date time in ISO 8601 format and is sent every 30 seconds.
+
+      <!-- schema is not included as the associated simple schema renders poorly
+       -->
+
+    ##### Heartbeat Improved
+
+
+    `object.values.heartbeatImproved` - Similar to `object.values.heartbeat` but
+
+    includes an array of all active subscription ids.
+
+    <SchemaDefinition schemaRef="#/components/schemas/objectsStreamValuesHeartbeatImproved" />
+
+
+    ##### COV Update
+
+
+    `object.values.update` - The client receives an update event when an attribute
+
+    value changes. This payload is similar in structure as the payload returned by
+
+    _Get attribute value_, but also includes `id` and `itemReference` of the object
+
+    to provide context for the attribute in question. The overall schema for this
+
+    payload is identical to the _Get an object_ schema (except this payload has no
+
+    `effectivePermissions` property). The payload excludes the `schema` for the
+
+    attribute by default, but it can be optionally included by using the
+
+    `includeSchema` flag on the initial subscription request.
+
+    <SchemaDefinition schemaRef="#/components/schemas/objectsStreamValuesUpdate" />
+
+
+    ##### COV Notification
+
+
+    `object.values.notification` - A notification event is sent when a value has
+
+    changed but the value is not included in the payload. This happens for some
+
+    values that are not simple scalar values. You can use this event as a trigger to
+
+    reread the attribute. In the example, even though the payload does not include
+
+    the current value, you know which object this is for (based on `id` and
+
+    `itemReference`), and you know it is the `overrideExpirationTime` attribute
+
+    based on the `attribute` property.
+
+    <SchemaDefinition schemaRef="#/components/schemas/objectsStreamValuesNotification" />
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - objects
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-objects-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+- aid: johnson-controls:johnson-controls-schemas-api
+  name: Johnson Controls Schemas API
+  description: A collection of JSON schemas for describing enumerations and object types.
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - schemas
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-schemas-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+- aid: johnson-controls:johnson-controls-spaces-api
+  name: Johnson Controls Spaces API
+  description: Operations on space-related resources.
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - spaces
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-spaces-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+- aid: johnson-controls:johnson-controls-streaming-api
+  name: Johnson Controls Streaming API
+  description: >-
+    Your Metasys system works continuously: sensors report current conditions,
+
+    algorithms make adjustments, and alarms alert operators to potential issues.
+
+    Streaming is how the Metasys API provides access to these _events_ using the
+
+    HTML standard
+
+    [server-sent events](https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events)
+
+    (SSE). For further information, refer to
+
+    [Mozilla developer guide](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events).
+
+    In this document, _Streaming_ typically refers to the Metasys feature and
+
+    _stream_ refers to the concept of the HTTP connection and the flow of data.
+
+
+    Per the standard, a server-sent event usually contains three components,
+
+    separated by newline, with the last component having a second newline to mark
+
+    the end of the event.
+
+
+    ```text
+
+    id: <event id>\n
+
+    event: <event type>\n
+
+    data: <event data>\n\n
+
+    ```
+
+
+    | Line Prefix | Explanation                                                         |
+
+    | ----------- | ------------------------------------------------------------------- |
+
+    | `id`        | ordering id to enable the "pick up where you left off" reconnection |
+
+    | `event`     | message type                                                        |
+
+    | `data`      | message payload as a JSON string                                    |
+
+
+    Example:
+
+
+    ```text
+
+    id: b6d184ee-e137-44aa-b9b1-14bc704cd25d:1\n
+
+    event: hello\n
+
+    data: b6d184ee-e137-44aa-b9b1-14bc704cd25d\n\n
+
+    ```
+
+
+    ## Getting Started
+
+
+    To get started, you first need a client. There are SSE clients available in many
+
+    languages.
+
+
+    Begin by [getting a stream](#operation/getStream). Only one stream is needed
+
+    regardless of the number of subscriptions you later create. As explained in the
+
+    documentation for getting a stream, the first event, `hello`, is a special event
+
+    because the `data` field contains your _stream ID_.
+
+
+    Some operations support the `METASYS-SUBSCRIBE` header which transforms them
+
+    from being a single request/response operations into a streaming subscription.
+
+    The value of the header is the _stream ID_ from the `data` field of the `hello`
+
+    event described above. As an example, refer to the
+
+    [Get Activities](#operation/getActivities) operation for more details about this
+
+    technique. This technique does not apply to every operation. See each
+
+    operation's description to understand its Streaming capability.
+
+
+    Not all _event_ data is currently exposed by Streaming. Future versions of the
+
+    API will add further Streaming capabilities.
+
+
+    ## Streaming Connection Maintenance
+
+
+    There are a few behaviors to be aware of if you want your stream to work beyond
+
+    the lifetime of the access token used to
+
+    [get your stream](#operation/getStream).
+
+
+    ### Keep Events Flowing After Initial Access Token Expiration
+
+
+    Recall that your access token has an expiration time. To keep the stream longer
+
+    than the lifetime of that access token, be sure to
+
+    [refresh your token](#operation/getToken) just as you would when using
+
+    non-Streaming portions of the API. Not only will you get a fresh token to use,
+
+    but internally, your stream expirations are updated to match the expiration time
+
+    of the new token.
+
+
+    ### Reconnect and Using the Current Access Token in Reconnect Requests
+
+
+    The server-sent events standard has a provision for reconnecting a lost
+
+    connection. Call the same [get a stream](#operation/getStream) operation but
+
+    also add the `Last-Event-Id` header with the `id` of the last event received.
+
+    Most clients handle this for you. Metasys continues to buffer events for at
+
+    least thirty seconds after the connection failure is detected, so you can resume
+
+    streams that experienced brief outages. If Metasys has cleaned up your buffer or
+
+    cannot find that `id` in the recently sent buffer, you will get a 204 response
+
+    per the SSE specification. Because your existing stream is not resumable, your
+
+    `Last-Event-Id` is no longer valid. The recovery path is to start anew by
+
+    calling [get a stream](#operation/getStream) without the `Last-Event-Id` and
+
+    subscribe again to data of interest.
+
+
+    One critical aspect of reconnect is ensuring that the reconnect request is done
+
+    with the current access token. As covered by
+
+    [get a stream](#operation/getStream), Streaming lets you specify the token in
+
+    either the `Authorization` header or query string. This flexibility accommodates
+
+    a variety of clients. For example, the web browser client, `EventSource`, does
+
+    not provide access to request headers, so you have to use the query string.
+
+
+    For `EventSource`, this however poses an issue because the reconnect attempt
+
+    will be done against the original URL which has a potentially outdated access
+
+    token embedded in the query string. For that reason, if you want to use a
+
+    JavaScript client, consider using the open source
+
+    [EventSource component](https://github.com/EventSource/eventsource). The Metasys
+
+    User Interface (MUI) employs this library to workaround the limitation of the
+
+    browser's `EventSource` . When using it, use the `Authorization` header instead.
+
+    Keep the options object passed to the constructor so you can update the
+
+    `Authorization` property when you refresh your access token.
+
+
+    Assuming:
+
+
+    1. Your access token is in variable `accessToken`
+
+    1. Variable `streamingUrl` is the URL for [get a stream](#operation/getStream)
+
+
+    ```javascript
+
+    const eventSourceOptions = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+
+    const eventSource = new $window.EventSourcePolyfill(
+      streamingUrl,
+      eventSourceOptions
+    );
+
+    ```
+
+
+    Before token expiration:
+
+
+    1. Get a [refreshed token](#tag/authentication/operation/getToken). Behind the
+       scenes this also refreshes you stream expirations.
+    1. Modify `eventSourceOptions` with new token like example below
+
+
+    ```javascript
+
+    eventSourceOptions.headers.Authorization = `Bearer ${newToken}`;
+
+    ```
+
+
+    ### Tips For Other Client Libraries
+
+
+    SSE clients exist in many languages. Inclusion in this section is not an
+
+    endorsement; however, if you chose one of these clients, these tips may prove
+
+    useful for ensuring the current token is used for reconnect.
+
+
+    #### C# - 3ventic EventSource
+
+
+    When using the
+
+    [3ventic EventSource for C#](https://github.com/3ventic/EvtSource) you will need
+
+    to use Reflection to update `Uri` which is a private field within the
+
+    EventSource that contains the location to [get a stream](#operation/getStream)
+
+    with the access token embedded in the query string.
+
+
+    ```csharp
+
+    public static void SetField(Object obj, String fieldName, object value)
+
+    {
+        Type type = obj.GetType();
+        FieldInfo field = type.GetField(
+            fieldName,
+            BindingFlags.NonPublic | BindingFlags.Instance
+        );
+        field.SetValue(obj, value);
+    }
+
+
+    // example usage
+
+    Reflector.SetField(eventSource, "Uri", uriWithCurrentToken);
+
+    ```
+
+
+    #### C# - LaunchDarkly EventSource
+
+
+    When using the
+
+    [LaunchDarkly EventSource for C#](https://github.com/launchdarkly/dotnet-eventsource)
+
+    you will not call the `Reset` method to attempt a reconnect. Instead, dispose of
+
+    the EventSource and then create a new instance, passing the the `LastEventId`
+
+    from the last message and the URL to [get a stream](#operation/getStream) with a
+
+    current access token embedded as a query string parameter.
+
+
+    ## Streaming Events
+
+
+    The following are types of events sent by Streaming along with example `data`
+
+    payloads for each:
+
+
+    - `hello` - Indicates Streaming connection was successful.
+
+      <details>
+        <summary><b>Example Data Payload</b></summary>
+
+      ```json
+      "b6d184ee-e137-44aa-b9b1-14bc704cd25d"
+      ```
+
+      </details>
+
+    - `heartbeat` - Indicates Streaming connection is alive.
+
+      <details>
+        <summary><b>Example Data Payload</b></summary>
+
+      ```json
+      "2021-02-16T16:21:10.23Z"
+      ```
+
+      </details>
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - streaming
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-streaming-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+- aid: johnson-controls:johnson-controls-time-series-api
+  name: Johnson Controls time series API
+  description: >-
+    This section describes the operations you can perform on time series sample
+
+    data.
+
+
+    ### Origin of Time Series data
+
+
+    The Metasys system has two locations from which time series samples can be
+
+    retrieved. The first is from the _trend_ or _log_ object, itself. Each object on
+
+    the Metasys site whose responsibility is to generate samples will have its own
+
+    _buffer_ to store them. When samples are retrieved from the `objects` endpoints,
+
+    they will be retrieved from their respective buffers. Time series operations
+
+    that work with a buffer will include "(buffer)" in their summary.
+
+
+    The second location is from the _repository_. As samples are collected in the
+
+    _trend_ or _log_ objects themselves, those objects (if configured and enabled)
+
+    have the ability to forward that information to a _repository_. The _repository_
+
+    is the location on the LAN (Local Area Network) that can receive and store
+
+    historical data from one to many Metasys sources. Samples retrieved from the
+
+    `timeSeries` endpoint are retrieved from the particular Metasys device's
+
+    repository. Time series operations that work with the repository will include
+
+    "(repository)" in their summary.
+
+
+    ## Subscription Streaming Events
+
+
+    Clients may subscribe to Objects and Network Devices streaming events. A
+
+    subscription is established by providing a `METASYS-SUBSCRIBE` header on a `GET`
+
+    operation of the `samples` resource under either the `objects` resource paths.
+
+
+    ### Events
+
+
+    The following events (with accompanying examples) are available for samples:
+
+
+    - `timeSeries.subscription.established` - Indicates when a subscription has been
+      established for `objects` samples.
+      <SchemaDefinition schemaRef="#/components/schemas/timeSeriesStreamEstablished" />
+
+    - `timeSeries.subscription.cancelled` - Indicates when a subscription has been
+      cancelled for `objects` samples.
+      <SchemaDefinition schemaRef="#/components/schemas/timeSeriesStreamCancelled" />
+
+    - `timeSeries.error` - Indicates an error occurred with regards to an active
+      samples subscription.
+      <SchemaDefinition schemaRef="#/components/schemas/timeSeriesStreamError" />
+
+    - `timeSeries.samples.update` - Indicates new samples have been generated.
+      Sample updates from multiple objects and attributes can be contained in a
+      single event (each designated by their `sampledByObjectId`, `sampledObjectId`
+      and `attribute` properties).
+      <SchemaDefinition schemaRef="#/components/schemas/timeSeriesStreamUpdate" />
+
+    - `timeSeries.heartbeat` - Indicates that time series subscription(s) are still
+      alive.
+      <SchemaDefinition schemaRef="#/components/schemas/activitiesStreamHeartbeat" />
+
+    ## Metasys-Call-Async Streaming Events
+
+
+    Clients may subscribe to Objects Samples Response streaming events. A
+
+    subscription is established by providing a `METASYS-CALL-ASYNC` header on a
+
+    `GET` operation of the `samples` resource under either the `objects` resource
+
+    paths or `POST` operation of the `samples` resource under batch operation of
+
+    times buffer. The following events (with accompanying examples) are available
+
+    for samples:
+
+
+    ### Samples Events
+
+
+    The following events (with accompanying examples) are available for async
+
+    samples:
+
+
+    - `timeSeries.samples.stream.started` - Indicates when a subscription has been
+      established for `objects` samples response.
+      <SchemaDefinition schemaRef="#/components/schemas/timeSeriesStreamEstablished" />
+    - `timeSeries.samples.stream.error` - Indicates an error occurred with regards
+      to an active samples response subscription.
+      <SchemaDefinition schemaRef="#/components/schemas/timeSeriesStreamAsyncError" />
+    - `timeSeries.samples.stream.data` - Indicates samples responses for each
+      request. Samples from multiple objects and attributes can be contained in a
+      single event (each designated by their `sampledByObjectId`, `sampledObjectId`
+      and `attribute` properties).
+      <SchemaDefinition schemaRef="#/components/schemas/timeSeriesStreamUpdate" />
+
+    - `timeSeries.samples.stream.completed` - Indicates that a streaming samples
+      response has completed successfully.
+      <SchemaDefinition schemaRef="#/components/schemas/timeSeriesStreamAsyncCompleted" />
+  humanURL: https://jci-metasys.github.io/api-landing/
+  baseURL: https://{hostname}/api/v6
+  tags:
+  - time series
+  properties:
+  - type: OpenAPI
+    url: openapi/johnson-controls-time-series-api-openapi.yml
+  - type: Documentation
+    url: https://jci-metasys.github.io/api-landing/
+  - type: GettingStarted
+    url: https://jci-metasys.github.io/api-landing/guides/quickstart
+  - type: ChangeLog
+    url: https://jci-metasys.github.io/api-landing/guides/api-changelog
+  - type: JSONSchema
+    url: json-schema/johnson-controls-activities-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-alarm-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-network-device-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-audit-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-item-schema.json
+  - type: JSONSchema
+    url: json-schema/johnson-controls-equipment-points-schema.json
+x-enrichment:
+  date: '2026-10-20'
+  status: enriched
+  artifacts_added: 12
+  pass: local-v5

@@ -1,0 +1,10 @@
+name: Metasys REST API lifecycle
+generated: '2026-10-20'
+method: searched
+source: https://jci-metasys.github.io/api-landing/guides/version-support-matrix
+versioning: URL path major version (/api/v1 ... /api/v6); each Metasys release supports a set of API versions per the version support matrix.
+version_support_matrix: https://jci-metasys.github.io/api-landing/guides/version-support-matrix
+deprecation: Matrix legend marks versions "Deprecated (supported, but may be removed in a future release)"; the v6 spec flags deprecated operations.
+deprecated_operations: [getObjectIdentifier, getEquipment, getServedByEquipment, getSpaces, getChildSpaces, getEquipmentServingSpace]
+status_page: null
+note: The API is self-hosted on each customer's Metasys site director, so there is no vendor-run status page.

@@ -1,0 +1,10 @@
+name: Johnson Controls pricing
+generated: '2026-10-20'
+method: none
+audience: business-product
+pricing_basis: none
+published: false
+delivery: {mode: self-hosted, evidence: "The Metasys REST API is served by the customer's own site director (servers https://{hostname}/api/v6)."}
+plan_count: 0
+plans: []
+note: No public pricing; the API ships with licensed Metasys installations.

@@ -1,0 +1,10 @@
+overlay: 1.0.0
+info:
+  title: Johnson Controls Metasys REST API enhancements
+  version: 1.0.0
+extends: ../openapi/_original/johnson-controls-metasys-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-provider: Johnson Controls
+    x-source: https://jci-metasys.github.io/api-landing/api/v6-16

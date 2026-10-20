@@ -1,0 +1,43 @@
+{
+  "provider": "johnson-controls",
+  "sources": [
+    "_original/metasys-api-v6-16.json",
+    "johnson-controls-metasys-openapi.yml"
+  ],
+  "outputs": [
+    "johnson-controls-activities-api-openapi.yml",
+    "johnson-controls-alarms-api-openapi.yml",
+    "johnson-controls-audits-api-openapi.yml",
+    "johnson-controls-authentication-api-openapi.yml",
+    "johnson-controls-equipment-api-openapi.yml",
+    "johnson-controls-network-devices-api-openapi.yml",
+    "johnson-controls-objects-api-openapi.yml",
+    "johnson-controls-schemas-api-openapi.yml",
+    "johnson-controls-spaces-api-openapi.yml",
+    "johnson-controls-streaming-api-openapi.yml",
+    "johnson-controls-time-series-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/johnson-controls-metasys-openapi.yml"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "metasys-api-v6-16.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "johnson-controls-metasys-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "tag 'activities' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "tag 'alarms' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "tag 'audits' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "tag 'authentication' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "tag 'equipment' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "tag 'network devices' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "tag 'objects' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "tag 'schemas' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "tag 'spaces' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "tag 'streaming' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "tag 'time series' spans 2 source specs (metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml): per-path servers applied",
+    "apis.yml register: written (+11 apis, 11 total)"
+  ],
+  "skipped": []
+}

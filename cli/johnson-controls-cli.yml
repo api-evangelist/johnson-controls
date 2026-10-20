@@ -1,0 +1,9 @@
+name: Metasys REST client (PowerShell)
+generated: '2026-10-20'
+method: searched
+source: https://github.com/jci-metasys/powershell-metasysrestclient
+description: A cross platform light weight powershell module to enable easy cli access to the Metasys REST API.
+install:
+  - Install-Module -Name MetasysRestClient
+commands: []
+note: Command surface not enumerated here; see the repository README.

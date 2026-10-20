@@ -1,0 +1,15 @@
+name: Metasys REST API conventions
+generated: '2026-10-20'
+method: searched
+source: https://jci-metasys.github.io/api-landing/guides/quickstart
+auth: 'Two-stage - POST credentials to the login endpoint (createToken) for a JWT access token, then send "Authorization: Bearer <token>"; tokens expire (default 30 minutes, at most 5 hours) and are refreshed via GET /api/refreshToken. The v6 spec also declares API-key authentication.'
+idempotency:
+  coverage: none
+  note: No Idempotency-Key header or replay protection is declared in the v6 contract or the quickstart.
+versioning: Major version in the URL path (/api/v6); see lifecycle/johnson-controls-lifecycle.yml.
+base_url: https://{hostname}/api/v6 (the customer's own Metasys site director)
+reversibility:
+  status: none
+  note: The contract has write operations (postObjects, patchObject, deleteObject, putObjectCommand, patchAlarm, deleteNetworkDevice) but no documented reversal operation or window.
+errors: errors/johnson-controls-problem-types.yml
+rate_limits: rate-limits/johnson-controls-rate-limits.yml

@@ -1,0 +1,1082 @@
+openapi: 3.2.0
+info:
+  title: Johnson Controls Spaces API
+  version: Version 6 for 16.0
+  x-logo:
+    url: source/images/logo.svg
+    href: https://jci-metasys.github.io/
+  x-releases:
+  - '14.0'
+  - '14.1'
+  - '15.0'
+  - '16.0'
+  x-revision: 'Commit ID: 4b227676a'
+  description: 'Operations tagged spaces across 2 of this provider''s published API definitions: metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{hostname}/api/v6
+  description: The base URL of all API routes
+  variables:
+    hostname:
+      default: metasys-server.example.com
+      description: This is the name of your site director device
+security:
+- Bearer-Authentication: []
+tags:
+- name: Spaces
+  description: Operations on space-related resources.
+paths:
+  /networkDevices/{networkDeviceId}/spaces:
+    get:
+      summary: Get spaces served by a network device
+      description: Retrieves the collection of spaces served by the specified network device. A space is served by a network device when any equipment instance serving the space defines points that map to an attribute of any object contained on the network device.
+      operationId: getDeviceSpaces
+      parameters:
+      - $ref: '#/components/parameters/networkDeviceId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/spacesSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/spaces'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/deviceSpaces'
+      tags:
+      - Spaces
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/spaces \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/spaces\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/spaces\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/spaces'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/spaces', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/spaces\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/spaces\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /equipment/{equipmentId}/spaces:
+    get:
+      summary: Get spaces served by an equipment instance
+      description: Retrieves the collection of spaces served by the specified equipment instance.
+      operationId: getEquipmentSpaces
+      parameters:
+      - $ref: '#/components/parameters/equipmentId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/spacesSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/spaces'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/equipmentSpaces'
+      tags:
+      - Spaces
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /spaces:
+    get:
+      summary: Get spaces
+      description: 'This operation is deprecated starting with Metasys Release 15.0. Use
+
+        Get spaces tree instead.
+
+
+        Retrieves the collection of spaces.'
+      operationId: getSpaces
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/parameters_type'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/spacesSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/spaces'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/spaces'
+                spaces_15:
+                  $ref: '#/components/examples/spaces_15'
+      tags:
+      - Spaces
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/spaces \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/spaces\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/spaces\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /spaces'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/spaces', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/spaces\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/spaces\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /spaces/{spaceId}:
+    get:
+      summary: Get a single space
+      description: Retrieves the specified space.
+      operationId: getSpace
+      parameters:
+      - $ref: '#/components/parameters/spaceId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/schemas_space'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/space'
+                spaces_15:
+                  $ref: '#/components/examples/space_15'
+        '403':
+          description: The client is not authorized to modify or delete this space.
+          content:
+            application/vnd.metasysapi.v6:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+        '404':
+          description: Provided identifier does not match any known space
+          content:
+            application/vnd.metasysapi.v6:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+      tags:
+      - Spaces
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6 \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /spaces/{spaceId}/spaces:
+    get:
+      summary: Get space children
+      description: 'This operation is deprecated starting with Metasys Release 15.0. Use
+
+        Get spaces subtree instead.
+
+
+        Retrieves the collection of spaces that are located within the specified
+
+        space.'
+      operationId: getChildSpaces
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/spaceId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/spacesSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/spaces'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/childSpaces'
+      tags:
+      - Spaces
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /spaces/tree:
+    get:
+      summary: Get spaces tree*
+      description: 'RELEASES: 15.0 and later
+
+
+        Retrieves the spaces tree starting at the root to the specified depth.'
+      operationId: getSpacesTreeRoot
+      tags:
+      - Spaces
+      parameters:
+      - $ref: '#/components/parameters/parameters_depth'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/spacesInTree'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/spaces-tree-root'
+      x-releases:
+        implementedAt: '15.0'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/spaces/tree \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/spaces/tree\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/spaces/tree\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /spaces/tree'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/spaces/tree', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/spaces/tree\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/spaces/tree\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /spaces/tree/{spaceId}:
+    get:
+      summary: Get spaces subtree*
+      description: 'RELEASES: 15.0 and later
+
+
+        Retrieves the section of the spaces tree starting with a root at the
+
+        specified tree.'
+      operationId: getSpaceTreeChildren
+      tags:
+      - Spaces
+      parameters:
+      - name: spaceId
+        description: The space to fetch
+        schema:
+          type: string
+        example: a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e
+        in: path
+      - $ref: '#/components/parameters/parameters_depth'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/spacesInTree'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/spaces-tree-children'
+      x-releases:
+        implementedAt: '15.0'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/spaces/tree/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/spaces/tree/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/spaces/tree/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /spaces/tree/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/spaces/tree/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/spaces/tree/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/spaces/tree/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+components:
+  parameters:
+    networkDeviceId:
+      name: networkDeviceId
+      description: The identifier of a network device.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: d9bf66bd-22f8-425b-82a4-44ba153d79c7
+    parameters_depth:
+      name: depth
+      in: query
+      example: 1
+      schema:
+        type: integer
+        default: 1
+        maximum: 5
+      description: 'Specifies the depth of the tree to return. A depth of 0 returns only the the
+
+        specified space.
+
+        '
+    page:
+      name: page
+      in: query
+      description: The page number of items to return.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      example: 1
+    pageSize:
+      name: pageSize
+      in: query
+      description: The maximum number of items to return in the response.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 100
+      example: 100
+    parameters_type:
+      name: type
+      in: query
+      description: 'Type of space to return.
+
+
+
+        The acceptable values for this parameter come from the `spaceTypesEnumSet` enumeration.
+
+        Only the long name of the space type (for example, `spaceTypesEnumSet.building` instead of `building`) is accepted.
+
+        Find the definition of `spaceTypesEnumSet` at the relative URL of `/schemas/enums/spaceTypesEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      schema:
+        type: string
+      example: spaceTypesEnumSet.building
+      x-metasysType: enum
+      x-metasysEnum: spaceTypesEnumSet
+    equipmentId:
+      name: equipmentId
+      in: path
+      description: The identifier of the equipment instance.
+      required: true
+      schema:
+        type: string
+      example: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+    spaceId:
+      name: spaceId
+      description: The identifier of a space.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+    spacesSort:
+      name: sort
+      in: query
+      description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+      schema:
+        type: string
+        default: name
+        enum:
+        - itemReference
+        - -itemReference
+        - name
+        - -name
+        - typeId
+        - -typeId
+      example: name
+  schemas:
+    spacesInTree:
+      type: object
+      properties:
+        items:
+          type: array
+          description: Collection of spaces.
+          items:
+            $ref: '#/components/schemas/spaceInTree'
+        self:
+          type: string
+          description: A link to this space tree.
+          format: uri
+      required:
+      - items
+      - self
+    spaces:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: Collection of spaces.
+          items:
+            $ref: '#/components/schemas/schemas_space'
+        next:
+          type:
+          - string
+          - 'null'
+          description: A link to the next page of results.
+          format: uri
+        previous:
+          type:
+          - string
+          - 'null'
+          description: A link to the previous page of results.
+          format: uri
+        self:
+          type: string
+          description: A link to this space collection.
+          format: uri
+      required:
+      - total
+      - items
+      - next
+      - previous
+      - self
+    schemas_space:
+      type: object
+      title: Space
+      properties:
+        id:
+          type: string
+          description: The identifier of the space.
+        name:
+          type: string
+          description: The name of the space.
+        type:
+          type: string
+          description: 'The type of the space.
+
+
+            The values for this property come from the `spaceTypesEnumSet` enumeration.
+
+            Find the definition of `spaceTypesEnumSet` at the relative URL of `/schemas/enums/spaceTypesEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysEnum: spaceTypesEnumSet
+        self:
+          type: string
+          description: A link to the space.
+          format: uri
+        parentUrl:
+          type:
+          - string
+          - 'null'
+          description: A link to the parent space of the space. This value is null if the space is the root space.
+          format: uri
+        spacesUrl:
+          type: string
+          description: A link to the collection spaces that are children of the space.
+          format: uri
+        equipmentUrl:
+          type: string
+          description: A link to the collection of equipment serving this space.
+          format: uri
+        networkDevicesUrl:
+          type: string
+          format: uri
+          description: A link to the collection of network devices which host points defined on equipment serving this space.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the space.
+        description:
+          x-releases:
+            implementedAt: '15.0'
+          type: string
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            The description of the space.'
+        area:
+          x-releases:
+            implementedAt: '15.0'
+          type:
+          - integer
+          - 'null'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            The area of the space as measured in square meters.
+
+            '
+        areaUnits:
+          x-releases:
+            implementedAt: '15.0'
+          type:
+          - string
+          - 'null'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            The units of the area.
+
+
+            The values for this property come from the `areaUnitEnumSet` enumeration.
+
+            Find the definition of `areaUnitEnumSet` at the relative URL of `/schemas/enums/areaUnitEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysEnum: areaUnitEnumSet
+      required:
+      - id
+      - itemReference
+      - name
+      - type
+      - self
+      - parentUrl
+      - spacesUrl
+      - equipmentUrl
+      - networkDevicesUrl
+    spaceInTree:
+      type: object
+      title: Space
+      properties:
+        id:
+          type: string
+          description: The identifier of the space.
+        name:
+          type: string
+          description: The name of the space.
+        type:
+          type: string
+          description: 'The type of the space.
+
+
+            The values for this property come from the `spaceTypesEnumSet` enumeration.
+
+            Find the definition of `spaceTypesEnumSet` at the relative URL of `/schemas/enums/spaceTypesEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysEnum: spaceTypesEnumSet
+        self:
+          type: string
+          description: A link to the space.
+          format: uri
+        parentUrl:
+          type:
+          - string
+          - 'null'
+          description: A link to the parent space of the space. This value is null if the space is the root space.
+          format: uri
+        spacesUrl:
+          type: string
+          description: A link to the collection spaces that are children of the space.
+          format: uri
+        equipmentUrl:
+          type: string
+          description: A link to the collection of equipment serving this space.
+          format: uri
+        networkDevicesUrl:
+          type: string
+          format: uri
+          description: A link to the collection of network devices which host points defined on equipment serving this space.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the space.
+        items:
+          type: array
+          description: Collection of spaces.
+          items:
+            $ref: '#/components/schemas/spaceInTree'
+        hasChild:
+          type: boolean
+          description: 'This space has spaces that it contains.
+
+            '
+      required:
+      - id
+      - itemReference
+      - name
+      - type
+      - self
+      - parentUrl
+      - spacesUrl
+      - equipmentUrl
+      - networkDevicesUrl
+    errorMessage:
+      title: Error
+      description: A general error of the API.
+      type: object
+      additionalProperties: false
+      properties:
+        statusName:
+          type: string
+          description: 'A Metasys specific status code. The format of this code is variable. If
+
+            the value is _unqualified_ ({enumValue}, e.g. "attributeNotFound"), then
+
+            the display text associated to the code comes from the `statusEnumSet`
+
+            available at `/schemas/enums/statusEnumSet`. If the value is qualified
+
+            with just an enumeration ("{enumeration}.{member}", e.g.
+
+            "statusEnumSet.attributeNotFound"), then the display text comes from the
+
+            enumeration schema available at `/schemas/enums/{enumeration}`. If the
+
+            value is qualified with a namespace
+
+            ("{namespace}:{enumeration}.{member}", e.g.
+
+            "api.diagram:error.saveFailed"), then the display text is the
+
+            responsibility of the client.
+
+            '
+        message:
+          type: string
+          description: The display string message that correlates to `statusName`.
+        details:
+          type:
+          - object
+          - 'null'
+          description: 'An object containing specific details to the type of error. Each type of
+
+            error may have different detail properties and value types.
+
+            '
+        innerError:
+          allOf:
+          - description: 'An error that is more detail or a cause of the containing error.
+
+              This allows for a recursive error structure which a client can
+
+              digest to as much detail as they understand. This is mutually
+
+              exclusive with `innerErrors`.
+
+              '
+          - $ref: '#/components/schemas/errorMessage'
+        innerErrors:
+          description: 'A collection of errors that is more detail or causes of the containing
+
+            error. This allows for a recursive error structure which a client can
+
+            digest to as much detail as they understand. This is mutually exclusive
+
+            with `innerError`.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/errorMessage'
+  examples:
+    deviceSpaces:
+      summary: Space Collection
+      description: A page of spaces.
+      value:
+        total: 1
+        items:
+        - id: bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+          itemReference: '{hostname}:{deviceHostname}/Campus'
+          name: Campus
+          type: spaceTypesEnumSet.generic
+          self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+          parentUrl: null
+          spacesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/spaces?pageSize=100&page=1&sort=name
+    equipmentSpaces:
+      summary: Space Collection
+      description: A page of spaces.
+      value:
+        total: 1
+        items:
+        - id: bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+          itemReference: '{hostname}:{deviceHostname}/Campus'
+          name: Campus
+          type: spaceTypesEnumSet.generic
+          self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+          parentUrl: null
+          spacesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces?pageSize=100&page=1&sort=name
+    spaces-tree-root:
+      summary: Spaces as tree
+      description: The spaces are returned in a tree structure. Child spaces are nested under their parents.
+      value:
+        self: https://metasys-server.example.com/api/v6/spaces/tree
+        items:
+        - id: a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e
+          name: Campus
+          type: spaceTypesEnumSet.generic
+          itemReference: '{hostname}:{deviceHostname}/Campus'
+          self: https://metasys-server.example.com/api/v6/spaces/ff6eeb43-5652-53eb-bf42-55559f2abd85
+          parentUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e
+          spacesUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e/equipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e/networkDevices
+          hasChild: true
+          items:
+          - id: 8f14e45f-ea31-4c66-9b65-dc4f5f8d96d4
+            name: Building 1
+            type: spaceTypesEnumSet.building
+            itemReference: '{hostname}:{deviceHostname}/Campus.Building1'
+            self: https://metasys-server.example.com/api/v6/spaces/8f14e45f-ea31-4c66-9b65-dc4f5f8d96d4
+            parentUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e
+            spacesUrl: https://metasys-server.example.com/api/v6/spaces/8f14e45f-ea31-4c66-9b65-dc4f5f8d96d4/spaces
+            equipmentUrl: https://metasys-server.example.com/api/v6/spaces/8f14e45f-ea31-4c66-9b65-dc4f5f8d96d4/equipment
+            networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/8f14e45f-ea31-4c66-9b65-dc4f5f8d96d4/networkDevices
+            hasChild: true
+            items: []
+          - id: c9eb1f04-4e8a-4b3f-8d7e-8d2b7a0b89e0
+            name: Building 2
+            type: spaceTypesEnumSet.building
+            itemReference: '{hostname}:{deviceHostname}/Campus.Building2'
+            self: https://metasys-server.example.com/api/v6/spaces/c9eb1f04-4e8a-4b3f-8d7e-8d2b7a0b89e0
+            parentUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e
+            spacesUrl: https://metasys-server.example.com/api/v6/spaces/c9eb1f04-4e8a-4b3f-8d7e-8d2b7a0b89e0/spaces
+            equipmentUrl: https://metasys-server.example.com/api/v6/spaces/c9eb1f04-4e8a-4b3f-8d7e-8d2b7a0b89e0/equipment
+            networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/c9eb1f04-4e8a-4b3f-8d7e-8d2b7a0b89e0/networkDevices
+            hasChild: true
+            items: []
+    space_15:
+      x-releases:
+        implementedAt: '15.0'
+      summary: A single space (release 15.0 or later)
+      value:
+        id: bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+        itemReference: '{hostname}:{deviceHostname}/Campus'
+        name: Campus
+        type: spaceTypesEnumSet.generic
+        self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+        parentUrl: null
+        spacesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces
+        equipmentUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment
+        networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices
+        description: Campus Description
+        area: 103
+        areaUnits: areaUnitEnumSet.areaUnitSquareMeters
+    spaces_15:
+      x-releases:
+        implementedAt: '15.0'
+      summary: Space Collection (release 15.0 or later)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        A page of spaces.'
+      value:
+        total: 1
+        items:
+        - id: bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+          itemReference: '{hostname}:{deviceHostname}/Campus'
+          name: Campus
+          type: spaceTypesEnumSet.generic
+          self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+          parentUrl: null
+          spacesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices
+          description: Campus Description
+          area: 103
+          areaUnits: areaUnitEnumSet.areaUnitSquareMeters
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/spaces?pageSize=100&page=1&sort=name
+    space:
+      summary: A single space
+      value:
+        id: bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+        itemReference: '{hostname}:{deviceHostname}/Campus'
+        name: Campus
+        type: spaceTypesEnumSet.generic
+        self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+        parentUrl: null
+        spacesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces
+        equipmentUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment
+        networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices
+    spaces:
+      summary: Space Collection
+      description: A page of spaces.
+      value:
+        total: 1
+        items:
+        - id: bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+          itemReference: '{hostname}:{deviceHostname}/Campus'
+          name: Campus
+          type: spaceTypesEnumSet.generic
+          self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+          parentUrl: null
+          spacesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/spaces?pageSize=100&page=1&sort=name
+    childSpaces:
+      summary: Space Collection
+      description: A page of spaces.
+      value:
+        total: 1
+        items:
+        - id: ca8fbdbb-8e44-41fd-a765-da18de80a8f1
+          itemReference: '{hostname}:{deviceHostname}/Campus.Building'
+          name: Building
+          type: spaceTypesEnumSet.building
+          self: https://metasys-server.example.com/api/v6/spaces/ca8fbdbb-8e44-41fd-a765-da18de80a8f1
+          parentUrl: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+          spacesUrl: https://metasys-server.example.com/api/v6/spaces/ca8fbdbb-8e44-41fd-a765-da18de80a8f1/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/spaces/ca8fbdbb-8e44-41fd-a765-da18de80a8f1/equipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/ca8fbdbb-8e44-41fd-a765-da18de80a8f1/networkDevices
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/spaces?pageSize=100&page=1&sort=name
+    spaces-tree-children:
+      summary: Spaces as tree
+      description: The spaces are returned in a tree structure. Child spaces are nested under their parents.
+      value:
+        self: https://metasys-server.example.com/api/v6/spaces/tree/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e
+        items:
+        - id: a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e
+          name: Campus
+          type: spaceTypesEnumSet.generic
+          itemReference: '{hostname}:{deviceHostname}/Campus'
+          self: https://metasys-server.example.com/api/v6/spaces/ff6eeb43-5652-53eb-bf42-55559f2abd85
+          parentUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e
+          spacesUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e/equipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e/networkDevices
+          hasChild: true
+          items:
+          - id: 8f14e45f-ea31-4c66-9b65-dc4f5f8d96d4
+            name: Building 1
+            type: spaceTypesEnumSet.building
+            itemReference: '{hostname}:{deviceHostname}/Campus.Building1'
+            self: https://metasys-server.example.com/api/v6/spaces/8f14e45f-ea31-4c66-9b65-dc4f5f8d96d4
+            parentUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e
+            spacesUrl: https://metasys-server.example.com/api/v6/spaces/8f14e45f-ea31-4c66-9b65-dc4f5f8d96d4/spaces
+            equipmentUrl: https://metasys-server.example.com/api/v6/spaces/8f14e45f-ea31-4c66-9b65-dc4f5f8d96d4/equipment
+            networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/8f14e45f-ea31-4c66-9b65-dc4f5f8d96d4/networkDevices
+            hasChild: true
+            items: []
+          - id: c9eb1f04-4e8a-4b3f-8d7e-8d2b7a0b89e0
+            name: Building 2
+            type: spaceTypesEnumSet.building
+            itemReference: '{hostname}:{deviceHostname}/Campus.Building2'
+            self: https://metasys-server.example.com/api/v6/spaces/c9eb1f04-4e8a-4b3f-8d7e-8d2b7a0b89e0
+            parentUrl: https://metasys-server.example.com/api/v6/spaces/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e
+            spacesUrl: https://metasys-server.example.com/api/v6/spaces/c9eb1f04-4e8a-4b3f-8d7e-8d2b7a0b89e0/spaces
+            equipmentUrl: https://metasys-server.example.com/api/v6/spaces/c9eb1f04-4e8a-4b3f-8d7e-8d2b7a0b89e0/equipment
+            networkDevicesUrl: https://metasys-server.example.com/api/v6/spaces/c9eb1f04-4e8a-4b3f-8d7e-8d2b7a0b89e0/networkDevices
+            hasChild: true
+            items: []
+  securitySchemes:
+    Bearer-Authentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Most of the calls in the API use bearer token authentication. What this
+
+        means is that these requests require an `Authorization` header to be set to
+
+        a value with the following format: `Bearer: {accessToken}`. Use the
+
+        [`/login`](#operation/createToken) operation to request an `accessToken`. An
+
+        example of the full header would look like the following:
+
+        `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...`.
+
+
+        **Note:** This example access token is truncated.
+
+
+        The expiration time of the access token is based on the user''s Metasys
+
+        profile.
+
+        '
+    API-Key-Authentication:
+      type: apiKey
+      in: query
+      name: access_token
+      description: 'The [Streaming operation](#operation/getStream) is the only operation to use
+
+        API key authentication, because web browsers do not allow setting custom
+
+        headers when initiating Server Sent Event connections.
+
+        '
+x-refined-from:
+- metasys-api-v6-16.json
+- johnson-controls-metasys-openapi.yml
+x-servers:
+  apps:
+    url: https://{hostname}/apps
+    description: The base url for accessing APIs of non-core applications
+    variables:
+      hostname:
+        default: metasys-server.example.com
+        description: This is the name of your site

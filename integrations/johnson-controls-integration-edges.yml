@@ -1,11 +1,23 @@
-generated: '2026-10-13'
+generated: '2026-10-20'
 method: searched
+source:
+- https://www.bacnetinternational.net/btl/
+- https://www.knx.org/community/manufacturers
+- https://zapier.com/apps/johnson-controls/integrations
+- https://n8n.io/integrations/johnson-controls/
+- https://composio.dev/toolkits/johnson-controls
+- https://monid.ai/tools/johnson-controls
 checked:
 - https://azuremarketplace.microsoft.com/
 - https://brickschema.org/consortium/
 - https://marketing.project-haystack.org/about-us
 - https://www.bacnetinternational.net/btl/
 - https://www.knx.org/community/manufacturers
+- https://composio.dev/toolkits/johnson-controls
+- https://monid.ai/tools/johnson-controls
+- https://n8n.io/integrations/johnson-controls/
+- https://zapier.com/apps/johnson-controls/integrations
+summary: null
 marketplace_apps: []
 edges:
 - partner_name: Microsoft Azure Marketplace
@@ -145,7 +157,7 @@ edges:
       type); product names are context, never a count; current listing only (archives.php superseded listings not
       read)
     detected_by: sweep-building-automation.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-building-automation.py
   first_seen: '2026-10-15'
 - partner_name: BACnet Testing Laboratories (BTL Listed)
@@ -169,7 +181,7 @@ edges:
     registered_name: Johnson Controls Inc.
     matched_domain: johnsoncontrols.com
     detected_by: sweep-building-automation.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-building-automation.py
   first_seen: '2026-10-15'
 - partner_name: KNX Association (manufacturer members)
@@ -192,7 +204,7 @@ edges:
     matched_by: domain
     signal_note: 'participation only: membership is not a product certification'
     detected_by: sweep-building-automation.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-building-automation.py
   first_seen: '2026-10-15'
 - partner_name: Brick Consortium (commercial members)
@@ -215,9 +227,7 @@ edges:
     matched_by: domain
     signal_note: participation only
     detected_by: sweep-building-automation.py
-    detected: '2026-10-15'
+    detected: '2026-10-19'
   detected_by: sweep-building-automation.py
   first_seen: '2026-10-15'
-source:
-- https://www.bacnetinternational.net/btl/
-- https://www.knx.org/community/manufacturers
+templates: []

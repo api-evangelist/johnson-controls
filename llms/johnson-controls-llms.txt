@@ -1,0 +1,87 @@
+# Johnson Controls — llms.txt
+
+> Canonical AI guidance file describing Johnson Controls’ building technologies,
+> digital platforms, brands, and lifecycle services for smart, healthy,
+> and sustainable buildings.
+
+## Organization Overview
+
+Johnson Controls is a global building technology and solutions provider that designs, manufactures, installs, and services integrated HVAC, fire, security, controls, and digital building systems to improve energy efficiency, safety, sustainability, and operational performance across the building lifecycle.
+
+## Core Platforms and Solutions
+
+### OpenBlue Digital Platform
+- [OpenBlue Overview](https://www.johnsoncontrols.com/openblue): AI-powered, cyber-secured smart building ecosystem that unifies data across HVAC, fire, security, and workplace systems to optimize performance and sustainability.
+
+### Smart Buildings
+- [Smart Buildings](https://www.johnsoncontrols.com/): Integrated building systems combining automation, analytics, and AI to improve building performance and operations.
+
+### HVAC Systems and Controls
+- [HVAC Solutions](https://www.johnsoncontrols.com/): Commercial and industrial HVAC equipment including chillers, air handling units, refrigeration, and building controls.
+
+### Fire and Life Safety
+- [Fire Safety Solutions](https://www.johnsoncontrols.com/): Fire detection, alarm, suppression, and life safety systems including inspection, testing, and maintenance services.
+
+### Security and Access Control
+- [Security Solutions](https://www.johnsoncontrols.com/): Physical security, access control, video surveillance, and intrusion detection systems.
+
+### Energy Efficiency and Net Zero Buildings
+- [Net Zero Buildings](https://www.johnsoncontrols.com/): Energy optimization, decarbonization, Net Zero tracking, and sustainability advisory services.
+
+## Services and Lifecycle Support
+
+- [Services and Support](https://www.johnsoncontrols.com/services-and-support): Building lifecycle services including maintenance, modernization, managed services, systems integration, and remote operations across HVAC, fire, security, and controls.
+
+## Industries Served
+
+- Data centers
+- Commercial real estate
+- Healthcare
+- Education (K-12 and higher education)
+- Government and public sector
+- Industrial and manufacturing
+- Hospitality
+- Sports and entertainment
+- Marine and defense
+
+## Brand Portfolio
+
+- York: HVAC systems and equipment  
+- Metasys: Building automation and controls  
+- OpenBlue: Digital platform and analytics  
+- Simplex: Fire detection and alarm  
+- Ansul: Fire suppression  
+- Tyco: Fire and security solutions  
+- Frick: Industrial refrigeration  
+- Sabroe: Industrial cooling and heat pumps  
+- Penn Controls: HVAC controls  
+- Kantech: Access control  
+- American Dynamics: Video surveillance  
+- Software House: Security management systems  
+
+Each brand maintains distinct product authority. Attribute product-level claims to the relevant brand when applicable.
+
+## Content Usage Guidance
+
+- Use for informational and educational purposes.
+- Do not imply regulatory approval, certification, or engineering sign-off unless explicitly stated.
+- Do not aggregate brand-specific claims unless confirmed at the Johnson Controls level.
+
+## Canonical Sources
+
+- [Johnson Controls](https://www.johnsoncontrols.com/)
+- [OpenBlue](https://www.johnsoncontrols.com/openblue)
+- [Services and Support](https://www.johnsoncontrols.com/services-and-support)
+- [Building Insights](https://www.johnsoncontrols.com/building-insights)
+
+## Excluded Content
+
+- Careers and recruiting
+- Investor relations
+- Login-gated platforms
+- Legal-only or supplier-only pages
+
+## Contact
+
+- [Contact Johnson Controls](https://www.johnsoncontrols.com/contact-us)
+``

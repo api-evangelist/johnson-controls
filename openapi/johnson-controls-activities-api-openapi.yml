@@ -1,0 +1,2149 @@
+openapi: 3.2.0
+info:
+  title: Johnson Controls Activities API
+  version: Version 6 for 16.0
+  x-logo:
+    url: source/images/logo.svg
+    href: https://jci-metasys.github.io/
+  x-releases:
+  - '14.0'
+  - '14.1'
+  - '15.0'
+  - '16.0'
+  x-revision: 'Commit ID: 4b227676a'
+  description: 'Operations tagged activities across 2 of this provider''s published API definitions: metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{hostname}/api/v6
+  description: The base URL of all API routes
+  variables:
+    hostname:
+      default: metasys-server.example.com
+      description: This is the name of your site director device
+security:
+- Bearer-Authentication: []
+tags:
+- name: Activities
+  description: 'This section describes the operations you can perform on activities. Activities
+
+    are a superset of all alarms and audits in a Metasys system. Use activities
+
+    operations to view audits and alarms. Apply filters to further refine the
+
+    results. ## Activities Event Subscriptions
+
+
+    Subscribe for activity-related events to receive updates when activities are
+
+    created, discarded, acknowledged, or annotated. #### Subscribing
+
+
+    To subscribe for activity-related events, complete the following steps:
+
+
+    1. Obtain a stream ID using the workflow outlined in the
+
+    Streaming section. 2. Use Get Activities and include a
+
+    `METASYS-SUBSCRIBE` header with the stream ID. **Note:** Any filters added to the original `GET` operation also apply the event
+
+    subscription. #### Unsubscribing
+
+
+    To unsubscribe from an activities event subscription, complete the following
+
+    steps:
+
+
+    1. Get the `METASYS-SUBSCRIPTION-LOCATION` from the subscribe operation
+
+    response. 2. Issue a
+
+    Delete activities subscription
+
+    request to `METASYS-SUBSCRIPTION-LOCATION`. **See also:**
+
+
+    - Get a stream
+
+    - Streaming
+
+
+    #### Events
+
+
+    There are five event types sent by the activities subscription: acknowledged,
+
+    annotate, discard, new, and heartbeat. - `activity.heartbeat` - A heartbeat event is sent to show that the subscription
+
+    is still alive. A heartbeat is a JSON string with the current UTC date time in
+
+    ISO 8601 format and is sent every 120 seconds. Heartbeat Payload Example
+
+
+    ```json
+
+    {
+
+    "currentTime": "2021-02-16T16:21:10.23Z",
+
+    "subscriptionIds": ["c569a157-7315-4f32-bc8f-11607f075660"]
+
+    }
+
+    ```
+
+
+    - `activity.alarm.ack` - An alarm acknowledge event is sent to indicate that the
+
+    management status has changed to acknowledged. Acknowledged Alarm Payload Example
+
+
+    ```json
+
+    {
+
+    "subscriptionIds": ["788fc8af-ff49-4501-b85b-e3d407a38a9e"],
+
+    "activity": {
+
+    "id": "6443a123-ddcd-47e7-9828-d872db6a7b4f",
+
+    "itemReference": "{hostname}:{deviceHostname}/AHU1.OA_T",
+
+    "objectName": "OA_T",
+
+    "activityManagementStatus": "acknowledged",
+
+    "creationTime": "2021-02-16T20:30:00Z",
+
+    "spaces": [
+
+    {
+
+    "id": "20b27e9a-d721-5e88-9942-85297cc57ea1",
+
+    "itemReference": "{hostname}:{deviceHostname}/Generic 1.Building 1.Floor 1",
+
+    "name": "Floor 1",
+
+    "spaceUrl": "https://metasys-server.example.com/api/v6/space/4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f"
+
+    }
+
+    ],
+
+    "equipment": [
+
+    {
+
+    "id": "4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f",
+
+    "itemReference": "{hostname}:{deviceHostname}/equipment.Engine1",
+
+    "equipmentName": "Engine1",
+
+    "shortName": null,
+
+    "equipmentUrl": "https://metasys-server.example.com/api/v6/equipment/4e0df8ec-c641-5fd0-9ed6-f2d980b1d26f"
+
+    }
+
+    ],
+
+    "objectUrl": "https://metasys-server.example.com/api/v6/objects/16defc31-1333-5379-82e7-576a6f1e8b50",
+
+    "objectId": "16defc31-1333-5379-82e7-576a6f1e8b50",
+
+    "alarm": {
+
+    "message": "",
+
+    "alarmGeneratorObject": {
+
+    "objectReference": "{hostname}:{deviceHostname}/AHU1.OA_T.Alarm1",
+
+    "referencedObject": {
+
+    "objectUrl": "https://metasys-server.example.com/api/v6/objects/bfcc3fce-a182-53c0-a529-268f8184496b"
+
+    }
+
+    },
+
+    "isAckRequired": true,
+
+    "acknowledgedTime": "2021-02-16T20:31:02Z",
+
+    "type": "alarmValueEnumSet.avHiAlarm",
+
+    "priority": 70,
+
+    "category": "objectCategoryEnumSet.generalCategory",
+
+    "annotationsUrl": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f/annotations",
+
+    "self": "https://metasys-server.example.com/api/v6/alarms/6443a123-ddcd-47e7-9828-d872db6a7b4f",
+
+    "triggerValue": {
+
+    "item": "2.0",
+
+    "schema": {
+
+    "type": "string",
+
+    "metasysType": "string",
+
+    "units": {
+
+    "id": "unitEnumSet.degF",
+
+    "title": "deg F"
+
+    }
+
+    }
+
+    },
+
+    "description": ""
+
+    }
+
+    },
+
+    "effectivePermission": {
+
+    "id": "6443a123-ddcd-47e7-9828-d872db6a7b4f",
+
+    "canAcknowledge": true,
+
+    "canDiscard": true,
+
+    "canAnnotate": true
+
+    }
+
+    }
+
+    ```
+
+
+    - `activity.alarm.annotate` - An alarm annotate event is sent when an annotation
+
+    is added to an alarm activity, providing the information for the annotated
+
+    alarm.'
+paths:
+  /activities:
+    get:
+      summary: List activities
+      description: Retrieves a collection of activities.
+      operationId: getActivities
+      parameters:
+      - $ref: '#/components/parameters/activityType'
+      - $ref: '#/components/parameters/activitiesIncludeDiscarded'
+      - $ref: '#/components/parameters/continuationToken'
+      - $ref: '#/components/parameters/activitiesSort'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/equipment'
+      - $ref: '#/components/parameters/object'
+      - $ref: '#/components/parameters/space'
+      - $ref: '#/components/parameters/priorityRange'
+      - $ref: '#/components/parameters/type'
+      - $ref: '#/components/parameters/includeAcknowledged'
+      - $ref: '#/components/parameters/activitiesIncludeAcknowledgementRequired'
+      - $ref: '#/components/parameters/activitiesIncludeAcknowledgementNotRequired'
+      - $ref: '#/components/parameters/category'
+      - $ref: '#/components/parameters/originApplication'
+      - $ref: '#/components/parameters/classLevel'
+      - $ref: '#/components/parameters/actionType'
+      - $ref: '#/components/parameters/user'
+      - $ref: '#/components/parameters/metasysSubscribe'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/activities'
+              examples:
+                tenActivities:
+                  $ref: '#/components/examples/first-two-activities'
+                twoActivities15:
+                  $ref: '#/components/examples/first-two-activities15'
+          headers:
+            METASYS-SUBSCRIPTION-LOCATION:
+              description: The location of the newly created subscription.
+              schema:
+                type: string
+                format: uri
+              example: https://metasys-server.example.com/api/v6/_GROUP_NAME_/streams/72d4ee80-e324-4922-b0ec-1425079d892a/subscriptions/538f00be-5788-4f68-a60e-45a14356c7ef
+              required: false
+      tags:
+      - Activities
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url 'https://metasys-server.example.com/api/v6/activities?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit' \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/activities?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/activities?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod "/activities?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit"'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/activities?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/activities?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/activities?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /activities/batch:
+    post:
+      tags:
+      - Activities
+      summary: Batch operations
+      operationId: postActivitiesBatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              batchDiscard:
+                summary: Discard
+                description: 'A request to discard multiple activities (2 audits and 2 alarms).
+
+                  One audit request and one alarm request include annotation text
+
+                  and the other requests do not.
+
+                  '
+                value:
+                  method: PATCH
+                  requests:
+                  - id: '1'
+                    requestUrl: https://metasys-server.example.com/api/v6/audits/3e19d8d8-bb2b-5302-8283-781dcff2b969
+                    body:
+                      activityManagementStatus: discarded
+                      annotationText: Issue resolved
+                  - id: '2'
+                    requestUrl: https://metasys-server.example.com/api/v6/audits/865c6e69-9725-5641-83ed-71447b766a30
+                    body:
+                      activityManagementStatus: discarded
+                  - id: '3'
+                    requestUrl: https://metasys-server.example.com/api/v6/alarms/79751f7a-c86a-5a45-8e0e-99a7fd23bdc6
+                    body:
+                      activityManagementStatus: discarded
+                      annotationText: Issue resolved
+                  - id: '4'
+                    requestUrl: https://metasys-server.example.com/api/v6/alarms/7d97c328-fae1-569b-a559-964215b9e007
+                    body:
+                      activityManagementStatus: discarded
+              batchAnnotate:
+                summary: Annotate
+                description: 'A request to annotate multiple audit activities.
+
+                  '
+                value:
+                  method: POST
+                  requests:
+                  - id: '1'
+                    requestUrl: https://metasys-server.example.com/api/v6/audits/3e19d8d8-bb2b-5302-8283-781dcff2b969/annotations
+                    body:
+                      text: Issue resolved
+                  - id: '2'
+                    requestUrl: https://metasys-server.example.com/api/v6/audits/865c6e69-9725-5641-83ed-71447b766a30/annotations
+                    body:
+                      text: Issue resolved
+              batchAcknowledge:
+                summary: Acknowledge
+                description: 'A request to acknowledge two alarm activities.
+
+                  '
+                value:
+                  method: PATCH
+                  requests:
+                  - id: '1'
+                    requestUrl: https://metasys-server.example.com/api/v6/alarms/79751f7a-c86a-5a45-8e0e-99a7fd23bdc6
+                    body:
+                      activityManagementStatus: acknowledged
+                      annotationText: Issue resolved
+                  - id: '2'
+                    requestUrl: https://metasys-server.example.com/api/v6/alarms/7d97c328-fae1-569b-a559-964215b9e007
+                    body:
+                      activityManagementStatus: acknowledged
+                      annotationText: Issue resolved
+            schema:
+              type: object
+              example:
+                method: PATCH
+                requests:
+                - id: '1'
+                  requestUrl: https://metasys-server.example.com/api/v6/audits/3e19d8d8-bb2b-5302-8283-781dcff2b969
+                  body:
+                    activityManagementStatus: discarded
+                    annotationText: Issue resolved
+                - id: '2'
+                  requestUrl: https://metasys-server.example.com/api/v6/audits/865c6e69-9725-5641-83ed-71447b766a30
+                  body:
+                    activityManagementStatus: discarded
+                - id: '3'
+                  requestUrl: https://metasys-server.example.com/api/v6/alarms/79751f7a-c86a-5a45-8e0e-99a7fd23bdc6
+                  body:
+                    activityManagementStatus: discarded
+                    annotationText: Issue resolved
+                - id: '4'
+                  requestUrl: https://metasys-server.example.com/api/v6/alarms/7d97c328-fae1-569b-a559-964215b9e007
+                  body:
+                    activityManagementStatus: discarded
+              required:
+              - method
+              - requests
+              properties:
+                method:
+                  type: string
+                  description: The HTTP method to use for each request.
+                  oneOf:
+                  - enum:
+                    - PATCH
+                  - enum:
+                    - POST
+                  - enum:
+                    - GET
+                    x-releases:
+                      implementedAt: '15.0'
+                requests:
+                  type: array
+                  description: A collection of entries that represent the operations to invoke.
+                  items:
+                    type: object
+                    required:
+                    - id
+                    - requestUrl
+                    properties:
+                      id:
+                        type: string
+                        description: A client supplied unique identifier for this request. The `id` values supplied by the client will be used to uniquely identify the responses that correspond to each request.
+                      requestUrl:
+                        type: string
+                        format: uri-reference
+                        description: "An absolute URL to a resource within either `audits` or\n`alarms`. Here are the possibilities.\n\n- _An audit:_ Used when discarding an audit (for example,\n  `https://metasys-server.example.com/api/v6/audits/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e`).\n- _Annotations for an audit:_ Used when adding an\n  annotation to an audit (for example,\n  `https://metasys-server.example.com/api/v6/audits/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e/annotations`).\n- _An alarm:_ Used when acknowledging or discarding an\n  alarm (for example,\n  `https://metasys-server.example.com/api/v6/alarms/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e`).\n- _Annotations for an alarm:_ Used when adding an\n  annotation to an alarm (for example,\n  `https://metasys-server.example.com/api/v6/alarms/a2649aa8-f3eb-569e-ac7e-cb97a45d7b0e/annotations`).\n\n**Note:** In all of the examples the URL references `audits`\nor `alarms` and not `activities`.\n"
+                      body:
+                        type: object
+                        description: A body that is appropriate for the specified operation.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                type: object
+                readOnly: true
+                required:
+                - responses
+                properties:
+                  responses:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - status
+                      properties:
+                        id:
+                          type: string
+                          description: One of the client-supplied unique request identifiers from the request. This identifier is used to match the response to the correct operation in the request.
+                        status:
+                          type: integer
+                          description: "The HTTP Status code returned for the corresponding\noperation. Beside the\n[standard HTTP status codes](#section/Validation), the\nfollowing status codes may also be returned:\n\n- 400: Bad request. Changing the state of an activity\n  may fail for a few reasons:\n  - The request contains annotation text but the\n    associated object is validated. Activity generated\n    for a validated object doesn't support an\n    `annotationText` property in the request.\n"
+                        body:
+                          oneOf:
+                          - type: string
+                          - type: object
+                          - $ref: '#/components/schemas/standardErrorMessage'
+                          description: 'The response body for the corresponding operation.
+
+
+                            <!-- The body can vary. Some errors have no body even
+
+                            though it would be helpful. Others include a .Net aspnet MVC binding error.
+
+                            That has a CR written on it and I''d rather not document it until the CR has been triaged.
+
+                            see G4CR-8556 which has a comment that docs may need updating based on triage. -->
+
+                            '
+              examples:
+                batchDiscardResponse:
+                  summary: Batch response
+                  description: 'This is an example response to a batch request. Two of the
+
+                    operations succeeded and two of them failed.
+
+                    '
+                  value:
+                    responses:
+                    - id: '1'
+                      status: 204
+                    - id: '2'
+                      status: 400
+                    - id: '3'
+                      status: 204
+                    - id: '4'
+                      status: 400
+      description: 'Used to invoke multiple activity operations in a single HTTP request. In this
+
+        version of the API, the only activity-related operations that can be used in a
+
+        batch are listed below.
+
+
+        **See also**
+
+
+        - Edit an audit
+
+        - Add audit annotation
+
+        - Edit an alarm'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request POST \\\n  --url https://metasys-server.example.com/api/v6/activities/batch \\\n  --header \"Authorization: Bearer $accessToken\" \\\n  --header 'Content-Type: application/json' \\\n  --data '{\"method\":\"PATCH\",\"requests\":[{\"id\":\"1\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/audits/3e19d8d8-bb2b-5302-8283-781dcff2b969\",\"body\":{\"activityManagementStatus\":\"discarded\",\"annotationText\":\"Issue resolved\"}},{\"id\":\"2\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/audits/865c6e69-9725-5641-83ed-71447b766a30\",\"body\":{\"activityManagementStatus\":\"discarded\"}},{\"id\":\"3\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/alarms/79751f7a-c86a-5a45-8e0e-99a7fd23bdc6\",\"body\":{\"activityManagementStatus\":\"discarded\",\"annotationText\":\"Issue resolved\"}},{\"id\":\"4\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/alarms/7d97c328-fae1-569b-a559-964215b9e007\",\"body\":{\"activityManagementStatus\":\"discarded\"}}]}'"
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/activities/batch\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .WithHeader(\"Content-Type\", \"application/json\")\n    .PostStringAsync(\"{\\\"method\\\":\\\"PATCH\\\",\\\"requests\\\":[{\\\"id\\\":\\\"1\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/audits/3e19d8d8-bb2b-5302-8283-781dcff2b969\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\",\\\"annotationText\\\":\\\"Issue resolved\\\"}},{\\\"id\\\":\\\"2\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/audits/865c6e69-9725-5641-83ed-71447b766a30\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\"}},{\\\"id\\\":\\\"3\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/alarms/79751f7a-c86a-5a45-8e0e-99a7fd23bdc6\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\",\\\"annotationText\\\":\\\"Issue resolved\\\"}},{\\\"id\\\":\\\"4\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/alarms/7d97c328-fae1-569b-a559-964215b9e007\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\"}}]}\");"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/activities/batch\" `\n  -Method Post `\n  -Body '{\"method\":\"PATCH\",\"requests\":[{\"id\":\"1\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/audits/3e19d8d8-bb2b-5302-8283-781dcff2b969\",\"body\":{\"activityManagementStatus\":\"discarded\",\"annotationText\":\"Issue resolved\"}},{\"id\":\"2\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/audits/865c6e69-9725-5641-83ed-71447b766a30\",\"body\":{\"activityManagementStatus\":\"discarded\"}},{\"id\":\"3\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/alarms/79751f7a-c86a-5a45-8e0e-99a7fd23bdc6\",\"body\":{\"activityManagementStatus\":\"discarded\",\"annotationText\":\"Issue resolved\"}},{\"id\":\"4\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/alarms/7d97c328-fae1-569b-a559-964215b9e007\",\"body\":{\"activityManagementStatus\":\"discarded\"}}]}' `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n    'Content-Type' = 'application/json'\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /activities/batch `\n  -Method Post `\n  -Body '{\"method\":\"PATCH\",\"requests\":[{\"id\":\"1\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/audits/3e19d8d8-bb2b-5302-8283-781dcff2b969\",\"body\":{\"activityManagementStatus\":\"discarded\",\"annotationText\":\"Issue resolved\"}},{\"id\":\"2\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/audits/865c6e69-9725-5641-83ed-71447b766a30\",\"body\":{\"activityManagementStatus\":\"discarded\"}},{\"id\":\"3\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/alarms/79751f7a-c86a-5a45-8e0e-99a7fd23bdc6\",\"body\":{\"activityManagementStatus\":\"discarded\",\"annotationText\":\"Issue resolved\"}},{\"id\":\"4\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/alarms/7d97c328-fae1-569b-a559-964215b9e007\",\"body\":{\"activityManagementStatus\":\"discarded\"}}]}'"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n  'Content-Type': 'application/json',\n};\n\nconst response = await axiosClient.post(\n  '/activities/batch',\n  '{\"method\":\"PATCH\",\"requests\":[{\"id\":\"1\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/audits/3e19d8d8-bb2b-5302-8283-781dcff2b969\",\"body\":{\"activityManagementStatus\":\"discarded\",\"annotationText\":\"Issue resolved\"}},{\"id\":\"2\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/audits/865c6e69-9725-5641-83ed-71447b766a30\",\"body\":{\"activityManagementStatus\":\"discarded\"}},{\"id\":\"3\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/alarms/79751f7a-c86a-5a45-8e0e-99a7fd23bdc6\",\"body\":{\"activityManagementStatus\":\"discarded\",\"annotationText\":\"Issue resolved\"}},{\"id\":\"4\",\"requestUrl\":\"https://metasys-server.example.com/api/v6/alarms/7d97c328-fae1-569b-a559-964215b9e007\",\"body\":{\"activityManagementStatus\":\"discarded\"}}]}', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/activities/batch\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\" ,\n    \"Content-Type\": \"application/json\"\n}\npayload = \"{\\\"method\\\":\\\"PATCH\\\",\\\"requests\\\":[{\\\"id\\\":\\\"1\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/audits/3e19d8d8-bb2b-5302-8283-781dcff2b969\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\",\\\"annotationText\\\":\\\"Issue resolved\\\"}},{\\\"id\\\":\\\"2\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/audits/865c6e69-9725-5641-83ed-71447b766a30\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\"}},{\\\"id\\\":\\\"3\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/alarms/79751f7a-c86a-5a45-8e0e-99a7fd23bdc6\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\",\\\"annotationText\\\":\\\"Issue resolved\\\"}},{\\\"id\\\":\\\"4\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/alarms/7d97c328-fae1-569b-a559-964215b9e007\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\"}}]}\"\n\nconn.request(\"POST\", url, payload, headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/activities/batch\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .header(\"content-type\", \"application/json\")\n    .method(\"POST\", HttpRequest.BodyPublishers.ofString(\"{\\\"method\\\":\\\"PATCH\\\",\\\"requests\\\":[{\\\"id\\\":\\\"1\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/audits/3e19d8d8-bb2b-5302-8283-781dcff2b969\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\",\\\"annotationText\\\":\\\"Issue resolved\\\"}},{\\\"id\\\":\\\"2\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/audits/865c6e69-9725-5641-83ed-71447b766a30\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\"}},{\\\"id\\\":\\\"3\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/alarms/79751f7a-c86a-5a45-8e0e-99a7fd23bdc6\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\",\\\"annotationText\\\":\\\"Issue resolved\\\"}},{\\\"id\\\":\\\"4\\\",\\\"requestUrl\\\":\\\"https://metasys-server.example.com/api/v6/alarms/7d97c328-fae1-569b-a559-964215b9e007\\\",\\\"body\\\":{\\\"activityManagementStatus\\\":\\\"discarded\\\"}}]}\"))\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /activities/streams/{streamId}/subscriptions/{subscriptionId}:
+    delete:
+      summary: Delete activities subscription
+      description: Deletes a subscription to the activities resource.
+      operationId: deleteActivitiesSubscription
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/subscriptionId'
+      responses:
+        '200':
+          description: The subscription was successfully deleted.
+      tags:
+      - Activities
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request DELETE \\\n  --url https://metasys-server.example.com/api/v6/activities/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5 \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/activities/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .DeleteAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/activities/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\" `\n  -Method Delete `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /activities/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5 `\n  -Method Delete"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.delete(\n  '/activities/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/activities/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"DELETE\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/activities/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"DELETE\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+components:
+  parameters:
+    classLevel:
+      name: classLevel
+      in: query
+      description: 'Filter by list of class levels. The class level of an audit indicates the
+
+        class or family the audit belongs to. Typically, each level of audit
+
+        provides additional detail about the system, with Diagnostic audits being
+
+        the most verbose.
+
+
+        The Enabled Audit Level attribute (`attributeEnumSet.auditEnabledClasLev`)
+
+        determines which audit levels the system generates. Therefore, be aware that
+
+        there will be no audits to return if the Enabled Audit Level attribute is
+
+        set too low to generate audits at the desired class level in this filter.
+
+        This attribute is set per device (for audits generated on that device).
+
+
+
+        The acceptable values for the elements of this parameter come from the `auditClassesEnumSet` enumeration.
+
+        Only the long name of the class level (for example, `auditClassesEnumSet.userActionAuditClass` instead of `userActionAuditClass`) is accepted.
+
+        Find the definition of `auditClassesEnumSet` at the relative URL of `/schemas/enums/auditClassesEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      examples:
+        singleClass:
+          summary: Single Level
+          value:
+          - auditClassesEnumSet.userActionAuditClass
+        multipleClasses:
+          summary: Multiple levels
+          value:
+          - auditClassesEnumSet.userActionAuditClass
+          - auditClassesEnumSet.systemErrorAuditClass
+      x-metasysEnum: auditClassesEnumSet
+      schema:
+        type: array
+        items:
+          type: string
+          x-metasysType: enum
+          x-metasysEnum: auditClassesEnumSet
+    activitiesIncludeAcknowledgementNotRequired:
+      name: includeAcknowledgementNotRequired
+      in: query
+      description: 'Determines whether activities which can not be acknowledged are included in
+
+        the results. When the value is `true` then the results will include
+
+        activities which cannot be acknowledged. When the value is `false` then the
+
+        results will not include activities which cannot be acknowledged.
+
+
+        The use of this parameter implies a filter of `activityType=alarm` and the
+
+        results will not include any audits.
+
+        '
+      example: true
+      schema:
+        type: boolean
+        default: true
+    endTime:
+      name: endTime
+      in: query
+      description: Only include results generated on or before this date-time.
+      schema:
+        type: string
+        format: date-time
+      example: '2018-05-21T13:58:20.243Z'
+    category:
+      name: category
+      in: query
+      description: 'The authorization category of the requested activities.
+
+
+
+        The acceptable values for the elements of this parameter come from the `objectCategoryEnumSet` enumeration.
+
+        Only the long name of the object category (for example, `objectCategoryEnumSet.hvacCategory` instead of `hvacCategory`) is accepted.
+
+        Find the definition of `objectCategoryEnumSet` at the relative URL of `/schemas/enums/objectCategoryEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      examples:
+        singleCategory:
+          summary: HVAC category
+          value:
+          - objectCategoryEnumSet.hvacCategory
+        multiplesCategories:
+          summary: Multiple Categories
+          value:
+          - objectCategoryEnumSet.hvacCategory
+          - objectCategoryEnumSet.fireCategory
+      x-metasysEnum: objectCategoryEnumSet
+      schema:
+        type: array
+        items:
+          type: string
+          x-metasysType: enum
+          x-metasysEnum: objectCategoryEnumSet
+    object:
+      name: object
+      in: query
+      description: Filter by list of object identifiers.
+      example:
+      - 06d77c63-6357-467a-a306-5e1ab3eb3aa7
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+    originApplication:
+      name: originApplication
+      in: query
+      description: 'Filter by list of origin applications. The origin application property
+
+        indicates which application in Metasys generated the audit message.
+
+
+
+        The acceptable values for the elements of this parameter come from the `auditOriginAppEnumSet` enumeration.
+
+        Only the long name of the origin application (for example, `auditOriginAppEnumSet.deviceManagerAuditOriginApp` instead of `deviceManagerAuditOriginApp`) is accepted.
+
+        Find the definition of `auditOriginAppEnumSet` at the relative URL of `/schemas/enums/auditOriginAppEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      examples:
+        singleOrigin:
+          summary: Single Origin
+          value:
+          - auditOriginAppEnumSet.deviceManagerAuditOriginApp
+        multipleOrigins:
+          summary: Multiple Origins
+          value:
+          - auditOriginAppEnumSet.deviceManagerAuditOriginApp
+          - auditOriginAppEnumSet.siteServicesAuditOriginApp
+      x-metasysEnum: auditOriginAppEnumSet
+      schema:
+        type: array
+        items:
+          type: string
+          x-metasysType: enum
+          x-metasysEnum: auditOriginAppEnumSet
+    actionType:
+      name: actionType
+      in: query
+      description: 'Filter by list of action types. The action type property indicates the user
+
+        or system action performed.
+
+
+
+        The acceptable values for the elements of this parameter come from the `auditActionTypeEnumSet` enumeration.
+
+        Only the long name of the action type (for example, `auditActionTypeEnumSet.writeAuditActionType` instead of `writeAuditActionType`) is accepted.
+
+        Find the definition of `auditActionTypeEnumSet` at the relative URL of `/schemas/enums/auditActionTypeEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      examples:
+        singleAction:
+          summary: Single Action Type
+          value:
+          - auditActionTypeEnumSet.writeAuditActionType
+        multipleActions:
+          summary: Multiple Action Types
+          value:
+          - auditActionTypeEnumSet.writeAuditActionType
+          - auditActionTypeEnumSet.commandAuditActionType
+      x-metasysEnum: auditActionTypeEnumSet
+      schema:
+        type: array
+        items:
+          type: string
+          x-metasysType: enum
+          x-metasysEnum: auditActionTypeEnumSet
+    space:
+      name: space
+      in: query
+      description: Filter by list of space identifiers.
+      example:
+      - 214f52d1-0c56-4a29-a690-abe5656d1647
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+    equipment:
+      name: equipment
+      in: query
+      description: Filter by list of equipment identifiers.
+      example:
+      - b7ed8b3e-cb95-410d-aaa7-37158852c398
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+    priorityRange:
+      name: priorityRange
+      in: query
+      description: Includes only results within the specified alarm priority range, from 0 to 255 inclusive.
+      schema:
+        type: string
+        pattern: ^\d+,\d+$
+      example: 0,255
+    activitiesSort:
+      name: sort
+      in: query
+      description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+      schema:
+        type: string
+        default: creationTime
+        enum:
+        - creationTime
+        - -creationTime
+        - priority
+        - -priority
+      example: creationTime
+    activityType:
+      name: activityType
+      in: query
+      description: 'Limit the activities returned to a specific type
+
+        '
+      example:
+      - alarm
+      schema:
+        type: array
+        items:
+          type: string
+          maxItems: 2
+          enum:
+          - alarm
+          - audit
+    activitiesIncludeDiscarded:
+      name: includeDiscarded
+      in: query
+      description: "Determines whether discarded activities will be included in the results or\nbe the only type of activity in the results. Discarded activities are those\nfor which the `activityManagementStatus` is `discarded`.\n\nThis parameter can produce 3 different types of results.\n\n- `true` - Return only discarded activities in the response.\n- `false` - Do not include any discarded activities in the response.\n- _missing_ - (default) Discarded status is ignored; both discarded and\n  non-discarded activities are returned.\n"
+      example: false
+      schema:
+        type: boolean
+    metasysSubscribe:
+      name: METASYS-SUBSCRIBE
+      in: header
+      description: 'If present, subscribes the client for streaming events associated with the
+
+        resource. The value of this header is a stream id obtained by opening a
+
+        stream with _Get a stream_. The response will have a
+
+        `METASYS-SUBSCRIPTION-LOCATION` header which identifies the created
+
+        subscription.
+
+
+        **See also:**
+
+
+        - [Get a stream](#operation/getStream)
+
+        '
+      required: false
+      schema:
+        type: string
+      example: 40e47e37-0f24-4101-8e1d-de96af4b648b
+    activitiesIncludeAcknowledgementRequired:
+      name: includeAcknowledgementRequired
+      in: query
+      description: 'Determines whether activities which can be acknowledged are included in the
+
+        results. When the value is `true`, activities which can be acknowledged will
+
+        be included in the results. When `false`, activities which can be
+
+        acknowledged will not be included in the results.
+
+
+        The use of this parameter implies a filter of `activityType=alarm` and the
+
+        results will not include any audits.
+
+        '
+      example: true
+      schema:
+        type: boolean
+        default: true
+    streamId:
+      name: streamId
+      in: path
+      required: true
+      description: 'The stream identifier that contains the subscription. This is the unique
+
+        identifier for the client''s stream obtained via `GET /stream`.
+
+        '
+      schema:
+        type: string
+      example: 32cfddc0-411f-5b9e-9a6d-442cb62fecbb
+    type:
+      name: type
+      in: query
+      description: 'Limits the alarms returned to specified types.
+
+
+
+        The acceptable values for the elements of this parameter come from the `alarmValueEnumSet` enumeration.
+
+        Only the long name of the alarm value (for example, `alarmValueEnumSet.avHighLimit` instead of `avHighLimit`) is accepted.
+
+        Find the definition of `alarmValueEnumSet` at the relative URL of `/schemas/enums/alarmValueEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      examples:
+        multiple:
+          summary: Multiple Types
+          value:
+          - alarmValueEnumSet.avHighLimit
+          - alarmValueEnumSet.avLowLimit
+          x-use-in-snippets: true
+      x-metasysEnum: alarmValueEnumSet
+      schema:
+        type: array
+        items:
+          type: string
+          maxItems: 100
+          x-metasysType: enum
+          x-metasysEnum: alarmValueEnumSet
+    subscriptionId:
+      name: subscriptionId
+      in: path
+      required: true
+      description: 'The identifier of the subscription to act upon. This is the unique
+
+        identifier to the subscription for a specific resource or type of event.
+
+        This value is found as the last parameter of a
+
+        `METASYS-SUBSCRIPTION-LOCATION` header returned for the original
+
+        subscription request.
+
+        '
+      schema:
+        type: string
+      example: 626e5ac3-506d-4017-bb8f-973f1c54ddb5
+    continuationToken:
+      name: continuationToken
+      in: query
+      description: Provide a token from a previous request to fetch the next set of results. Ignored for streaming subscriptions.
+      schema:
+        type: string
+      example: eyJhdWRpdCI6eyJpZCI6IjgOTQ2NjUzLTlmM...
+    includeAcknowledged:
+      name: includeAcknowledged
+      in: query
+      description: "Determines whether acknowledged alarms will be included in the results or be\nthe only type of alarm in the results. Acknowledged alarms are those which\nhave an `acknowledgedTime` value set.\n\nThis parameter can produce 3 different types of results.\n\n- `true` - Return only acknowledged alarms in the response.\n- `false` - Do not include any acknowledged alarms in the response.\n- _missing_ - (default) Acknowledged status is ignored; both acknowledged\n  and non-acknowledged alarms are returned.\n"
+      example: false
+      schema:
+        type: boolean
+    user:
+      name: user
+      in: query
+      description: 'Filter by list of users. The user property indicates which user initiated
+
+        the action being audited.
+
+        '
+      examples:
+        singleUser:
+          summary: Single User
+          value:
+          - metasysuser
+        multipleUsers:
+          summary: Multiple Users
+          value:
+          - metasysuser
+          - johnsmith
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+    startTime:
+      name: startTime
+      in: query
+      description: Only include results generated on or after this date-time.
+      schema:
+        type: string
+        format: date-time
+      example: '2018-05-21T13:58:20.243Z'
+  schemas:
+    standardErrorMessage:
+      title: Standard Error
+      description: A general error of the API.
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'A Metasys specific status code. The format of this code is variable. It
+
+            uses namespace/qualified format for `statusName` values. If the value is
+
+            qualified with just an enumeration
+
+            ("{namespace}:{enumeration}.{member}", e.g.
+
+            "enum.core:statusEnumSet.attributeNotFound"), then the display text
+
+            comes from the enumeration schema available at
+
+            `/schemas/enums/{enumeration}`. If the value is qualified with a
+
+            namespace ("{namespace}:{enumeration}.{member}", e.g.
+
+            "api.diagram:error.saveFailed"), then the display text is the
+
+            responsibility of the client.
+
+            '
+        message:
+          type: string
+          description: The display string message that correlates to `statusName`.
+        details:
+          type:
+          - object
+          - 'null'
+          description: 'An object containing specific details to the type of error. Each type of
+
+            error may have different detail properties and value types.
+
+            '
+        innerError:
+          allOf:
+          - description: 'An error that is more detailed or a cause of the containing error.
+
+              This allows for a recursive error structure which a client can
+
+              digest to as much detail as they understand. This is mutually
+
+              exclusive with `innerErrors`.
+
+              '
+          - $ref: '#/components/schemas/standardErrorMessage'
+        innerErrors:
+          description: 'A collection of errors that is more detailed or causes of the containing
+
+            error. This allows for a recursive error structure which a client can
+
+            digest to as much detail as they understand. This is mutually exclusive
+
+            with `innerError`.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/standardErrorMessage'
+    objectReferenceDefinition:
+      type: object
+      additionalProperties: false
+      description: A reference to an object in the system.
+      properties:
+        objectReference:
+          type: string
+          description: The fully qualified referenced of the object.
+        referencedObject:
+          type: object
+          description: Meta-data about the referenced object.
+          properties:
+            objectName:
+              type: string
+              description: The name of the object.
+            objectUrl:
+              type: string
+              description: A link to the object.
+              format: uri
+      required:
+      - objectReference
+      x-metasysType: objectReference
+    anyDataTypeSchemaRequired:
+      type: object
+      description: A variant data type that can hold a value of any of the built-in data types of the Metasys object model.
+      x-metasysType: any
+      properties:
+        item: {}
+        schema:
+          $ref: '#/components/schemas/dataTypeMetaSchema'
+      required:
+      - item
+      - schema
+    activities:
+      type: object
+      additionalProperties: false
+      properties:
+        total:
+          type: integer
+          description: The total number of activities in the collection.
+        items:
+          type: array
+          description: Collection of activities.
+          items:
+            oneOf:
+            - type: object
+              title: Alarm activity
+              description: An alarm activity.
+              additionalProperties: false
+              properties:
+                id:
+                  type: string
+                  description: The identifier of the activity.
+                itemReference:
+                  type: string
+                  description: The fully qualified reference of the object.
+                objectName:
+                  type: string
+                  description: The name of the object.
+                objectId:
+                  type: string
+                  description: The identifier of the object that generated this activity.
+                objectUrl:
+                  type: string
+                  description: A link to the object that generated this activity.
+                  format: uri
+                discardedTime:
+                  type:
+                  - string
+                  - 'null'
+                  description: 'The date-time representing the time when a user discarded the activity.
+
+                    This property will only be present if the `activityManagementStatus` of
+
+                    the alarm or audit for the activity is `discarded`.
+
+                    '
+                  format: date-time
+                creationTime:
+                  type: string
+                  description: The date-time for when the activity was detected.
+                  format: date-time
+                spaces:
+                  type: array
+                  description: 'The collection of spaces associated with the object on which the
+
+                    activity occurred.
+
+                    '
+                  items:
+                    $ref: '#/components/schemas/space'
+                equipment:
+                  type: array
+                  description: 'The collection of equipment associated with the object on which the
+
+                    activity occurred.
+
+                    '
+                  items:
+                    $ref: '#/components/schemas/equipment'
+                activityManagementStatus:
+                  type: string
+                  description: 'The activity management status of this alarm. The values of this
+
+                    property are:
+
+
+                    - `pending` - Indicates a user has not yet acted upon the alarm.
+
+                    - `acknowledged` - Indicates a user recognized and viewed the alarm.
+
+                    - `discarded` - Indicates a user acted upon or dismissed the alarm.
+
+                    '
+                alarm:
+                  type: object
+                  properties:
+                    description:
+                      type: string
+                      description: 'A more detailed description of the triggered alarm, either
+
+                        describing the object that triggered the alarm or the alarm itself.
+
+                        '
+                    acknowledgedTime:
+                      type:
+                      - string
+                      - 'null'
+                      description: 'The date-time representing the time when this activity message was
+
+                        acknowledged.
+
+                        '
+                      format: date-time
+                    message:
+                      type: string
+                      description: The alarm message.
+                    isAckRequired:
+                      type: boolean
+                      description: 'Indicates whether the alarm can be acknowledged. You will get an
+
+                        error response if you attempt to acknowledge an alarm for which this
+
+                        property is `false`.
+
+                        '
+                    type:
+                      type: string
+                      description: 'The type of alarm.
+
+
+                        The values for this property come from the `alarmValueEnumSet` enumeration.
+
+                        Find the definition of `alarmValueEnumSet` at the relative URL of `/schemas/enums/alarmValueEnumSet`.
+
+
+                        **See also:**
+
+                        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                      x-metasysType: enum
+                      x-metasysEnum: alarmValueEnumSet
+                    priority:
+                      type: integer
+                      description: The priority of the alarm.
+                    category:
+                      type: string
+                      description: 'The authorization category of the object when the alarm was
+
+                        generated
+
+
+
+                        The values for this property come from the `objectCategoryEnumSet` enumeration.
+
+                        Find the definition of `objectCategoryEnumSet` at the relative URL of `/schemas/enums/objectCategoryEnumSet`.
+
+
+                        **See also:**
+
+                        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                      x-metasysType: enum
+                      x-metasysEnum: objectCategoryEnumSet
+                    annotationsUrl:
+                      type: string
+                      description: A link to the annotations available on the alarms.
+                      format: uri
+                    annotationsCount:
+                      type: integer
+                      description: 'The total number of annotations associated with this alarm.
+
+                        '
+                    signedAnnotationsCount:
+                      type: integer
+                      description: 'The total number of MVE Annotations associated with this audit.
+
+                        '
+                    self:
+                      type: string
+                      description: A link to this alarm.
+                      format: uri
+                    triggerValue:
+                      description: 'The value of the attribute of the object that triggered the alarm.
+
+                        '
+                      allOf:
+                      - type: object
+                        properties:
+                          item:
+                            oneOf:
+                            - type: string
+                            - type: number
+                          schema:
+                            type: object
+                        required:
+                        - item
+                        - schema
+                      - $ref: '#/components/schemas/anyDataTypeSchemaRequired'
+                    alarmGeneratorObject:
+                      description: 'Reference information to the object which generated the alarm.
+
+                        '
+                      allOf:
+                      - $ref: '#/components/schemas/nullableObjectReferenceDefinition'
+                    associatedGraphic:
+                      type:
+                      - object
+                      - 'null'
+                      description: 'Reference information for the graphic associated with the alarm.
+
+                        '
+                      properties:
+                        reference:
+                          description: 'Provides the fully qualified reference to the graphic associated
+
+                            with the alarm.
+
+                            '
+                          allOf:
+                          - $ref: '#/components/schemas/objectReferenceDefinition'
+                        url:
+                          type: string
+                          description: 'A link to the graphic resource associated with the alarm.
+
+                            '
+                          format: uri
+                        alias:
+                          type: string
+                          description: 'The object alias to apply to the graphic for which this alarm is
+
+                            associated to.
+
+                            '
+                        aliasUrl:
+                          type: string
+                          description: 'A link to the graphic resource associated with the alarm, with
+
+                            the alias information included.
+
+                            '
+                          format: uri
+                      required:
+                      - reference
+                      - url
+                      - alias
+                      - aliasUrl
+                      - discardedTime
+                    bacnet:
+                      $ref: '#/components/schemas/alarmBacnetProps'
+                  required:
+                  - description
+                  - message
+                  - isAckRequired
+                  - type
+                  - priority
+                  - category
+                  - annotationsUrl
+                  - annotationsCount
+                  - self
+                  - triggerValue
+                  - acknowledgedTime
+                  - alarmGeneratorObject
+                  - associatedGraphic
+              required:
+              - activityManagementStatus
+              - alarm
+              - id
+              - itemReference
+              - objectName
+              - objectId
+              - objectUrl
+              - creationTime
+            - type: object
+              title: Audit activity
+              description: An audit activity.
+              additionalProperties: false
+              properties:
+                id:
+                  type: string
+                  description: The identifier of the activity.
+                itemReference:
+                  type: string
+                  description: The fully qualified reference of the object.
+                objectName:
+                  type: string
+                  description: The name of the object.
+                objectId:
+                  type: string
+                  description: The identifier of the object that generated this activity.
+                objectUrl:
+                  type: string
+                  description: A link to the object that generated this activity.
+                  format: uri
+                discardedTime:
+                  type:
+                  - string
+                  - 'null'
+                  description: 'The date-time representing the time when a user discarded the activity.
+
+                    This property will only be present if the `activityManagementStatus` of
+
+                    the alarm or audit for the activity is `discarded`.
+
+                    '
+                  format: date-time
+                creationTime:
+                  type: string
+                  description: The date-time for when the activity was detected.
+                  format: date-time
+                spaces:
+                  type: array
+                  description: 'The collection of spaces associated with the object on which the
+
+                    activity occurred.
+
+                    '
+                  items:
+                    $ref: '#/components/schemas/space'
+                equipment:
+                  type: array
+                  description: 'The collection of equipment associated with the object on which the
+
+                    activity occurred.
+
+                    '
+                  items:
+                    $ref: '#/components/schemas/equipment'
+                activityManagementStatus:
+                  type: string
+                  description: 'The activity management status of the audit. The values of this property
+
+                    are:
+
+
+                    - `pending` - Indicates a user has not yet acted upon the audit.
+
+                    - `discarded` - Indicates a user has acted upon or dismissed the audit.
+
+                    '
+                  enum:
+                  - pending
+                  - discarded
+                audit:
+                  type: object
+                  properties:
+                    description:
+                      type:
+                      - string
+                      - 'null'
+                      description: A more detailed description of the audited action.
+                    originApplication:
+                      type: string
+                      description: 'The Metasys application or component that generated the audit.
+
+
+
+                        The values for this property come from the `auditOriginAppEnumSet` enumeration.
+
+                        Find the definition of `auditOriginAppEnumSet` at the relative URL of `/schemas/enums/auditOriginAppEnumSet`.
+
+
+                        **See also:**
+
+                        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                      x-metasysType: enum
+                      x-metasysEnum: auditOriginAppEnumSet
+                    actionType:
+                      type: string
+                      description: 'The type of action audited by the system.
+
+
+                        The values for this property come from the `auditActionTypeEnumSet` enumeration.
+
+                        Find the definition of `auditActionTypeEnumSet` at the relative URL of `/schemas/enums/auditActionTypeEnumSet`.
+
+
+                        **See also:**
+
+                        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                      x-metasysType: enum
+                      x-metasysEnum: auditActionTypeEnumSet
+                    parameters:
+                      type:
+                      - array
+                      - 'null'
+                      items:
+                        $ref: '#/components/schemas/anyDataTypeSchemaRequired'
+                      description: Parameters passed for commands or writes.
+                    user:
+                      type:
+                      - string
+                      - 'null'
+                      description: The username of the user that initiated the action.
+                    signature:
+                      x-releases:
+                        implementedAt: '15.0'
+                      type:
+                      - object
+                      - 'null'
+                      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+                        The signature associated with the activity.'
+                      properties:
+                        fullName:
+                          type: string
+                          description: The full name of the person signing the annotation.
+                        reason:
+                          type: string
+                          description: The reason for the action requiring an annotation.
+                    classLevel:
+                      type: string
+                      description: 'The level at which the system generated the audit.
+
+
+                        The values for this property come from the `auditClassesEnumSet` enumeration.
+
+                        Find the definition of `auditClassesEnumSet` at the relative URL of `/schemas/enums/auditClassesEnumSet`.
+
+
+                        **See also:**
+
+                        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                      x-metasysType: enum
+                      x-metasysEnum: auditClassesEnumSet
+                    status:
+                      type:
+                      - string
+                      - 'null'
+                      description: 'The status of the action.
+
+
+                        The values for this property come from the `statusEnumSet` enumeration.
+
+                        Find the definition of `statusEnumSet` at the relative URL of `/schemas/enums/statusEnumSet`.
+
+
+                        **See also:**
+
+                        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                      x-metasysType: enum
+                      x-metasysEnum: statusEnumSet
+                    errorString:
+                      type:
+                      - string
+                      - 'null'
+                      description: Error message for the action.
+                    preData:
+                      description: The old value before the command or edit.
+                      anyOf:
+                      - type:
+                        - object
+                        - 'null'
+                      - $ref: '#/components/schemas/anyDataTypeSchemaRequired'
+                    postData:
+                      description: The new value after the command or edit.
+                      anyOf:
+                      - type:
+                        - object
+                        - 'null'
+                      - $ref: '#/components/schemas/anyDataTypeSchemaRequired'
+                    annotationsUrl:
+                      type: string
+                      description: 'A link to the available annotations available for the audit.
+
+                        '
+                      format: uri
+                    annotationsCount:
+                      type: integer
+                      description: 'The total number of annotations associated with this audit.
+
+                        '
+                    signedAnnotationsCount:
+                      type: integer
+                      description: 'The total number of MVE Annotations associated with this audit.
+
+                        '
+                    self:
+                      type: string
+                      description: A link to the audit.
+                      format: uri
+                  required:
+                  - originApplication
+                  - actionType
+                  - user
+                  - classLevel
+                  - status
+                  - annotationsUrl
+                  - annotationsCount
+                  - errorString
+                  - preData
+                  - postData
+                  - self
+              required:
+              - activityManagementStatus
+              - audit
+              - id
+              - itemReference
+              - objectName
+              - objectId
+              - objectUrl
+              - creationTime
+              - discardedTime
+        effectivePermissions:
+          type: array
+          description: 'A collection of permissions that apply to the activities in `items`.
+
+            '
+          items:
+            type: object
+            description: 'Indicates the ability for the current user to take action on a given
+
+              activity.
+
+              '
+            properties:
+              id:
+                type: string
+                description: The ID of the activity that these permissions apply to.
+              canAcknowledge:
+                type: boolean
+                description: 'Indicates whether the current user can acknowledge the activity. This
+
+                  property will only be present for an alarm activity.
+
+                  '
+              canDiscard:
+                type: boolean
+                description: Indicates whether the current user can discard the activity.
+              canAnnotate:
+                type: boolean
+                description: 'Indicates whether the current user can annotate the activity. This
+
+                  property will only be present if the current platform supports
+
+                  annotations.
+
+                  '
+            required:
+            - id
+            - canDiscard
+        next:
+          type:
+          - string
+          - 'null'
+          description: 'A link to the next set of results. This link contains the continuation
+
+            token used to retrieve the next set.
+
+            '
+          format: uri
+        self:
+          type: string
+          description: A link to this list of activities.
+          format: uri
+      required:
+      - total
+      - items
+      - effectivePermissions
+      - next
+      - self
+    nullableObjectReferenceDefinition:
+      type:
+      - object
+      - 'null'
+      additionalProperties: false
+      description: A reference to an object in the system.
+      properties:
+        objectReference:
+          type: string
+          description: The fully qualified referenced of the object.
+        referencedObject:
+          type: object
+          description: Meta-data about the referenced object.
+          properties:
+            objectName:
+              type: string
+              description: The name of the object.
+            objectUrl:
+              type: string
+              description: A link to the object.
+              format: uri
+      required:
+      - objectReference
+      x-metasysType: objectReference
+    space:
+      type: object
+      description: 'A space associated with the object on which the activity occurred.
+
+        '
+      properties:
+        id:
+          type: string
+          description: The identifier of the space.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the space.
+        name:
+          type: string
+          description: The name of the space.
+        spaceUrl:
+          type: string
+          description: The URL to the space.
+          format: uri
+      required:
+      - id
+      - itemReference
+      - name
+      - spaceUrl
+    equipment:
+      type: object
+      description: 'An equipment instance associated with the object on which the activity
+
+        occurred.
+
+        '
+      properties:
+        id:
+          type: string
+          description: The identifier of the equipment instance.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the equipment instance.
+        equipmentName:
+          type: string
+          description: The name of the equipment instance.
+        shortName:
+          type: string
+          description: The name of the mapped point.
+        equipmentUrl:
+          type: string
+          description: The URL to the equipment instance.
+          format: uri
+      required:
+      - id
+      - itemReference
+      - equipmentName
+      - shortName
+      - equipmentUrl
+    dataTypeMetaSchema:
+      type: object
+      properties:
+        type:
+          type: string
+        metasysType:
+          type: string
+          enum:
+          - any
+          - array
+          - attributeReference
+          - bitString
+          - bacOid
+          - bool
+          - byte
+          - choice
+          - date
+          - double
+          - enum
+          - enumMemberId
+          - flags
+          - float
+          - list
+          - listof
+          - long
+          - none
+          - numeric
+          - objectReference
+          - octetString
+          - oid
+          - short
+          - string
+          - struct
+          - time
+          - ulong
+          - ushort
+      additionalProperties: true
+    alarmBacnetProps:
+      type: object
+      x-releases:
+        implementedAt: '14.1'
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>14.1 and later</strong></span>\
+
+        BACnet calls this type of record an event notification. The properties under
+
+        this key are specific to BACnet event notifications. This property will only
+
+        be present on a BACnet Advanced Workstation site.
+
+        '
+      properties:
+        deviceId:
+          type: object
+          x-metasysType: bacOid
+          properties:
+            bacnetObjectType:
+              type: string
+              x-metasysType: enum
+              x-metasysEnum: objectTypeEnumSet
+              description: 'The values for this property come from the `objectTypeEnumSet` enumeration.
+
+                Find the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.
+
+
+                **See also:**
+
+                * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+            instance:
+              type: integer
+              minimum: 0
+              maximum: 4194302
+          description: The BACoid of the device where the event initiated.
+          example:
+            bacnetObjectType: objectTypeEnumSet.bacdeviceClass
+            instance: 100
+        objectId:
+          type: object
+          x-metasysType: bacOid
+          properties:
+            bacnetObjectType:
+              type: string
+              x-metasysType: enum
+              x-metasysEnum: objectTypeEnumSet
+              description: 'The values for this property come from the `objectTypeEnumSet` enumeration.
+
+                Find the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.
+
+
+                **See also:**
+
+                * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+            instance:
+              type: integer
+              minimum: 0
+              maximum: 4194302
+          description: The BACoid of the object initiating the event.
+          example:
+            bacnetObjectType: objectTypeEnumSet.bacAiClass
+            instance: 200
+        notificationClassId:
+          description: 'The notifier class that was responsible for distributing the alarm.
+
+            '
+          properties:
+            bacnetObjectType:
+              type: string
+              enum:
+              - objectTypeEnumSet.bacNotificClass
+              description: Will always be the Notification Class
+            instance:
+              type: integer
+              minimum: 0
+              maximum: 4194302
+          example:
+            bacnetObjectType: objectTypeEnumSet.bacNotificClass
+            instance: 205
+        timestamp:
+          description: 'For devices with a clock this property will specify the time or date and
+
+            time of the alarm. For devices without a clock this will convey a
+
+            sequence number that indicates the relative ordering of alarms. A BACnet
+
+
+            Check for the existence of the properties `time`, `dateTime` and
+
+            `sequenceNumber` to determine which is used for an instance of alarm.
+
+            '
+          oneOf:
+          - type: object
+            title: Time
+            properties:
+              time:
+                type: string
+                format: time
+                example: '19:49:23'
+                description: 'The local time the alarm was generated. (The time is local with
+
+                  respect to the device that generated the alarm.) An example
+
+                  value is `"19:49:23"`
+
+                  '
+          - type: object
+            title: Sequence Number
+            properties:
+              sequenceNumber:
+                type: integer
+                minimum: 0
+                maximum: 65535
+                example: 345
+                description: 'The sequence number associated with this alarm. An example is
+
+                  `345`
+
+                  '
+          - type: object
+            title: Date and Time
+            properties:
+              dateTime:
+                type: string
+                format: date-time
+                example: '2024-10-11T19:49:23'
+                description: 'The local date and time when the alarm was generated. (The value
+
+                  is local with respect to the device that generated the alarm.)
+
+                  An example value is `"2024-10-11T19:49:23"`
+
+                  '
+        notifyType:
+          type: string
+          x-metasysType: enum
+          x-metasysEnum: bacNotifyTypeEnumSet
+          description: 'The type of notification. This indicates if the notification is an
+
+            alarm, an event or an acknowledgement. An example value is
+
+            `bacNotifyTypeEnumSet.bacNotifyAlarm`
+
+
+
+            The values for this property come from the `bacNotifyTypeEnumSet` enumeration.
+
+            Find the definition of `bacNotifyTypeEnumSet` at the relative URL of `/schemas/enums/bacNotifyTypeEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+  examples:
+    first-two-activities15:
+      summary: Activities (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        Audit and alarm activities.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        total: 4096
+        items:
+        - id: 648070d6-3b00-4027-ad07-63e9247f4e40
+          itemReference: '{hostname}:{deviceHostname}'
+          objectName: My Site Director
+          activityManagementStatus: discarded
+          creationTime: '2022-01-06T15:16:33.403Z'
+          objectUrl: https://metasys-server.example.com/api/v6/objects/c05d5d30-ebf0-5533-8e67-f74bb728bf18
+          objectId: c05d5d30-ebf0-5533-8e67-f74bb728bf18
+          discardedTime: null
+          audit:
+            actionType: auditActionTypeEnumSet.subsystemAuditActionType
+            status: null
+            preData: null
+            postData:
+              item: ::1
+              schema:
+                type: string
+                metasysType: string
+            parameters: []
+            errorString: null
+            user: jane-doe
+            classLevel: auditClassesEnumSet.userActionAuditClass
+            originApplication: auditOriginAppEnumSet.systemSecurityAuditOriginApp
+            description: auditTrailStringsEnumSet.atstrSecurityUserLoginSuccessful
+            annotationsUrl: https://metasys-server.example.com/api/v6/audits/648070d6-3b00-4027-ad07-63e9247f4e40/annotations
+            annotationsCount: 2
+            signedAnnotationsCount: 1
+            signature:
+              fullName: Aaron
+              reason: Review
+            self: https://metasys-server.example.com/api/v6/audits/648070d6-3b00-4027-ad07-63e9247f4e40
+        - id: bf350492-bf03-43d5-8c50-6d9727e420fe
+          itemReference: '{hostname}:{deviceHostname}/AV1'
+          objectName: AV1
+          activityManagementStatus: pending
+          creationTime: '2022-01-06T15:16:18Z'
+          discardedTime: null
+          equipment:
+          - id: ef24e09e-fc26-5113-b91e-607dd6f81b93
+            itemReference: '{hostname}:{deviceHostname}/equipment.My Engine 1'
+            equipmentName: My Engine 1
+            shortName: My Engine 1.AV1
+            equipmentUrl: https://metasys-server.example.com/api/v6/equipment/ef24e09e-fc26-5113-b91e-607dd6f81b93
+          objectUrl: https://metasys-server.example.com/api/v6/objects/559081e4-4ddd-5923-ab03-85c1797126a5
+          objectId: 559081e4-4ddd-5923-ab03-85c1797126a5
+          alarm:
+            message: ''
+            alarmGeneratorObject:
+              objectReference: '{hostname}:{deviceHostname}/AV1.Alarm1'
+              referencedObject:
+                objectUrl: https://metasys-server.example.com/api/v6/objects/3e8fad25-48fe-5a48-8e06-beb504229187
+            isAckRequired: true
+            type: alarmValueEnumSet.avHiAlarm
+            priority: 100
+            category: objectCategoryEnumSet.generalCategory
+            annotationsUrl: https://metasys-server.example.com/api/v6/alarms/bf350492-bf03-43d5-8c50-6d9727e420fe
+            annotationsCount: 1
+            self: https://metasys-server.example.com/api/v6/alarms/bf350492-bf03-43d5-8c50-6d9727e420fe
+            triggerValue:
+              item: '82.0'
+              schema:
+                type: string
+                metasysType: string
+                units:
+                  id: unitEnumSet.degF
+                  title: deg F
+            description: Zone Temperature
+            acknowledgedTime: null
+            associatedGraphic: null
+        next: https://metasys-server.example.com/api/v6/activities?count=100&sort=-creationtime&continuationToken=eyJhdWRpdCI6eyJpZCI6IjY0ODA3MGQ2LTNiMDAtNDAyNy1hZDA3LTYzZTkyNDdmNGU0MCIsImN0IjoiMjAyMi0wMS0wNlQxNToxNjozMy40MDNaIn0sImFsYXJtIjp7ImlkIjoiYWM1ZGMwMTMtYmM4NC00NDdkLWEyMTgtNzRiZDg3MWM5ODMxIiwiY3QiOiIyMDIyLTAxLTA2VDE1OjEwOjEzWiIsInAiOjEwMH19
+        effectivePermissions:
+        - id: 648070d6-3b00-4027-ad07-63e9247f4e40
+          canDiscard: true
+          canAnnotate: true
+        - id: bf350492-bf03-43d5-8c50-6d9727e420fe
+          canAcknowledge: true
+          canDiscard: true
+          canAnnotate: true
+        self: https://metasys-server.example.com/api/v6/activities?count=100&sort=-creationtime
+    first-two-activities:
+      summary: Activities
+      value:
+        total: 4096
+        items:
+        - id: 648070d6-3b00-4027-ad07-63e9247f4e40
+          itemReference: '{hostname}:{deviceHostname}'
+          objectName: My Site Director
+          activityManagementStatus: discarded
+          creationTime: '2022-01-06T15:16:33.403Z'
+          objectUrl: https://metasys-server.example.com/api/v6/objects/c05d5d30-ebf0-5533-8e67-f74bb728bf18
+          objectId: c05d5d30-ebf0-5533-8e67-f74bb728bf18
+          discardedTime: null
+          audit:
+            actionType: auditActionTypeEnumSet.subsystemAuditActionType
+            status: null
+            preData: null
+            postData:
+              item: ::1
+              schema:
+                type: string
+                metasysType: string
+            parameters: []
+            errorString: null
+            user: jane-doe
+            classLevel: auditClassesEnumSet.userActionAuditClass
+            originApplication: auditOriginAppEnumSet.systemSecurityAuditOriginApp
+            description: auditTrailStringsEnumSet.atstrSecurityUserLoginSuccessful
+            annotationsUrl: https://metasys-server.example.com/api/v6/audits/648070d6-3b00-4027-ad07-63e9247f4e40/annotations
+            annotationsCount: 2
+            signedAnnotationsCount: 1
+            self: https://metasys-server.example.com/api/v6/audits/648070d6-3b00-4027-ad07-63e9247f4e40
+        - id: bf350492-bf03-43d5-8c50-6d9727e420fe
+          itemReference: '{hostname}:{deviceHostname}/AV1'
+          objectName: AV1
+          activityManagementStatus: pending
+          creationTime: '2022-01-06T15:16:18Z'
+          discardedTime: null
+          equipment:
+          - id: ef24e09e-fc26-5113-b91e-607dd6f81b93
+            itemReference: '{hostname}:{deviceHostname}/equipment.My Engine 1'
+            equipmentName: My Engine 1
+            shortName: My Engine 1.AV1
+            equipmentUrl: https://metasys-server.example.com/api/v6/equipment/ef24e09e-fc26-5113-b91e-607dd6f81b93
+          objectUrl: https://metasys-server.example.com/api/v6/objects/559081e4-4ddd-5923-ab03-85c1797126a5
+          objectId: 559081e4-4ddd-5923-ab03-85c1797126a5
+          alarm:
+            message: ''
+            alarmGeneratorObject:
+              objectReference: '{hostname}:{deviceHostname}/AV1.Alarm1'
+              referencedObject:
+                objectUrl: https://metasys-server.example.com/api/v6/objects/3e8fad25-48fe-5a48-8e06-beb504229187
+            isAckRequired: true
+            type: alarmValueEnumSet.avHiAlarm
+            priority: 100
+            category: objectCategoryEnumSet.generalCategory
+            annotationsUrl: https://metasys-server.example.com/api/v6/alarms/bf350492-bf03-43d5-8c50-6d9727e420fe
+            annotationsCount: 1
+            self: https://metasys-server.example.com/api/v6/alarms/bf350492-bf03-43d5-8c50-6d9727e420fe
+            triggerValue:
+              item: '82.0'
+              schema:
+                type: string
+                metasysType: string
+                units:
+                  id: unitEnumSet.degF
+                  title: deg F
+            description: Zone Temperature
+            acknowledgedTime: null
+            associatedGraphic: null
+        next: https://metasys-server.example.com/api/v6/activities?count=100&sort=-creationtime&continuationToken=eyJhdWRpdCI6eyJpZCI6IjY0ODA3MGQ2LTNiMDAtNDAyNy1hZDA3LTYzZTkyNDdmNGU0MCIsImN0IjoiMjAyMi0wMS0wNlQxNToxNjozMy40MDNaIn0sImFsYXJtIjp7ImlkIjoiYWM1ZGMwMTMtYmM4NC00NDdkLWEyMTgtNzRiZDg3MWM5ODMxIiwiY3QiOiIyMDIyLTAxLTA2VDE1OjEwOjEzWiIsInAiOjEwMH19
+        effectivePermissions:
+        - id: 648070d6-3b00-4027-ad07-63e9247f4e40
+          canDiscard: true
+          canAnnotate: true
+        - id: bf350492-bf03-43d5-8c50-6d9727e420fe
+          canAcknowledge: true
+          canDiscard: true
+          canAnnotate: true
+        self: https://metasys-server.example.com/api/v6/activities?count=100&sort=-creationtime
+  securitySchemes:
+    Bearer-Authentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Most of the calls in the API use bearer token authentication. What this
+
+        means is that these requests require an `Authorization` header to be set to
+
+        a value with the following format: `Bearer: {accessToken}`. Use the
+
+        [`/login`](#operation/createToken) operation to request an `accessToken`. An
+
+        example of the full header would look like the following:
+
+        `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...`.
+
+
+        **Note:** This example access token is truncated.
+
+
+        The expiration time of the access token is based on the user''s Metasys
+
+        profile.
+
+        '
+    API-Key-Authentication:
+      type: apiKey
+      in: query
+      name: access_token
+      description: 'The [Streaming operation](#operation/getStream) is the only operation to use
+
+        API key authentication, because web browsers do not allow setting custom
+
+        headers when initiating Server Sent Event connections.
+
+        '
+x-refined-from:
+- metasys-api-v6-16.json
+- johnson-controls-metasys-openapi.yml
+x-servers:
+  apps:
+    url: https://{hostname}/apps
+    description: The base url for accessing APIs of non-core applications
+    variables:
+      hostname:
+        default: metasys-server.example.com
+        description: This is the name of your site

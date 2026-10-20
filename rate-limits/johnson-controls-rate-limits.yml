@@ -1,0 +1,7 @@
+name: Johnson Controls rate limits
+generated: '2026-10-20'
+method: none
+source: https://jci-metasys.github.io/api-landing/guides/quickstart
+limit_count: 0
+limits: []
+note: No rate limits are documented; the API runs on the customer's own Metasys server.

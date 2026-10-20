@@ -1,0 +1,160 @@
+generated: '2026-10-20'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 12
+  own: 9
+  other_domain: 0
+  platform: 3
+  roles:
+  - api
+  - docs
+  - other
+  - source
+  - website
+hosts:
+- host: api.johnsoncontrols.com
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: johnsoncontrols.com
+  role: api
+  relation: own
+- host: cn.johnsoncontrols.com
+  found_by:
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: johnsoncontrols.com
+  role: other
+  relation: own
+- host: docs.johnsoncontrols.com
+  found_by:
+  - probed
+  - site-links
+  - namespace-probe
+  - well-known
+  types: []
+  serves: []
+  title: Product Documentation | Johnson Controls
+  status: 200
+  registrable_domain: johnsoncontrols.com
+  role: docs
+  relation: own
+- host: github.com
+  found_by:
+  - pointer
+  types:
+  - GitHubOrganization
+  serves: []
+  registrable_domain: github.com
+  role: source
+  relation: platform
+- host: investors.johnsoncontrols.com
+  found_by:
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: johnsoncontrols.com
+  role: other
+  relation: own
+- host: jci-metasys.github.io
+  found_by:
+  - pointer
+  - apis[]
+  - vendor-detect
+  types:
+  - Documentation
+  serves:
+  - docs
+  - cdn
+  - hosting
+  vendor: fastly
+  registrable_domain: github.io
+  role: docs
+  relation: platform
+- host: jobs.johnsoncontrols.com
+  found_by:
+  - probed
+  - site-links
+  - contract-discovery
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: johnsoncontrols.com
+  role: other
+  relation: own
+- host: me.johnsoncontrols.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: johnsoncontrols.com
+  role: other
+  relation: own
+- host: ru.johnsoncontrols.com
+  found_by:
+  - probed
+  - site-links
+  - well-known
+  types: []
+  serves: []
+  registrable_domain: johnsoncontrols.com
+  role: other
+  relation: own
+- host: trust.johnsoncontrols.com
+  found_by:
+  - pointer
+  - probed
+  - site-links
+  - well-known
+  types:
+  - Compliance
+  serves: []
+  registrable_domain: johnsoncontrols.com
+  role: other
+  relation: own
+- host: www.johnsoncontrols.com
+  found_by:
+  - pointer
+  - probed
+  - docs-index
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Security
+  - GettingStarted
+  - Website
+  - OpenBlue
+  - Support
+  - TermsOfService
+  - PrivacyPolicy
+  - Login
+  - Newsroom
+  serves:
+  - docs
+  - cdn
+  vendor: imperva
+  registrable_domain: johnsoncontrols.com
+  role: website
+  relation: own
+- host: www.linkedin.com
+  found_by:
+  - pointer
+  types:
+  - LinkedIn
+  serves: []
+  registrable_domain: linkedin.com
+  role: other
+  relation: platform

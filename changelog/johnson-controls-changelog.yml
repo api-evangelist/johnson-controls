@@ -1,0 +1,12 @@
+name: Metasys REST API changelog
+generated: '2026-10-20'
+method: searched
+source: https://jci-metasys.github.io/api-landing/guides/api-changelog
+scheme: API major version per Metasys release (v1-v6)
+current_version: v6 (Metasys 16.0)
+entries:
+  - {version: Metasys 16.0 (API v6), date: '2026-06-03', breaking: false, highlights: [Non-breaking additions to API v6; no breaking changes]}
+  - {version: Metasys 15.0 (API v6), date: '2025-10-06', breaking: false, highlights: [Non-breaking additions; deprecated operations listed]}
+  - {version: Metasys 14.1 (API v6), date: '2025-05-09', breaking: false, highlights: [Non-breaking additions to API v6]}
+  - {version: Metasys 14.0 (API v6), date: '2024-08-12', breaking: true, highlights: [Initial release of API version 6; added, changed and removed operations]}
+  - {version: v5, date: '2023-09-30', breaking: true, highlights: [Added, deprecated, changed and removed operations]}

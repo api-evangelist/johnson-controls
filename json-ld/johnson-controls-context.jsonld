@@ -1,0 +1,527 @@
+{
+  "@context": {
+    "@vocab": "https://johnsoncontrols.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "johnson": "https://johnsoncontrols.com/schema#",
+    "activitiesStreamHeartbeat": "johnson:activitiesStreamHeartbeat",
+    "currentTime": {
+      "@id": "johnson:currentTime",
+      "@type": "xsd:dateTime"
+    },
+    "subscriptionIds": {
+      "@id": "johnson:subscriptionIds",
+      "@container": "@list"
+    },
+    "objectsStreamValuesHeartbeatImproved": "johnson:objectsStreamValuesHeartbeatImproved",
+    "activeSubscriptions": {
+      "@id": "johnson:activeSubscriptions",
+      "@container": "@list"
+    },
+    "dateTime": {
+      "@id": "johnson:dateTime",
+      "@type": "xsd:dateTime"
+    },
+    "timeSeriesStreamError": "johnson:timeSeriesStreamError",
+    "message": {
+      "@id": "johnson:message",
+      "@type": "xsd:string"
+    },
+    "items": {
+      "@id": "johnson:items",
+      "@container": "@list"
+    },
+    "total": {
+      "@id": "johnson:total",
+      "@type": "xsd:integer"
+    },
+    "timeSeriesStreamCancelled": "johnson:timeSeriesStreamCancelled",
+    "timeSeriesStreamEstablished": "johnson:timeSeriesStreamEstablished",
+    "timeSeriesStreamUpdate": "johnson:timeSeriesStreamUpdate",
+    "timeSeriesStreamAsyncError": "johnson:timeSeriesStreamAsyncError",
+    "timeSeriesStreamAsyncCompleted": "johnson:timeSeriesStreamAsyncCompleted",
+    "loginRequest": "johnson:loginRequest",
+    "username": {
+      "@id": "johnson:username",
+      "@type": "xsd:string"
+    },
+    "password": {
+      "@id": "johnson:password",
+      "@type": "xsd:string"
+    },
+    "loginResponse": "johnson:loginResponse",
+    "accessToken": {
+      "@id": "johnson:accessToken",
+      "@type": "xsd:string"
+    },
+    "expires": {
+      "@id": "johnson:expires",
+      "@type": "xsd:dateTime"
+    },
+    "space": "johnson:space",
+    "id": {
+      "@id": "johnson:id",
+      "@type": "xsd:string"
+    },
+    "itemReference": {
+      "@id": "johnson:itemReference",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "johnson:name",
+      "@type": "xsd:string"
+    },
+    "spaceUrl": {
+      "@id": "johnson:spaceUrl",
+      "@type": "@id"
+    },
+    "equipment": "johnson:equipment",
+    "equipmentName": {
+      "@id": "johnson:equipmentName",
+      "@type": "xsd:string"
+    },
+    "shortName": {
+      "@id": "johnson:shortName",
+      "@type": "xsd:string"
+    },
+    "equipmentUrl": {
+      "@id": "johnson:equipmentUrl",
+      "@type": "@id"
+    },
+    "dataTypeMetaSchema": "johnson:dataTypeMetaSchema",
+    "type": {
+      "@id": "johnson:type",
+      "@type": "xsd:string"
+    },
+    "metasysType": {
+      "@id": "johnson:metasysType",
+      "@type": "xsd:string"
+    },
+    "anyDataTypeSchemaRequired": "johnson:anyDataTypeSchemaRequired",
+    "item": {
+      "@id": "johnson:item"
+    },
+    "nullableObjectReferenceDefinition": "johnson:nullableObjectReferenceDefinition",
+    "objectReference": {
+      "@id": "johnson:objectReference",
+      "@type": "xsd:string"
+    },
+    "referencedObject": {
+      "@id": "johnson:referencedObject"
+    },
+    "objectReferenceDefinition": "johnson:objectReferenceDefinition",
+    "alarmBacnetProps": "johnson:alarmBacnetProps",
+    "deviceId": {
+      "@id": "johnson:deviceId"
+    },
+    "objectId": {
+      "@id": "johnson:objectId"
+    },
+    "notificationClassId": {
+      "@id": "johnson:notificationClassId"
+    },
+    "timestamp": {
+      "@id": "johnson:timestamp"
+    },
+    "notifyType": {
+      "@id": "johnson:notifyType",
+      "@type": "xsd:string"
+    },
+    "activities": "johnson:activities",
+    "effectivePermissions": {
+      "@id": "johnson:effectivePermissions",
+      "@container": "@list"
+    },
+    "next": {
+      "@id": "johnson:next",
+      "@type": "@id"
+    },
+    "self": {
+      "@id": "johnson:self",
+      "@type": "@id"
+    },
+    "standardErrorMessage": "johnson:standardErrorMessage",
+    "code": {
+      "@id": "johnson:code",
+      "@type": "xsd:string"
+    },
+    "details": {
+      "@id": "johnson:details"
+    },
+    "innerError": {
+      "@id": "johnson:innerError"
+    },
+    "innerErrors": {
+      "@id": "johnson:innerErrors",
+      "@container": "@list"
+    },
+    "classification": "johnson:classification",
+    "objectEntityInTree": "johnson:objectEntityInTree",
+    "parentUrl": {
+      "@id": "johnson:parentUrl",
+      "@type": "@id"
+    },
+    "networkDeviceUrl": {
+      "@id": "johnson:networkDeviceUrl",
+      "@type": "@id"
+    },
+    "pointsUrl": {
+      "@id": "johnson:pointsUrl",
+      "@type": "@id"
+    },
+    "objectsUrl": {
+      "@id": "johnson:objectsUrl",
+      "@type": "@id"
+    },
+    "alarmsUrl": {
+      "@id": "johnson:alarmsUrl",
+      "@type": "@id"
+    },
+    "auditsUrl": {
+      "@id": "johnson:auditsUrl",
+      "@type": "@id"
+    },
+    "trendedAttributesUrl": {
+      "@id": "johnson:trendedAttributesUrl",
+      "@type": "@id"
+    },
+    "hasChildrenMatchingQuery": {
+      "@id": "johnson:hasChildrenMatchingQuery",
+      "@type": "xsd:boolean"
+    },
+    "label": {
+      "@id": "johnson:label",
+      "@type": "xsd:string"
+    },
+    "objectType": {
+      "@id": "johnson:objectType",
+      "@type": "@id"
+    },
+    "objectTypeVersion": {
+      "@id": "johnson:objectTypeVersion",
+      "@type": "@id"
+    },
+    "getObjectsResponse": "johnson:getObjectsResponse",
+    "post-objects-request": "johnson:post-objects-request",
+    "parentId": {
+      "@id": "johnson:parentId",
+      "@type": "xsd:string"
+    },
+    "localUniqueIdentifier": {
+      "@id": "johnson:localUniqueIdentifier",
+      "@type": "xsd:string"
+    },
+    "get-object-attribute-response": "johnson:get-object-attribute-response",
+    "condition": {
+      "@id": "johnson:condition",
+      "@type": "@id"
+    },
+    "write-priority-enum-set": "johnson:write-priority-enum-set",
+    "put-command-request": "johnson:put-command-request",
+    "priority": {
+      "@id": "johnson:priority",
+      "@type": "@id"
+    },
+    "parameters": {
+      "@id": "johnson:parameters",
+      "@container": "@list"
+    },
+    "annotation": {
+      "@id": "johnson:annotation",
+      "@type": "xsd:string"
+    },
+    "errorMessage": "johnson:errorMessage",
+    "statusName": {
+      "@id": "johnson:statusName",
+      "@type": "xsd:string"
+    },
+    "points": "johnson:points",
+    "previous": {
+      "@id": "johnson:previous",
+      "@type": "@id"
+    },
+    "lookup-object-identifier-error-response": "johnson:lookup-object-identifier-error-response",
+    "alarm": "johnson:alarm",
+    "description": {
+      "@id": "johnson:description",
+      "@type": "xsd:string"
+    },
+    "activityManagementStatus": {
+      "@id": "johnson:activityManagementStatus",
+      "@type": "xsd:string"
+    },
+    "discardedTime": {
+      "@id": "johnson:discardedTime",
+      "@type": "xsd:dateTime"
+    },
+    "creationTime": {
+      "@id": "johnson:creationTime",
+      "@type": "xsd:dateTime"
+    },
+    "acknowledgedTime": {
+      "@id": "johnson:acknowledgedTime",
+      "@type": "xsd:dateTime"
+    },
+    "objectUrl": {
+      "@id": "johnson:objectUrl",
+      "@type": "@id"
+    },
+    "isAckRequired": {
+      "@id": "johnson:isAckRequired",
+      "@type": "xsd:boolean"
+    },
+    "category": {
+      "@id": "johnson:category",
+      "@type": "xsd:string"
+    },
+    "annotationsUrl": {
+      "@id": "johnson:annotationsUrl",
+      "@type": "@id"
+    },
+    "annotationsCount": {
+      "@id": "johnson:annotationsCount",
+      "@type": "xsd:integer"
+    },
+    "signedAnnotationsCount": {
+      "@id": "johnson:signedAnnotationsCount",
+      "@type": "xsd:integer"
+    },
+    "triggerValue": {
+      "@id": "johnson:triggerValue"
+    },
+    "spaces": {
+      "@id": "johnson:spaces",
+      "@container": "@list"
+    },
+    "alarmGeneratorObject": {
+      "@id": "johnson:alarmGeneratorObject"
+    },
+    "associatedGraphic": {
+      "@id": "johnson:associatedGraphic"
+    },
+    "bacnet": {
+      "@id": "johnson:bacnet"
+    },
+    "effectivePermission": "johnson:effectivePermission",
+    "canAcknowledge": {
+      "@id": "johnson:canAcknowledge",
+      "@type": "xsd:boolean"
+    },
+    "canDiscard": {
+      "@id": "johnson:canDiscard",
+      "@type": "xsd:boolean"
+    },
+    "canAnnotate": {
+      "@id": "johnson:canAnnotate",
+      "@type": "xsd:boolean"
+    },
+    "objectAlarms": "johnson:objectAlarms",
+    "signature": "johnson:signature",
+    "fullName": {
+      "@id": "johnson:fullName",
+      "@type": "xsd:string"
+    },
+    "reason": {
+      "@id": "johnson:reason",
+      "@type": "xsd:string"
+    },
+    "audit": "johnson:audit",
+    "objectName": {
+      "@id": "johnson:objectName",
+      "@type": "xsd:string"
+    },
+    "originApplication": {
+      "@id": "johnson:originApplication",
+      "@type": "xsd:string"
+    },
+    "actionType": {
+      "@id": "johnson:actionType",
+      "@type": "xsd:string"
+    },
+    "user": {
+      "@id": "johnson:user",
+      "@type": "xsd:string"
+    },
+    "classLevel": {
+      "@id": "johnson:classLevel",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "johnson:status",
+      "@type": "xsd:string"
+    },
+    "errorString": {
+      "@id": "johnson:errorString",
+      "@type": "xsd:string"
+    },
+    "preData": {
+      "@id": "johnson:preData"
+    },
+    "postData": {
+      "@id": "johnson:postData"
+    },
+    "schemas_effectivePermission": "johnson:schemas_effectivePermission",
+    "audits": "johnson:audits",
+    "trendedAttributesResponse": "johnson:trendedAttributesResponse",
+    "repoTrendedObjectResponse": "johnson:repoTrendedObjectResponse",
+    "sampledAttributes": {
+      "@id": "johnson:sampledAttributes",
+      "@container": "@list"
+    },
+    "repoTrendedAttributesResponse": "johnson:repoTrendedAttributesResponse",
+    "trendedAttributeResponse": "johnson:trendedAttributeResponse",
+    "samplesUrl": {
+      "@id": "johnson:samplesUrl",
+      "@type": "@id"
+    },
+    "attribute": {
+      "@id": "johnson:attribute",
+      "@type": "xsd:string"
+    },
+    "objectsAttributeSamplesResponse": "johnson:objectsAttributeSamplesResponse",
+    "repoAttributeSamplesResponse": "johnson:repoAttributeSamplesResponse",
+    "timeSeriesUrl": {
+      "@id": "johnson:timeSeriesUrl",
+      "@type": "@id"
+    },
+    "timeSeriesStreamingSubscriptionRequest": "johnson:timeSeriesStreamingSubscriptionRequest",
+    "networkDevice": "johnson:networkDevice",
+    "productVersion": {
+      "@id": "johnson:productVersion",
+      "@type": "xsd:string"
+    },
+    "firmwareVersion": {
+      "@id": "johnson:firmwareVersion",
+      "@type": "xsd:string"
+    },
+    "objectCategory": {
+      "@id": "johnson:objectCategory",
+      "@type": "xsd:string"
+    },
+    "timeZone": {
+      "@id": "johnson:timeZone",
+      "@type": "xsd:string"
+    },
+    "networkDevicesUrl": {
+      "@id": "johnson:networkDevicesUrl",
+      "@type": "@id"
+    },
+    "spacesUrl": {
+      "@id": "johnson:spacesUrl",
+      "@type": "@id"
+    },
+    "allowHttp": {
+      "@id": "johnson:allowHttp",
+      "@type": "xsd:boolean"
+    },
+    "jciIpCommMode": {
+      "@id": "johnson:jciIpCommMode",
+      "@type": "xsd:string"
+    },
+    "ipAddress": {
+      "@id": "johnson:ipAddress",
+      "@type": "xsd:string"
+    },
+    "deviceIpv6Address": {
+      "@id": "johnson:deviceIpv6Address",
+      "@type": "xsd:string"
+    },
+    "certificateExpirationDate": {
+      "@id": "johnson:certificateExpirationDate",
+      "@type": "xsd:dateTime"
+    },
+    "pairing": {
+      "@id": "johnson:pairing"
+    },
+    "ethernetMacAddress": {
+      "@id": "johnson:ethernetMacAddress",
+      "@type": "xsd:string"
+    },
+    "modelName": {
+      "@id": "johnson:modelName",
+      "@type": "xsd:string"
+    },
+    "incompleteNetworkDevice": "johnson:incompleteNetworkDevice",
+    "networkDevices": "johnson:networkDevices",
+    "schemas_space": "johnson:schemas_space",
+    "area": {
+      "@id": "johnson:area",
+      "@type": "xsd:integer"
+    },
+    "areaUnits": {
+      "@id": "johnson:areaUnits",
+      "@type": "xsd:string"
+    },
+    "equipmentItemLegacy": "johnson:equipmentItemLegacy",
+    "hasUpstreamEquipment": {
+      "@id": "johnson:hasUpstreamEquipment",
+      "@type": "xsd:boolean"
+    },
+    "upstreamEquipmentUrl": {
+      "@id": "johnson:upstreamEquipmentUrl",
+      "@type": "@id"
+    },
+    "equipmentItemsLegacy": "johnson:equipmentItemsLegacy",
+    "deviceAlarms": "johnson:deviceAlarms",
+    "equipmentItem": "johnson:equipmentItem",
+    "equipmentDefinitionId": {
+      "@id": "johnson:equipmentDefinitionId",
+      "@type": "xsd:string"
+    },
+    "upstreamEquipment": {
+      "@id": "johnson:upstreamEquipment",
+      "@container": "@list"
+    },
+    "subsystemCategory": {
+      "@id": "johnson:subsystemCategory",
+      "@type": "xsd:string"
+    },
+    "graphicAlias": {
+      "@id": "johnson:graphicAlias",
+      "@type": "xsd:string"
+    },
+    "equipmentPoints": "johnson:equipmentPoints",
+    "equipmentTreeFolder": "johnson:equipmentTreeFolder",
+    "hasChildren": {
+      "@id": "johnson:hasChildren",
+      "@type": "xsd:boolean"
+    },
+    "equipmentTreeEquipment": "johnson:equipmentTreeEquipment",
+    "equipmentTree": "johnson:equipmentTree",
+    "spaceInTree": "johnson:spaceInTree",
+    "hasChild": {
+      "@id": "johnson:hasChild",
+      "@type": "xsd:boolean"
+    },
+    "spacesInTree": "johnson:spacesInTree",
+    "alarmAnnotation": "johnson:alarmAnnotation",
+    "text": {
+      "@id": "johnson:text",
+      "@type": "xsd:string"
+    },
+    "action": {
+      "@id": "johnson:action",
+      "@type": "xsd:string"
+    },
+    "alarmUrl": {
+      "@id": "johnson:alarmUrl",
+      "@type": "@id"
+    },
+    "alarmAnnotations": "johnson:alarmAnnotations",
+    "auditAnnotation": "johnson:auditAnnotation",
+    "auditUrl": {
+      "@id": "johnson:auditUrl",
+      "@type": "@id"
+    },
+    "auditAnnotations": "johnson:auditAnnotations",
+    "auditsUsers": "johnson:auditsUsers"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Johnson Controls API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Johnson Controls's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-20) from openapi/johnson-controls-metasys-openapi.yml.",
+  "dcterms:created": "2026-10-20",
+  "dcterms:source": [
+    "openapi/johnson-controls-metasys-openapi.yml"
+  ]
+}

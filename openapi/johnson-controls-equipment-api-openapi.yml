@@ -1,0 +1,2040 @@
+openapi: 3.2.0
+info:
+  title: Johnson Controls Equipment API
+  version: Version 6 for 16.0
+  x-logo:
+    url: source/images/logo.svg
+    href: https://jci-metasys.github.io/
+  x-releases:
+  - '14.0'
+  - '14.1'
+  - '15.0'
+  - '16.0'
+  x-revision: 'Commit ID: 4b227676a'
+  description: 'Operations tagged equipment across 2 of this provider''s published API definitions: metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{hostname}/api/v6
+  description: The base URL of all API routes
+  variables:
+    hostname:
+      default: metasys-server.example.com
+      description: This is the name of your site director device
+security:
+- Bearer-Authentication: []
+tags:
+- name: Equipment
+  description: This section describes the operations you can perform on equipment. Equipment is a broad term for anything that makes a building run, including boilers, chillers, air handling units, lights, meters, and security systems. Use equipment operations to get equipment instances and to list equipment points. Apply filters, sorting, and paging to further refine the results.
+paths:
+  /networkDevices/{networkDeviceId}/equipment:
+    get:
+      summary: Get equipment hosted by a network device
+      description: Retrieves the collection of equipment instances hosted by the specified network device or its children. A network device is considered to host an equipment if the equipment defines points that map to an attribute of any object contained on the network device.
+      operationId: getEquipmentHostedByDevice
+      parameters:
+      - $ref: '#/components/parameters/networkDeviceId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/equipmentSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentItemsLegacy'
+              examples:
+                equipment:
+                  $ref: '#/components/examples/equipmentHostedByDevice'
+                equipment15:
+                  $ref: '#/components/examples/equipmentHostedByDevice15'
+      tags:
+      - Equipment
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/equipment \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/equipment\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/equipment\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/equipment'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/equipment', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/equipment\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/equipment\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /equipment:
+    get:
+      summary: Get equipment instances
+      description: 'This operation is deprecated starting with Metasys Release 15.0. Use
+
+        Get equipment tree instead.
+
+
+        Retrieves a collection of equipment instances.'
+      operationId: getEquipment
+      deprecated: true
+      parameters:
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/equipmentSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentItemsLegacy'
+              examples:
+                equipment:
+                  $ref: '#/components/examples/equipmentItemsLegacy'
+                equipment15:
+                  $ref: '#/components/examples/equipmentItemsLegacy15'
+      tags:
+      - Equipment
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/equipment \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/equipment\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/equipment\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /equipment'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/equipment', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/equipment\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/equipment\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /equipment/{equipmentId}:
+    get:
+      summary: Get an equipment instance
+      description: Retrieves the specified equipment instance.
+      operationId: getEquipmentInstance
+      parameters:
+      - $ref: '#/components/parameters/equipmentId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentItem'
+              examples:
+                equipment:
+                  $ref: '#/components/examples/equipmentItem'
+                equipment15:
+                  $ref: '#/components/examples/equipmentItem15'
+        '404':
+          description: The provided identifier does not match any known equipment.
+          content:
+            application/vnd.metasysapi.v6:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+      tags:
+      - Equipment
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0 \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /equipment/{equipmentId}/equipment:
+    get:
+      summary: Get equipment served by equipment
+      deprecated: true
+      description: 'This operation is deprecated starting with Metasys Release 15.0. Use
+
+        Get served by equipment
+
+        instead. It performs the same operation but with a path that is more
+
+        descriptive of its task.
+
+
+        Retrieves the equipment served by the specified equipment instance.'
+      operationId: getServedByEquipment
+      parameters:
+      - $ref: '#/components/parameters/equipmentId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/equipmentSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentItemsLegacy'
+              examples:
+                equipment:
+                  $ref: '#/components/examples/servedByEquipmentItems'
+                equipment15:
+                  $ref: '#/components/examples/servedByEquipmentItems15'
+      tags:
+      - Equipment
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /equipment/{equipmentId}/upstreamEquipment:
+    get:
+      summary: Get upstream equipment
+      description: Retrieves the collection of all upstream equipment serving the specified equipment instance, including directly serving equipment and equipment that further serve the directly serving equipment recursively.
+      operationId: getUpstreamEquipment
+      parameters:
+      - $ref: '#/components/parameters/servedByEquipmentId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/equipmentSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentItemsLegacy'
+              examples:
+                equipment:
+                  $ref: '#/components/examples/upstreamEquipmentItems'
+                equipment15:
+                  $ref: '#/components/examples/upstreamEquipmentItems15'
+      tags:
+      - Equipment
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /equipment/{equipmentId}/points:
+    get:
+      summary: List equipment points
+      description: Retrieves the collection of points defined for the specified equipment instance. Each point contains a mapping to an attribute on an object.
+      operationId: getEquipmentPoints
+      parameters:
+      - $ref: '#/components/parameters/equipmentId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/equipmentPointsSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentPoints'
+              examples:
+                zoneTemperaturePoint:
+                  $ref: '#/components/examples/get-equipment-points'
+                zoneTemperaturePoint15:
+                  $ref: '#/components/examples/get-equipment-points-15'
+        '403':
+          description: The client is not authorized to modify or delete this equipment.
+          content:
+            application/vnd.metasysapi.v6:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+        '404':
+          description: The provided identifier does not match any known equipment.
+          content:
+            application/vnd.metasysapi.v6:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+      tags:
+      - Equipment
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /equipment/tree:
+    get:
+      summary: Get equipment tree*
+      description: 'RELEASES: 15.0 and later
+
+
+        Retrieves the equipment tree from the root to the specified depth.'
+      operationId: getEquipmentTree
+      parameters:
+      - $ref: '#/components/parameters/depth'
+      - $ref: '#/components/parameters/excludeServed'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentTree'
+              examples:
+                equipment:
+                  $ref: '#/components/examples/equipmentTree'
+      tags:
+      - Equipment
+      x-releases:
+        implementedAt: '15.0'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/equipment/tree \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/equipment/tree\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/equipment/tree\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /equipment/tree'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/equipment/tree', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/equipment/tree\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/equipment/tree\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /equipment/tree/{objectId}:
+    get:
+      summary: Get equipment subtree*
+      description: 'RELEASES: 15.0 and later
+
+
+        Retrieves a subset of the equipment tree starting at the specified item to the specified depth. The item can be an equipment instance or a folder within the tree.'
+      operationId: getEquipmentSubtree
+      parameters:
+      - $ref: '#/components/parameters/objectIdForEquipment'
+      - $ref: '#/components/parameters/depth'
+      - $ref: '#/components/parameters/excludeServed'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentTree'
+              examples:
+                equipment:
+                  $ref: '#/components/examples/equipmentSubtree'
+        '404':
+          description: The provided identifier does not match any known equipment.
+          content:
+            application/vnd.metasysapi.v6:
+              schema:
+                $ref: '#/components/schemas/errorMessage'
+      tags:
+      - Equipment
+      x-releases:
+        implementedAt: '15.0'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/equipment/tree/767d8af0-163f-552c-ba37-a884466075f9 \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/equipment/tree/767d8af0-163f-552c-ba37-a884466075f9\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/equipment/tree/767d8af0-163f-552c-ba37-a884466075f9\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /equipment/tree/767d8af0-163f-552c-ba37-a884466075f9'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/equipment/tree/767d8af0-163f-552c-ba37-a884466075f9', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/equipment/tree/767d8af0-163f-552c-ba37-a884466075f9\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/equipment/tree/767d8af0-163f-552c-ba37-a884466075f9\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /equipment/{equipmentId}/servedEquipment:
+    get:
+      x-releases:
+        implementedAt: '15.0'
+      summary: Get served by equipment*
+      description: 'RELEASES: 15.0 and later
+
+
+        Retrieves the equipment served by the specified equipment instance.'
+      operationId: getServedEquipment
+      parameters:
+      - $ref: '#/components/parameters/equipmentId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/equipmentSortOptional'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentItemsLegacy'
+              examples:
+                equipment:
+                  $ref: '#/components/examples/servedByEquipmentItemsNew'
+                equipment15:
+                  $ref: '#/components/examples/servedByEquipmentItems15New'
+      tags:
+      - Equipment
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/servedEquipment \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/servedEquipment\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/servedEquipment\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/servedEquipment'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/servedEquipment', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/servedEquipment\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/servedEquipment\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /spaces/{spaceId}/equipment:
+    get:
+      summary: Get equipment serving a space
+      deprecated: true
+      description: 'Use
+
+        Get equipment serving space
+
+        instead. It performs the same operation but with a path that is more
+
+        descriptive of its task.
+
+
+        Retrieves the collection of equipment that serve the specified space.'
+      operationId: getEquipmentServingSpace
+      parameters:
+      - $ref: '#/components/parameters/spaceId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/equipmentSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentItemsLegacy'
+              examples:
+                equipment:
+                  $ref: '#/components/examples/equipmentServingSpace'
+                equipment15:
+                  $ref: '#/components/examples/equipmentServingSpace15'
+      tags:
+      - Equipment
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /spaces/{spaceId}/servingEquipment:
+    get:
+      x-releases:
+        implementedAt: '15.0'
+      summary: Get equipment serving a space*
+      description: 'RELEASES: 15.0 and later
+
+
+        Retrieves the collection of equipment that serve the specified space.'
+      operationId: getSpaceServingEquipment
+      parameters:
+      - $ref: '#/components/parameters/spaceId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/equipmentSortOptional'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/equipmentItemsLegacy'
+              examples:
+                equipment:
+                  $ref: '#/components/examples/equipmentServingSpaceNew'
+                equipment15:
+                  $ref: '#/components/examples/equipmentServingSpace15New'
+      tags:
+      - Equipment
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/servingEquipment \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/servingEquipment\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/servingEquipment\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/servingEquipment'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/servingEquipment', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/servingEquipment\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/servingEquipment\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+components:
+  parameters:
+    networkDeviceId:
+      name: networkDeviceId
+      description: The identifier of a network device.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: d9bf66bd-22f8-425b-82a4-44ba153d79c7
+    equipmentSortOptional:
+      name: sort
+      in: query
+      description: When provided, the criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+      schema:
+        type: string
+        enum:
+        - itemReference
+        - -itemReference
+        - name
+        - -name
+        - type
+        - -type
+      example: name
+    depth:
+      name: depth
+      in: query
+      example: 1
+      schema:
+        type: integer
+        default: 1
+      description: 'Specifies depth of the tree to return. For typical usage, a value or 1 or 2
+
+        is recommended. Use `-1` for unlimited depth to return the entire tree.
+
+        '
+    page:
+      name: page
+      in: query
+      description: The page number of items to return.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      example: 1
+    pageSize:
+      name: pageSize
+      in: query
+      description: The maximum number of items to return in the response.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 100
+      example: 100
+    servedByEquipmentId:
+      name: equipmentId
+      in: path
+      description: The identifier of the equipment instance.
+      required: true
+      schema:
+        type: string
+      example: 04d68394-3415-4813-b5ec-43d840deee38
+    objectIdForEquipment:
+      name: objectId
+      in: path
+      required: true
+      example: 767d8af0-163f-552c-ba37-a884466075f9
+      schema:
+        type: string
+      description: Specifies the root of the subtree to return for this request. The `objectId` is the identifier of the object to retrieve (optionally along with 1 or more levels of descendants).
+    excludeServed:
+      name: excludeServed
+      in: query
+      required: false
+      description: 'Specifies whether the response should exclude all equipment that is
+
+        currently serving another piece of equipment or a particular space. Only
+
+        equipment that is unassigned and not serving any space or equipment will be
+
+        returned
+
+        '
+      example: true
+      schema:
+        type: boolean
+        default: false
+    equipmentId:
+      name: equipmentId
+      in: path
+      description: The identifier of the equipment instance.
+      required: true
+      schema:
+        type: string
+      example: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+    spaceId:
+      name: spaceId
+      description: The identifier of a space.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+    equipmentPointsSort:
+      name: sort
+      in: query
+      description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+      schema:
+        type: string
+        default: shortName
+        enum:
+        - category
+        - -category
+        - isDisplayData
+        - -isDisplayData
+        - shortName
+        - -shortName
+      example: shortName
+    equipmentSort:
+      name: sort
+      in: query
+      description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+      schema:
+        type: string
+        default: name
+        enum:
+        - itemReference
+        - -itemReference
+        - name
+        - -name
+        - type
+        - -type
+      example: name
+  schemas:
+    equipmentTreeFolder:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A link to this equipment tree item, either an equipment instance or a folder.
+          format: uri
+          readOnly: true
+        id:
+          type: string
+          description: The identifier of the equipment tree item.
+        name:
+          type: string
+          description: The name of the equipment instance or folder.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the equipment.
+        objectType:
+          type: string
+          enum:
+          - objectTypeEnumSet.containerClass
+          x-metasysType: enum
+          x-metasysEnum: objectTypeEnumSet
+          description: 'The object type of the equipment tree folder. This will always be
+
+            `objectTypeEnumSet.containerClass`.
+
+
+
+            The values for this property come from the `objectTypeEnumSet` enumeration.
+
+            Find the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+        hasChildren:
+          type: boolean
+          description: 'Indicates if the equipment tree folder has children.
+
+            '
+        items:
+          type: array
+          description: 'A collection of equipment tree items, either equipment instances or
+
+            folders, that are children of the equipment tree folder.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/equipmentTreeFolder'
+            - $ref: '#/components/schemas/equipmentTreeEquipment'
+    equipmentItemsLegacy:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: Collection of equipment.
+          items:
+            $ref: '#/components/schemas/equipmentItemLegacy'
+        next:
+          type:
+          - string
+          - 'null'
+          description: A link to the next page of results.
+          format: uri
+        previous:
+          type:
+          - string
+          - 'null'
+          description: A link to the previous page of results.
+          format: uri
+        self:
+          type: string
+          description: A link to this equipment collection.
+          format: uri
+      required:
+      - total
+      - items
+      - next
+      - previous
+      - self
+    equipmentItemLegacy:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the object.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the object.
+        name:
+          type: string
+          description: The full name of the equipment instance.
+        type:
+          type:
+          - string
+          - 'null'
+          description: The name of the equipment definition for this equipment instance. If this instance is not associated with an equipment definition, this value will be null.
+        hasUpstreamEquipment:
+          type: boolean
+          x-releases:
+            implementedAt: '15.0'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            Indicates if the equipment instance has upstream equipment that serves
+
+            it.
+
+            '
+        self:
+          type: string
+          description: A link to this equipment instance.
+          format: uri
+        spacesUrl:
+          type: string
+          description: A link to the spaces served by this equipment instance.
+          format: uri
+        equipmentUrl:
+          type: string
+          description: A link to the equipment served by this equipment instance.
+          format: uri
+        upstreamEquipmentUrl:
+          type: string
+          description: A link to the equipment that serves this equipment instance.
+          format: uri
+        networkDevicesUrl:
+          type: string
+          description: A link to the network devices that host this equipment instance.
+          format: uri
+        pointsUrl:
+          type: string
+          description: A link to the point mappings defined by this equipment instance.
+          format: uri
+      required:
+      - id
+      - itemReference
+      - name
+      - type
+      - self
+      - spacesUrl
+      - equipmentUrl
+      - upstreamEquipmentUrl
+      - networkDevicesUrl
+      - pointsUrl
+    equipmentPoints:
+      type: object
+      description: The collection of points mapped to the equipment.
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: The collection of equipment point mappings.
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The identifier of the mapped equipment instance.
+              itemReference:
+                type: string
+                description: The fully qualified reference of the mapped equipment instance.
+              equipmentName:
+                type: string
+                description: The full name of the mapped equipment instance.
+              shortName:
+                type: string
+                description: The short name for the equipment point.
+              label:
+                type: string
+                description: The label for the equipment point.
+              category:
+                type: string
+                description: The category for the equipment point. This is generally unused.
+              isDisplayData:
+                type: boolean
+                description: Indicates that the equipment point should be shown to an end user more prominently than other points. This value can be configured via the Equipment Definition.
+              equipmentUrl:
+                type: string
+                description: A link to the mapped equipment.
+                format: uri
+              objectUrl:
+                type: string
+                description: A link to the mapped object.
+                format: uri
+              objectReference:
+                x-releases:
+                  implementedAt: '15.0'
+                type: string
+                description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+                  The fully qualified reference of the mapped object.'
+              attribute:
+                type: string
+                description: 'The attribute of the mapped object which the point''s value represents.
+
+
+                  The values for this property come from the `attributeEnumSet` enumeration.
+
+                  Find the definition of `attributeEnumSet` at the relative URL of `/schemas/enums/attributeEnumSet`.
+
+
+                  **See also:**
+
+                  * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                x-metasysEnum: attributeEnumSet
+            required:
+            - id
+            - itemReference
+            - equipmentName
+            - shortName
+            - label
+            - category
+            - isDisplayData
+            - equipmentUrl
+            - objectUrl
+            - attribute
+        next:
+          type:
+          - string
+          - 'null'
+          description: A link to the next page of results.
+          format: uri
+        previous:
+          type:
+          - string
+          - 'null'
+          description: A link to the previous page of results.
+          format: uri
+        self:
+          type: string
+          description: A link to this equipment point mapping collection.
+          format: uri
+      required:
+      - total
+      - items
+      - next
+      - previous
+      - self
+      example:
+        value:
+          items:
+          - shortName: OCC-MODE
+            label: Occupancy Status Display
+            isDisplayData: true
+            objectReference: https://metasys-server.example.com/api/v6/objects/ba12d1aa-e8e9-5cc7-b3fb-c308ec7f40d0
+            attribute: attributeEnumSet.presentValue
+            referencedObject: {}
+          - shortName: OCC-SCHEDULE
+            label: Occupancy Schedule
+            isDisplayData: false
+            objectReference: https://metasys-server.example.com/api/v6/objects/0ddeedd4-89d5-5d7b-a05d-68b961015a1a
+            attribute: attributeEnumSet.presentValue
+          - shortName: ZN-T
+            label: Zone Temperature
+            isDisplayData: true
+            objectReference: https://metasys-server.example.com/api/v6/objects/c3255717-d069-583d-9b88-3e98c660a4a5
+            attribute: attributeEnumSet.presentValue
+          - shortName: ZN-TOCC
+            label: Zone Temporary Occupancy
+            isDisplayData: false
+            objectReference: https://metasys-server.example.com/api/v6/objects/16bf0d5f-ff17-5095-a548-61bfa4e1ea3b
+            attribute: attributeEnumSet.presentValue
+          - shortName: ZN-TOCC
+            label: Zone Temporary Occupancy
+            isDisplayData: false
+            objectReference: https://metasys-server.example.com/api/v6/objects/16bf0d5f-ff17-5095-a548-61bfa4e1ea3b
+            attribute: attributeEnumSet.presentValue
+          - shortName: ZNT-STATE
+            label: Zone Status
+            isDisplayData: true
+            objectReference: https://metasys-server.example.com/api/v6/objects/492ab29a-99d8-5ab7-8528-d9af2e30807c
+            attribute: attributeEnumSet.presentValue
+    equipmentTree:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A link to this equipment tree.
+          format: uri
+          readOnly: true
+        items:
+          type: array
+          description: A collection of equipment tree items, either equipment instances or folders, that are children of this equipment tree.
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/equipmentTreeFolder'
+            - $ref: '#/components/schemas/equipmentTreeEquipment'
+    equipmentTreeEquipment:
+      type: object
+      properties:
+        self:
+          type: string
+          description: A link to this equipment tree item, either an equipment instance or a folder.
+          format: uri
+          readOnly: true
+        id:
+          type: string
+          description: The identifier of the equipment tree item.
+        name:
+          type: string
+          description: The name of the equipment instance or folder.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the equipment.
+        type:
+          type:
+          - string
+          - 'null'
+          description: The name of the equipment definition for this equipment instance. If this instance is not associated with an equipment definition, this value will be null.
+        objectType:
+          type: string
+          enum:
+          - objectTypeEnumSet.equipmentClass
+          x-metasysType: enum
+          x-metasysEnum: objectTypeEnumSet
+          description: 'The object type of the equipment tree item. This will always be
+
+            `objectTypeEnumSet.equipmentClass`.
+
+
+            **Note:** The correct enum value for this type is
+
+            `objectTypeEnumSet.legacyEquipmentClass`, but the Metasys server
+
+            incorrectly returns `objectTypeEnumSet.equipmentClass`. This
+
+            documentation reflects the actual server behavior.
+
+
+
+            The values for this property come from the `objectTypeEnumSet` enumeration.
+
+            Find the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+        subsystemCategory:
+          type:
+          - string
+          - 'null'
+          description: 'The system subtype of the equipment definition for this equipment instance. If this instance is not associated with an equipment definition, this value will be null.
+
+
+            The values for this property come from the `subsystemCategoryEnumSet` enumeration.
+
+            Find the definition of `subsystemCategoryEnumSet` at the relative URL of `/schemas/enums/subsystemCategoryEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysEnum: subsystemCategoryEnumSet
+        equipmentDefinitionId:
+          type:
+          - string
+          - 'null'
+          description: The identifier of the equipment definition for this equipment instance. If this instance is not associated with an equipment definition, this value will be null.
+    equipmentItem:
+      type: object
+      title: Equipment
+      properties:
+        id:
+          type: string
+          description: The identifier of the equipment instance.
+        name:
+          type: string
+          description: The full name of the equipment instance.
+        type:
+          type:
+          - string
+          - 'null'
+          description: The name of the equipment definition for this equipment instance. If this instance is not associated with an equipment definition, this value will be null.
+        self:
+          type: string
+          description: A link to this equipment instance.
+          format: uri
+        spacesUrl:
+          type: string
+          description: A link to the spaces served by this equipment instance.
+          format: uri
+        equipmentUrl:
+          type: string
+          description: A link to the equipment served by this equipment instance.
+          format: uri
+        equipmentDefinitionId:
+          x-releases:
+            implementedAt: '15.0'
+          type:
+          - string
+          - 'null'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            The identifier of the equipment definition for this equipment instance. If this instance is not associated with an equipment definition, this value will be null.'
+        upstreamEquipmentUrl:
+          type: string
+          description: A link to the equipment that serves this equipment instance.
+          format: uri
+        networkDevicesUrl:
+          type: string
+          description: A link to the network devices that host this equipment instance.
+          format: uri
+        pointsUrl:
+          type: string
+          description: A link to the point mappings defined by this equipment instance.
+          format: uri
+        hasUpstreamEquipment:
+          type: boolean
+          x-releases:
+            implementedAt: '15.0'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            Indicates if the equipment instance has upstream equipment that serves it.
+
+            '
+        upstreamEquipment:
+          type: array
+          x-releases:
+            implementedAt: '15.0'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            A collection of upstream equipment.'
+        itemReference:
+          type: string
+          description: The fully qualified reference of the object.
+        description:
+          type: string
+          x-releases:
+            implementedAt: '15.0'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            The description of the equipment.'
+        category:
+          type: string
+          x-releases:
+            implementedAt: '15.0'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            The authorization category of the equipment
+
+
+
+            The values for this property come from the `objectCategoryEnumSet` enumeration.
+
+            Find the definition of `objectCategoryEnumSet` at the relative URL of `/schemas/enums/objectCategoryEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: objectCategoryEnumSet
+        subsystemCategory:
+          type:
+          - string
+          - 'null'
+          x-releases:
+            implementedAt: '15.0'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            The system subtype of the equipment definition for this equipment instance. If this instance is not associated with an equipment definition, this value will be null.
+
+
+            The values for this property come from the `subsystemCategoryEnumSet` enumeration.
+
+            Find the definition of `subsystemCategoryEnumSet` at the relative URL of `/schemas/enums/subsystemCategoryEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysEnum: subsystemCategoryEnumSet
+        graphicAlias:
+          type:
+          - string
+          - 'null'
+          x-releases:
+            implementedAt: '15.0'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            The alias to apply to the graphics associated with the equipment.
+
+            '
+      required:
+      - id
+      - itemReference
+      - name
+      - type
+      - self
+      - spacesUrl
+      - equipmentUrl
+      - upstreamEquipmentUrl
+      - networkDevicesUrl
+      - pointsUrl
+    errorMessage:
+      title: Error
+      description: A general error of the API.
+      type: object
+      additionalProperties: false
+      properties:
+        statusName:
+          type: string
+          description: 'A Metasys specific status code. The format of this code is variable. If
+
+            the value is _unqualified_ ({enumValue}, e.g. "attributeNotFound"), then
+
+            the display text associated to the code comes from the `statusEnumSet`
+
+            available at `/schemas/enums/statusEnumSet`. If the value is qualified
+
+            with just an enumeration ("{enumeration}.{member}", e.g.
+
+            "statusEnumSet.attributeNotFound"), then the display text comes from the
+
+            enumeration schema available at `/schemas/enums/{enumeration}`. If the
+
+            value is qualified with a namespace
+
+            ("{namespace}:{enumeration}.{member}", e.g.
+
+            "api.diagram:error.saveFailed"), then the display text is the
+
+            responsibility of the client.
+
+            '
+        message:
+          type: string
+          description: The display string message that correlates to `statusName`.
+        details:
+          type:
+          - object
+          - 'null'
+          description: 'An object containing specific details to the type of error. Each type of
+
+            error may have different detail properties and value types.
+
+            '
+        innerError:
+          allOf:
+          - description: 'An error that is more detail or a cause of the containing error.
+
+              This allows for a recursive error structure which a client can
+
+              digest to as much detail as they understand. This is mutually
+
+              exclusive with `innerErrors`.
+
+              '
+          - $ref: '#/components/schemas/errorMessage'
+        innerErrors:
+          description: 'A collection of errors that is more detail or causes of the containing
+
+            error. This allows for a recursive error structure which a client can
+
+            digest to as much detail as they understand. This is mutually exclusive
+
+            with `innerError`.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/errorMessage'
+  examples:
+    upstreamEquipmentItems15:
+      summary: Equipment Collection (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        A page of equipment instances.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        total: 1
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+          name: AHU-1
+          type: MASP AHUs
+          self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+          hasUpstreamEquipment: true
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment?page=1&pageSize=100&sort=name
+    servedByEquipmentItems:
+      summary: Equipment Collection
+      description: A page of equipment instances.
+      value:
+        total: 1
+        items:
+        - id: 04d68394-3415-4813-b5ec-43d840deee38
+          itemReference: '{hostname}:{deviceHostname}/equipment.VAV-1'
+          name: VAV-1
+          type: VAV Boxes
+          self: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/equipment
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment?page=1&pageSize=100&sort=name
+    equipmentItemsLegacy:
+      summary: Equipment Collection
+      description: A page of equipment instances.
+      value:
+        total: 1
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+          name: AHU-1
+          type: MASP AHUs
+          self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/equipment?page=1&pageSize=100&sort=name
+    upstreamEquipmentItems:
+      summary: Equipment Collection
+      description: A page of equipment instances.
+      value:
+        total: 1
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+          name: AHU-1
+          type: MASP AHUs
+          self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment?page=1&pageSize=100&sort=name
+    equipmentItemsLegacy15:
+      summary: Equipment Collection (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        A page of equipment instances.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        total: 1
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+          name: AHU-1
+          type: MASP AHUs
+          self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+          hasUpstreamEquipment: true
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/equipment?page=1&pageSize=100&sort=name
+    equipmentServingSpace15New:
+      summary: Equipment Collection (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        A page of equipment instances.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        total: 1
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+          name: AHU-1
+          type: MASP AHUs
+          self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+          hasUpstreamEquipment: true
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/servingEquipment?page=1&pageSize=100&sort=name
+    equipmentHostedByDevice15:
+      summary: Equipment Collection (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        A page of equipment instances.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        total: 1
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+          name: AHU-1
+          type: MASP AHUs
+          self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+          hasUpstreamEquipment: true
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/equipment?page=1&pageSize=100&sort=name
+    equipmentItem15:
+      summary: Equipment Instance (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        A single equipment instance.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+        itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+        description: Equipment description
+        category: objectCategoryEnumSet.systemCategory
+        name: AHU-1
+        equipmentDefinitionId: e792bb0f-f4bc-4f7e-a692-8f121af2e81f
+        type: MASP AHUs
+        subsystemCategory: subsystemCategoryEnumSet.otherTypes
+        graphicAlias: null
+        self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+        spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+        equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+        upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+        hasUpstreamEquipment: false
+        networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+        pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+    servedByEquipmentItems15:
+      summary: Equipment Collection (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        A page of equipment instances.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        total: 1
+        items:
+        - id: 04d68394-3415-4813-b5ec-43d840deee38
+          itemReference: '{hostname}:{deviceHostname}/equipment.VAV-1'
+          name: VAV-1
+          type: VAV Boxes
+          self: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/equipment
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment
+          hasUpstreamEquipment: true
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment?page=1&pageSize=100&sort=name
+    equipmentSubtree:
+      summary: Equipment subtree
+      value:
+        self: https://metasys-server.example.com/api/v6/equipment/tree/b3717c77-9d5a-4f03-9c6b-d52db4caed5b
+        items:
+        - id: b3717c77-9d5a-4f03-9c6b-d52db4caed5b
+          name: SNE20001
+          itemReference: '{hostname}:{deviceHostname}/equipment.SNE2'
+          objectType: objectTypeEnumSet.containerClass
+          self: https://metasys-server.example.com/api/v6/equipment/tree/b3717c77-9d5a-4f03-9c6b-d52db4caed5b
+          hasChildren: true
+          items:
+          - id: 38ab8d71-63b3-40ab-bb20-343ec0d74be5
+            name: BACnetIP
+            itemReference: '{hostname}:{deviceHostname}/equipment.SNE2.MSTP1'
+            objectType: objectTypeEnumSet.containerClass
+            self: https://metasys-server.example.com/api/v6/equipment/tree/38ab8d71-63b3-40ab-bb20-343ec0d74be5
+            hasChildren: true
+            items:
+            - id: 69c813dd-0a7c-4efd-8e2c-290902359016
+              name: VAV-1
+              itemReference: '{hostname}:{deviceHostname}/equipment.SNE2.MSTP1.VAV-1'
+              type: VAV Boxes
+              self: https://metasys-server.example.com/api/v6/equipment/tree/69c813dd-0a7c-4efd-8e2c-290902359016
+              objectType: objectTypeEnumSet.equipmentClass
+              subsystemCategory: subsystemCategoryEnumSet.terminalUnits
+              equipmentDefinitionId: 4e3ab5b6-e3e2-4ab8-bfff-a41a7d4a780a
+            - id: 635b4d15-4afe-499f-a5cc-b9fa113d075f
+              name: VAV-2
+              itemReference: '{hostname}:{deviceHostname}/equipment.SNE2.MSTP1.VAV-2'
+              type: VAV Boxes
+              self: https://metasys-server.example.com/api/v6/equipment/tree/635b4d15-4afe-499f-a5cc-b9fa113d075f
+              objectType: objectTypeEnumSet.equipmentClass
+              subsystemCategory: subsystemCategoryEnumSet.terminalUnits
+              equipmentDefinitionId: 4e3ab5b6-e3e2-4ab8-bfff-a41a7d4a780a
+    get-equipment-points:
+      summary: List equipment points
+      description: The collection of points mapped to this equipment
+      value:
+        total: 5
+        next: null
+        previous: null
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.Controllers.VAV-1'
+          equipmentName: VAV-1
+          shortName: CLG-MAXFLOW
+          label: Cooling Max Flow
+          category: ''
+          isDisplayData: true
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          objectUrl: https://metasys-server.example.com/api/v6/objects/6e914cd5-a557-5f92-8902-d74d50378fce
+          attribute: attributeEnumSet.presentValue
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.Controllers.VAV-1'
+          equipmentName: VAV-1
+          shortName: CLG-MINFLOW
+          label: Cooling Min Flow
+          category: ''
+          isDisplayData: true
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          objectUrl: https://metasys-server.example.com/api/v6/objects/f1aab581-31ee-5c0a-bebe-3c7cf6fab1a1
+          attribute: attributeEnumSet.presentValue
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.Controllers.VAV-1'
+          equipmentName: VAV-1
+          shortName: CLG-O
+          label: Cooling Output
+          category: ''
+          isDisplayData: false
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          objectUrl: https://metasys-server.example.com/api/v6/objects/5ee6f26b-9b74-5057-b486-bade69eba543
+          attribute: attributeEnumSet.presentValue
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.Controllers.VAV-1'
+          equipmentName: VAV-1
+          shortName: CLGOCC-MINFLOW
+          label: Occ Cooling Min Flow
+          category: ''
+          isDisplayData: true
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          objectUrl: https://metasys-server.example.com/api/v6/objects/91b06262-c6f9-53fc-90aa-70fa9b9f2999
+          attribute: attributeEnumSet.presentValue
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.Controllers.VAV-1'
+          equipmentName: VAV-1
+          shortName: CLGOCC-SP
+          label: Cooling Occupied Setpoint
+          category: ''
+          isDisplayData: true
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          objectUrl: https://metasys-server.example.com/api/v6/objects/42fddafe-2c26-59a1-bf9b-2d70edb2c5ca
+          attribute: attributeEnumSet.presentValue
+        self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points?page=1&pageSize=100&sort=shortName
+    equipmentItem:
+      summary: Equipment Instance
+      description: A single equipment instance.
+      value:
+        id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+        itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+        name: AHU-1
+        type: MASP AHUs
+        self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+        spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+        equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+        upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+        networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+        pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+    equipmentTree:
+      summary: Equipment tree
+      value:
+        self: https://metasys-server.example.com/api/v6/equipment/tree
+        items:
+        - id: b4a6c2c9-7e49-46a9-b960-0897ea48d962
+          name: Equipment
+          itemReference: '{hostname}:{deviceHostname}/equipment'
+          objectType: objectTypeEnumSet.containerClass
+          self: https://metasys-server.example.com/api/v6/equipment/tree/b4a6c2c9-7e49-46a9-b960-0897ea48d962
+          hasChildren: true
+          items:
+          - id: 5397c66d-64a2-4ddd-9eba-6ffc5d8683c7
+            name: SNE4001
+            itemReference: '{hostname}:{deviceHostname}/equipment.SNE1'
+            objectType: objectTypeEnumSet.containerClass
+            self: https://metasys-server.example.com/api/v6/equipment/tree/5397c66d-64a2-4ddd-9eba-6ffc5d8683c7
+            hasChildren: true
+            items:
+            - id: 62f721ce-b90b-40f6-ae3f-7447a3a909ca
+              name: MSTP
+              itemReference: '{hostname}:{deviceHostname}/equipment.SNE1.MSTP1'
+              objectType: objectTypeEnumSet.containerClass
+              self: https://metasys-server.example.com/api/v6/equipment/tree/62f721ce-b90b-40f6-ae3f-7447a3a909ca
+              hasChildren: true
+              items:
+              - id: 2c7f527b-a46d-43c9-9e6c-65655b2ef646
+                name: VAV-1
+                itemReference: '{hostname}:{deviceHostname}/equipment.SNE1.MSTP1.VAV-1'
+                type: VAV Boxes
+                self: https://metasys-server.example.com/api/v6/equipment/tree/2c7f527b-a46d-43c9-9e6c-65655b2ef646
+                objectType: objectTypeEnumSet.equipmentClass
+                subsystemCategory: subsystemCategoryEnumSet.terminalUnits
+                equipmentDefinitionId: 4e3ab5b6-e3e2-4ab8-bfff-a41a7d4a780a
+              - id: 6795e65a-790d-4e6b-a145-354c104b14a8
+                name: VAV-3
+                itemReference: '{hostname}:{deviceHostname}/equipment.SNE1.MSTP1.VAV-2'
+                type: VAV Boxes
+                self: https://metasys-server.example.com/api/v6/equipment/tree/6795e65a-790d-4e6b-a145-354c104b14a8
+                objectType: objectTypeEnumSet.equipmentClass
+                subsystemCategory: subsystemCategoryEnumSet.terminalUnits
+                equipmentDefinitionId: 4e3ab5b6-e3e2-4ab8-bfff-a41a7d4a780a
+          - id: abb3c117-2c07-4895-90e9-47a829d9bdb8
+            name: SNE4002
+            itemReference: '{hostname}:{deviceHostname}/equipment.SNE2'
+            objectType: objectTypeEnumSet.containerClass
+            self: https://metasys-server.example.com/api/v6/equipment/tree/abb3c117-2c07-4895-90e9-47a829d9bdb8
+            hasChildren: true
+            items:
+            - id: f4e57475-cb45-4b8d-b95a-208b659ae9bd
+              name: BACnetIP
+              itemReference: '{hostname}:{deviceHostname}/equipment.SNE2.MSTP1'
+              objectType: objectTypeEnumSet.containerClass
+              self: https://metasys-server.example.com/api/v6/equipment/tree/f4e57475-cb45-4b8d-b95a-208b659ae9bd
+              hasChildren: true
+              items:
+              - id: baf794ce-88c6-4bb5-9267-07b75e2a40af
+                name: AHU-1
+                itemReference: '{hostname}:{deviceHostname}/equipment.SNE2.MSTP1.VAV-1'
+                type: MASP AHUs
+                self: https://metasys-server.example.com/api/v6/equipment/tree/baf794ce-88c6-4bb5-9267-07b75e2a40af
+                objectType: objectTypeEnumSet.equipmentClass
+                subsystemCategory: subsystemCategoryEnumSet.terminalUnits
+                equipmentDefinitionId: 04a61779-5231-418c-ae35-60bf5506026c
+              - id: ddff4f42-c5de-49c1-aead-f9e524923682
+                name: AHU-2
+                itemReference: '{hostname}:{deviceHostname}/equipment.SNE2.MSTP1.VAV-2'
+                type: MASP AHUs
+                self: https://metasys-server.example.com/api/v6/equipment/tree/ddff4f42-c5de-49c1-aead-f9e524923682
+                objectType: objectTypeEnumSet.equipmentClass
+                subsystemCategory: subsystemCategoryEnumSet.terminalUnits
+                equipmentDefinitionId: 04a61779-5231-418c-ae35-60bf5506026c
+    get-equipment-points-15:
+      summary: List equipment points (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        The collection of points mapped to this equipment'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        total: 5
+        next: null
+        previous: null
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.Controllers.VAV-1'
+          equipmentName: VAV-1
+          shortName: CLG-MAXFLOW
+          label: Cooling Max Flow
+          category: ''
+          isDisplayData: true
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          objectUrl: https://metasys-server.example.com/api/v6/objects/6e914cd5-a557-5f92-8902-d74d50378fce
+          objectReference: '{hostname}:{deviceHostname}/AV2'
+          attribute: attributeEnumSet.presentValue
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.Controllers.VAV-1'
+          equipmentName: VAV-1
+          shortName: CLG-MINFLOW
+          label: Cooling Min Flow
+          category: ''
+          isDisplayData: true
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          objectUrl: https://metasys-server.example.com/api/v6/objects/f1aab581-31ee-5c0a-bebe-3c7cf6fab1a1
+          objectReference: '{hostname}:{deviceHostname}/MV2'
+          attribute: attributeEnumSet.presentValue
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.Controllers.VAV-1'
+          equipmentName: VAV-1
+          shortName: CLG-O
+          label: Cooling Output
+          category: ''
+          isDisplayData: false
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          objectUrl: https://metasys-server.example.com/api/v6/objects/5ee6f26b-9b74-5057-b486-bade69eba543
+          objectReference: '{hostname}:{deviceHostname}/MV1'
+          attribute: attributeEnumSet.presentValue
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.Controllers.VAV-1'
+          equipmentName: VAV-1
+          shortName: CLGOCC-MINFLOW
+          label: Occ Cooling Min Flow
+          category: ''
+          isDisplayData: true
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          objectUrl: https://metasys-server.example.com/api/v6/objects/91b06262-c6f9-53fc-90aa-70fa9b9f2999
+          objectReference: '{hostname}:{deviceHostname}/AV1'
+          attribute: attributeEnumSet.presentValue
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.Controllers.VAV-1'
+          equipmentName: VAV-1
+          shortName: CLGOCC-SP
+          label: Cooling Occupied Setpoint
+          category: ''
+          isDisplayData: true
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          objectUrl: https://metasys-server.example.com/api/v6/objects/42fddafe-2c26-59a1-bf9b-2d70edb2c5ca
+          objectReference: '{hostname}:{deviceHostname}/BV1'
+          attribute: attributeEnumSet.presentValue
+        self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points?page=1&pageSize=100&sort=shortName
+    servedByEquipmentItemsNew:
+      summary: Equipment Collection
+      description: A page of equipment instances.
+      value:
+        total: 1
+        items:
+        - id: 04d68394-3415-4813-b5ec-43d840deee38
+          itemReference: '{hostname}:{deviceHostname}/equipment.VAV-1'
+          name: VAV-1
+          type: VAV Boxes
+          self: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/equipment
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/servedEquipment?page=1&pageSize=100&sort=name
+    equipmentHostedByDevice:
+      summary: Equipment Collection
+      description: A page of equipment instances.
+      value:
+        total: 1
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+          name: AHU-1
+          type: MASP AHUs
+          self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/equipment?page=1&pageSize=100&sort=name
+    equipmentServingSpace15:
+      summary: Equipment Collection (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        A page of equipment instances.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        total: 1
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+          name: AHU-1
+          type: MASP AHUs
+          self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+          hasUpstreamEquipment: true
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment?page=1&pageSize=100&sort=name
+    equipmentServingSpace:
+      summary: Equipment Collection
+      description: A page of equipment instances.
+      value:
+        total: 1
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+          name: AHU-1
+          type: MASP AHUs
+          self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/equipment?page=1&pageSize=100&sort=name
+    equipmentServingSpaceNew:
+      summary: Equipment Collection
+      description: A page of equipment instances.
+      value:
+        total: 1
+        items:
+        - id: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          itemReference: '{hostname}:{deviceHostname}/equipment.AHU-1'
+          name: AHU-1
+          type: MASP AHUs
+          self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/equipment
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/upstreamEquipment
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/servingEquipment?page=1&pageSize=100&sort=name
+    servedByEquipmentItems15New:
+      summary: Equipment Collection (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        A page of equipment instances.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        total: 1
+        items:
+        - id: 04d68394-3415-4813-b5ec-43d840deee38
+          itemReference: '{hostname}:{deviceHostname}/equipment.VAV-1'
+          name: VAV-1
+          type: VAV Boxes
+          self: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38
+          spacesUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/spaces
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/equipment
+          upstreamEquipmentUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/upstreamEquipment
+          hasUpstreamEquipment: true
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/networkDevices
+          pointsUrl: https://metasys-server.example.com/api/v6/equipment/04d68394-3415-4813-b5ec-43d840deee38/points
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/servedEquipment?page=1&pageSize=100&sort=name
+  securitySchemes:
+    Bearer-Authentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Most of the calls in the API use bearer token authentication. What this
+
+        means is that these requests require an `Authorization` header to be set to
+
+        a value with the following format: `Bearer: {accessToken}`. Use the
+
+        [`/login`](#operation/createToken) operation to request an `accessToken`. An
+
+        example of the full header would look like the following:
+
+        `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...`.
+
+
+        **Note:** This example access token is truncated.
+
+
+        The expiration time of the access token is based on the user''s Metasys
+
+        profile.
+
+        '
+    API-Key-Authentication:
+      type: apiKey
+      in: query
+      name: access_token
+      description: 'The [Streaming operation](#operation/getStream) is the only operation to use
+
+        API key authentication, because web browsers do not allow setting custom
+
+        headers when initiating Server Sent Event connections.
+
+        '
+x-refined-from:
+- metasys-api-v6-16.json
+- johnson-controls-metasys-openapi.yml
+x-servers:
+  apps:
+    url: https://{hostname}/apps
+    description: The base url for accessing APIs of non-core applications
+    variables:
+      hostname:
+        default: metasys-server.example.com
+        description: This is the name of your site

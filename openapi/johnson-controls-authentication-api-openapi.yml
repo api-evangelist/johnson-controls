@@ -1,0 +1,271 @@
+openapi: 3.2.0
+info:
+  title: Johnson Controls Authentication API
+  version: Version 6 for 16.0
+  x-logo:
+    url: source/images/logo.svg
+    href: https://jci-metasys.github.io/
+  x-releases:
+  - '14.0'
+  - '14.1'
+  - '15.0'
+  - '16.0'
+  x-revision: 'Commit ID: 4b227676a'
+  description: 'Operations tagged authentication across 2 of this provider''s published API definitions: metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{hostname}/api/v6
+  description: The base URL of all API routes
+  variables:
+    hostname:
+      default: metasys-server.example.com
+      description: This is the name of your site director device
+security:
+- Bearer-Authentication: []
+tags:
+- name: Authentication
+  description: Operations to get and refresh an access token.
+paths:
+  /login:
+    post:
+      summary: Request access token
+      description: 'Use this to request an access token that can be used for authentication on
+
+        other API calls. The accessToken is sensitive information and must be kept
+
+        private. Do not share your access token with others.'
+      operationId: createToken
+      security: []
+      requestBody:
+        description: Used to supply credentials for login.
+        required: true
+        content:
+          application/json:
+            examples:
+              local:
+                $ref: '#/components/examples/local'
+              activeDirectory:
+                $ref: '#/components/examples/activeDirectory'
+            schema:
+              $ref: '#/components/schemas/loginRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/loginResultOK200'
+        '401':
+          $ref: '#/components/responses/loginResultUnauthorized401'
+        '403':
+          $ref: '#/components/responses/loginResultForbidden403'
+      tags:
+      - Authentication
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# Uses jq utility to parse out accessToken from response\n# https://github.com/jqlang/jq\naccessToken=$( \\\n  curl --request POST \\\n  --url https://metasys-server.example.com/api/v6/login \\\n  --header 'Content-Type: application/json' \\\n  --data '{\"username\":\"jane-doe\",\"password\":\"strongPassword\"}' | jq -r .accessToken)"
+      - lang: csharp
+        label: C# + Flurl
+        source: "using Flurl.Http;\nusing System.Collections.Generic;\n\nvar loginResponse = await \"https://metasys-server.example.com/api/v6/login\"\n    .PostJsonAsync(new\n        {\n            username = \"jane-doe\",\n            password = \"strongPassword\"\n        })\n    .ReceiveJson<Dictionary<string,object>>();\nvar accessToken = loginResponse[\"accessToken\"];"
+      - lang: text
+        label: Powershell
+        source: "$loginResponse = Invoke-RestMethod -Method Post `\n  -Uri https://metasys-server.example.com/api/v6/login `\n  -Headers @{ \"Content-Type\" = \"application/json\"} `\n  -Body @\"\n  {\n    \"username\": \"jane-doe\",\n    \"password\": \"strongPassword\"\n  }\n\"@\n$accessToken = $loginResponse.accessToken"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "$securePassword = Read-Host -AsSecureString\nConnect-MetasysAccount -MetasysHost metasys-server.example.com `\n  -UserName jane-doe `\n  -Password $securePassword `\n  -Version 6"
+      - lang: javascript
+        label: Node + Axios
+        source: "import axios from 'axios';\n\nconst axiosClient = axios.create({\n  baseURL: 'https://metasys-server.example.com/api/v6'\n});\n\nconst loginResponse = await axiosClient.post('login', {\n  username: 'jane-doe',\n  password: 'strongPassword'\n}, {\n  headers: {\n    'Content-Type': 'application/json'\n  }\n});\n\nconst accessToken = loginResponse.data.accessToken;\n\n// You'll use `axiosClient` and `accessToken` in most\n// other axios code examples"
+      - lang: python
+        label: Python
+        source: 'import http.client
+
+          import json
+
+
+          conn = http.client.HTTPSConnection("metasys-server.example.com")
+
+          payload = "{\"username\":\"jane-doe\",\"password\":\"strongPassword\"}"
+
+          headers = { "Content-Type": "application/json" }
+
+          conn.request("POST", "/api/v6/login", payload, headers)
+
+
+          login_res = conn.getresponse()
+
+          response_json = json.loads(login_res.read().decode("utf-8"))
+
+
+          access_token = response_json.get("accessToken")'
+      - lang: java
+        label: Java
+        source: "HttpRequest loginRequest = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/login\"))\n    .header(\"Content-Type\", \"application/json\")\n    .method(\"POST\", HttpRequest.BodyPublishers.ofString(\"{\\\"username\\\":\\\"jane-doe\\\",\\\"password\\\":\\\"strongPassword\\\"}\"))\n    .build();\nHttpResponse<String> loginResponse = HttpClient.newHttpClient().send(loginRequest, HttpResponse.BodyHandlers.ofString());\nString responseBody = loginResponse.body();\nJSONObject jsonResponse = new JSONObject(responseBody);\nString accessToken = jsonResponse.getString(\"accessToken\");"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /refreshToken:
+    get:
+      summary: Refresh a token
+      description: Use this operation to request a new token before the previous one expires.
+      operationId: getToken
+      responses:
+        '200':
+          $ref: '#/components/responses/loginResultOK200'
+      tags:
+      - Authentication
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/refreshToken \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/refreshToken\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/refreshToken\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /refreshToken'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/refreshToken', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/refreshToken\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/refreshToken\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+components:
+  responses:
+    loginResultOK200:
+      description: login result
+      content:
+        application/vnd.metasysapi.v6+json:
+          schema:
+            $ref: '#/components/schemas/loginResponse'
+          examples:
+            standard:
+              summary: Login result
+              description: The result includes the access token needed to make requests. (The token in this example has been truncated.)
+              value:
+                accessToken: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...
+                expires: '2021-04-22T00:12:18Z'
+    loginResultForbidden403:
+      description: Forbidden.
+    loginResultUnauthorized401:
+      description: Unauthorized.
+  schemas:
+    loginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: The access token for this session.
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IklFa3FIW...
+        expires:
+          type: string
+          format: date-time
+          description: The time at which the token will expire.
+          example: '2018-08-03T18:23:45Z'
+      required:
+      - accessToken
+      - expires
+    loginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: 'The user name of an account. This can either be a local Metasys
+
+            account, or an Active Directory account that has been granted access
+
+            to Metasys. When using an Active Directory account, the value should
+
+            be in the format `{name}@{domain}` (for example,
+
+            `jane-doe@mycorp.com`).
+
+
+            **Note:** Only accounts with an _Access Type_ of `API` can be used to
+
+            request a token from the REST API.
+
+            '
+        password:
+          type: string
+          description: The corresponding password of a Metasys account.
+      example:
+        username: jane-doe
+        password: strongPassword
+  examples:
+    activeDirectory:
+      summary: Active Directory
+      description: The `username` must be in the format `{name}@{domain}`
+      value:
+        username: jane-doe@mycorp.com
+        password: strongPassword
+    local:
+      summary: Local Metasys Account
+      value:
+        username: jane-doe
+        password: strongPassword
+  securitySchemes:
+    Bearer-Authentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Most of the calls in the API use bearer token authentication. What this
+
+        means is that these requests require an `Authorization` header to be set to
+
+        a value with the following format: `Bearer: {accessToken}`. Use the
+
+        [`/login`](#operation/createToken) operation to request an `accessToken`. An
+
+        example of the full header would look like the following:
+
+        `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...`.
+
+
+        **Note:** This example access token is truncated.
+
+
+        The expiration time of the access token is based on the user''s Metasys
+
+        profile.
+
+        '
+    API-Key-Authentication:
+      type: apiKey
+      in: query
+      name: access_token
+      description: 'The [Streaming operation](#operation/getStream) is the only operation to use
+
+        API key authentication, because web browsers do not allow setting custom
+
+        headers when initiating Server Sent Event connections.
+
+        '
+x-refined-from:
+- metasys-api-v6-16.json
+- johnson-controls-metasys-openapi.yml
+x-servers:
+  apps:
+    url: https://{hostname}/apps
+    description: The base url for accessing APIs of non-core applications
+    variables:
+      hostname:
+        default: metasys-server.example.com
+        description: This is the name of your site

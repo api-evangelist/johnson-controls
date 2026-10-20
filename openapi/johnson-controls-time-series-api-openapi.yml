@@ -1,0 +1,2125 @@
+openapi: 3.2.0
+info:
+  title: Johnson Controls time series API
+  version: Version 6 for 16.0
+  x-logo:
+    url: source/images/logo.svg
+    href: https://jci-metasys.github.io/
+  x-releases:
+  - '14.0'
+  - '14.1'
+  - '15.0'
+  - '16.0'
+  x-revision: 'Commit ID: 4b227676a'
+  description: 'Operations tagged time series across 2 of this provider''s published API definitions: metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{hostname}/api/v6
+  description: The base URL of all API routes
+  variables:
+    hostname:
+      default: metasys-server.example.com
+      description: This is the name of your site director device
+security:
+- Bearer-Authentication: []
+tags:
+- name: time series
+  description: 'This section describes the operations you can perform on time series sample
+
+    data.
+
+
+    ### Origin of Time Series data
+
+
+    The Metasys system has two locations from which time series samples can be
+
+    retrieved. The first is from the _trend_ or _log_ object, itself. Each object on
+
+    the Metasys site whose responsibility is to generate samples will have its own
+
+    _buffer_ to store them. When samples are retrieved from the `objects` endpoints,
+
+    they will be retrieved from their respective buffers. Time series operations
+
+    that work with a buffer will include "(buffer)" in their summary.
+
+
+    The second location is from the _repository_. As samples are collected in the
+
+    _trend_ or _log_ objects themselves, those objects (if configured and enabled)
+
+    have the ability to forward that information to a _repository_. The _repository_
+
+    is the location on the LAN (Local Area Network) that can receive and store
+
+    historical data from one to many Metasys sources. Samples retrieved from the
+
+    `timeSeries` endpoint are retrieved from the particular Metasys device''s
+
+    repository. Time series operations that work with the repository will include
+
+    "(repository)" in their summary.
+
+
+    ## Subscription Streaming Events
+
+
+    Clients may subscribe to Objects and Network Devices streaming events. A
+
+    subscription is established by providing a `METASYS-SUBSCRIBE` header on a `GET`
+
+    operation of the `samples` resource under either the `objects` resource paths.
+
+
+    ### Events
+
+
+    The following events (with accompanying examples) are available for samples:
+
+
+    - `timeSeries.subscription.established` - Indicates when a subscription has been
+
+    established for `objects` samples.
+
+
+    - `timeSeries.subscription.cancelled` - Indicates when a subscription has been
+
+    cancelled for `objects` samples.
+
+
+    - `timeSeries.error` - Indicates an error occurred with regards to an active
+
+    samples subscription.
+
+
+    - `timeSeries.samples.update` - Indicates new samples have been generated.
+
+    Sample updates from multiple objects and attributes can be contained in a
+
+    single event (each designated by their `sampledByObjectId`, `sampledObjectId`
+
+    and `attribute` properties).
+
+
+    - `timeSeries.heartbeat` - Indicates that time series subscription(s) are still
+
+    alive.
+
+
+    ## Metasys-Call-Async Streaming Events
+
+
+    Clients may subscribe to Objects Samples Response streaming events. A
+
+    subscription is established by providing a `METASYS-CALL-ASYNC` header on a
+
+    `GET` operation of the `samples` resource under either the `objects` resource
+
+    paths or `POST` operation of the `samples` resource under batch operation of
+
+    times buffer. The following events (with accompanying examples) are available
+
+    for samples:
+
+
+    ### Samples Events
+
+
+    The following events (with accompanying examples) are available for async
+
+    samples:
+
+
+    - `timeSeries.samples.stream.started` - Indicates when a subscription has been
+
+    established for `objects` samples response.
+
+
+    - `timeSeries.samples.stream.error` - Indicates an error occurred with regards
+
+    to an active samples response subscription.
+
+
+    - `timeSeries.samples.stream.data` - Indicates samples responses for each
+
+    request. Samples from multiple objects and attributes can be contained in a
+
+    single event (each designated by their `sampledByObjectId`, `sampledObjectId`
+
+    and `attribute` properties).
+
+
+    - `timeSeries.samples.stream.completed` - Indicates that a streaming samples
+
+    response has completed successfully.'
+paths:
+  /timeSeries:
+    get:
+      tags:
+      - time series
+      summary: List all time series (repository)
+      description: 'The operation retrieves a collection of resources for which historical
+
+        time series data exists. This operation uses the time series repository as
+
+        its source of truth. It may contain data for objects that no longer
+
+        actually exist on the site. This operation never considers time series
+
+        that exist exclusively in buffers on devices and that are not configured
+
+        to forward their samples to the repository.'
+      operationId: getTimeSeries
+      parameters:
+      - name: searchString
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Filter results by finding objects with an `itemReference` that contains the `searchString` as a substring.
+        examples:
+          av:
+            summary: Find all references with `AV`` in them
+            value: AV
+          programming:
+            summary: Find all references with `Programming`` in them
+            value: Programming
+      - $ref: '#/components/parameters/page'
+      - name: pageSize
+        in: query
+        description: The maximum number of items to return in the response.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 2000
+          default: 100
+        example: 100
+      - name: sort
+        in: query
+        description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+        schema:
+          type: string
+          default: itemReference
+          enum:
+          - itemReference
+          - -itemReference
+        example: itemReference
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                title: Historical Time Series List
+                type: object
+                required:
+                - self
+                - total
+                - next
+                - previous
+                - items
+                readOnly: true
+                properties:
+                  self:
+                    $ref: '#/components/schemas/schemas_self'
+                  total:
+                    type: integer
+                    description: The total number of items in the collection.
+                  next:
+                    type:
+                    - string
+                    - 'null'
+                    description: A link to the next page of results.
+                    format: uri
+                  previous:
+                    type:
+                    - string
+                    - 'null'
+                    description: A link to the previous page of results.
+                    format: uri
+                  items:
+                    title: Historical Time Series Record
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - itemReference
+                      - sampledAttributes
+                      properties:
+                        id:
+                          type: string
+                          description: The unique identifier of an object with samples.
+                          example: 32cfddc0-411f-5b9e-9a6d-442cb62fecbb
+                        itemReference:
+                          type: string
+                          format: fully-qualified-reference
+                          description: The fully qualified reference of the object.
+                        name:
+                          type: string
+                          description: The name of the object.
+                        sampledAttributes:
+                          type: array
+                          description: The set of attributes for which samples exist.
+                          items:
+                            title: Sampled Attributes
+                            type: object
+                            required:
+                            - samplesUrl
+                            - attribute
+                            properties:
+                              samplesUrl:
+                                type: string
+                                format: uri
+                                description: The base URL to use for fetching samples of this attribute.
+                              attribute:
+                                type: string
+                                description: 'The attribute for which samples exist.
+
+
+                                  The values for this property come from the `attributeEnumSet` enumeration.
+
+                                  Find the definition of `attributeEnumSet` at the relative URL of `/schemas/enums/attributeEnumSet`.
+
+
+                                  **See also:**
+
+                                  * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                                x-metasysEnum: attributeEnumSet
+              examples:
+                typical-response:
+                  $ref: '#/components/examples/get-time-series-response'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/timeSeries \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/timeSeries\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/timeSeries\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /timeSeries'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/timeSeries', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/timeSeries\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/timeSeries\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /objects/{objectId}/trendedAttributes:
+    get:
+      tags:
+      - time series
+      summary: List trended attributes (buffer)
+      description: Retrieves a collection of attributes under the specified object for which samples are available in their respective local sample buffers.
+      operationId: getObjectTrendedAttributes
+      parameters:
+      - $ref: '#/components/parameters/objectId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/trendedAttributesResponse'
+              examples:
+                objects-trended-attributes-response:
+                  $ref: '#/components/examples/get-objects-trended-attributes-response'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /timeSeries/{objectId}:
+    get:
+      tags:
+      - time series
+      summary: Get trend object (repository)
+      description: Retrieves data for a specified object for which samples are available in trend repository.
+      operationId: getRepoTrendedObject
+      parameters:
+      - $ref: '#/components/parameters/objectId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/repoTrendedObjectResponse'
+              examples:
+                repo-trended-object-response:
+                  $ref: '#/components/examples/get-repo-trended-object-response'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /timeSeries/{objectId}/trendedAttributes:
+    get:
+      tags:
+      - time series
+      summary: List trended attributes (repository)
+      description: Retrieves a collection of attributes for the specified object for which samples are available in the trend repository.
+      operationId: getRepoTrendedAttributes
+      parameters:
+      - $ref: '#/components/parameters/objectId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/repoTrendedAttributesResponse'
+              examples:
+                repo-trended-attributes-response:
+                  $ref: '#/components/examples/get-repo-trended-attributes-response'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /timeSeries/{objectId}/trendedAttributes/{attributeId}:
+    get:
+      tags:
+      - time series
+      summary: Get trended attribute (repository)
+      description: Retrieves a attribute for the specified object for which samples are available in the trend repository.
+      operationId: getTrendedAttribute
+      parameters:
+      - $ref: '#/components/parameters/objectId'
+      - $ref: '#/components/parameters/attributeId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/trendedAttributeResponse'
+              examples:
+                repo-trended-attributes-response:
+                  $ref: '#/components/examples/get-repo-trended-attribute-response'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /objects/{objectId}/trendedAttributes/{attributeId}/samples:
+    get:
+      tags:
+      - time series
+      summary: Get attribute samples (buffer)
+      description: 'Retrieves a collection of samples from the object''s local sample buffer
+
+        for the specified object attribute during a particular date and time
+
+        range.
+
+
+        If the `METASYS-SUBSCRIBE` header is provided, then an event subscription
+
+        will be created which will include the events described in
+
+        Time Series.
+
+
+        **Note:** The parent endpoint
+
+        `/objects/{objectId}/trendedAttributes/{attributeId}` is not currently
+
+        supported.'
+      operationId: getObjectAttributeSamplesFromBuffer
+      parameters:
+      - $ref: '#/components/parameters/metasysSubscribe'
+      - $ref: '#/components/parameters/objectId'
+      - $ref: '#/components/parameters/attributeId'
+      - name: startSampleTime
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: The date and time representing the earliest sample to return.
+        example: '2020-05-12T16:46:47Z'
+      - name: endSampleTime
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: The date and time representing the latest sample to return.
+        example: '2021-01-19T18:13:58.007Z'
+      - name: sort
+        in: query
+        description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+        schema:
+          type: string
+          default: -sampleTime
+          enum:
+          - sampleTime
+          - -sampleTime
+        example: sampleTime
+      - $ref: '#/components/parameters/sampledById'
+      responses:
+        '200':
+          description: Success
+          headers:
+            METASYS-SUBSCRIPTION-LOCATION:
+              description: The location of the newly created subscription.
+              schema:
+                type: string
+                format: uri
+              example: https://metasys-server.example.com/api/v6/timeSeries/streams/72d4ee80-e324-4922-b0ec-1425079d892a/subscriptions/538f00be-5788-4f68-a60e-45a14356c7ef
+              required: false
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/objectsAttributeSamplesResponse'
+              examples:
+                analog-response:
+                  $ref: '#/components/examples/get-objects-samples-response-with-analog-values'
+                enum-response:
+                  $ref: '#/components/examples/get-objects-samples-response-with-enum-values'
+                boolean-response:
+                  $ref: '#/components/examples/get-objects-samples-response-with-boolean-values'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /timeSeries/{objectId}/trendedAttributes/{attributeId}/samples:
+    get:
+      tags:
+      - time series
+      summary: Get attribute samples (repository)
+      description: 'Retrieves a collection of samples from the trend repository for the
+
+        specified object attribute during a particular date and time range. **Note:**
+
+        The parent endpoint
+
+        `/timeSeries/{objectId}/trendedAttributes/{attributeId}` is not currently
+
+        supported.'
+      operationId: getRepoSamples
+      parameters:
+      - $ref: '#/components/parameters/objectId'
+      - $ref: '#/components/parameters/attributeId'
+      - name: startSampleTime
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: The date and time representing the earliest sample to return.
+        example: '2020-05-12T16:46:47Z'
+      - name: endSampleTime
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+        description: The date and time representing the latest sample to return.
+        example: '2021-01-19T18:13:58.007Z'
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 1
+          minimum: 1
+        description: The page of the collection being requested.
+        example: 5
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: integer
+          default: 500
+          maximum: 20000
+        description: The requested number of items in the response.
+        example: 500
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          default: -sampleTime
+          enum:
+          - sampleTime
+          - -sampleTime
+        description: The criteria to use when sorting results. Please refer to default sorting rules for general guidelines.
+        example: sampleTime
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/repoAttributeSamplesResponse'
+              examples:
+                analog-response:
+                  $ref: '#/components/examples/get-repo-samples-response-with-analog-values'
+                enum-response:
+                  $ref: '#/components/examples/get-repo-samples-response-with-enum-values'
+                boolean-response:
+                  $ref: '#/components/examples/get-repo-samples-response-with-boolean-values'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /timeSeries/batch:
+    post:
+      tags:
+      - time series
+      summary: Batch operations for time series (repository)
+      description: 'This operation is used to invoke multiple time series operations in a
+
+        single HTTP request. Often a batch request is more efficient than sending
+
+        each individual operation in its own HTTP request. In this version of the
+
+        API, the only time series related operations that can be used in this
+
+        batch API are _Get object samples (repository)_. This request is for
+
+        fetching repository data (as opposed to fetching data from the buffer).'
+      operationId: postRepoBatchTimeSeries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              batchSamples:
+                summary: Get samples for multiple attributes of multiple objects
+                description: 'This example shows a request body that will read samples for the
+
+                  `presentValue` and `enabled` attributes for object
+
+                  `c550095d-ee4c-4314-b415-b0577e383ee9` and for the
+
+                  `presentValue` attribute of object
+
+                  `c82d160b-884c-5eac-bad4-89754f0069e0`.
+
+                  '
+                value:
+                  method: GET
+                  requests:
+                  - id: '1'
+                    relativeUrl: c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples
+                  - id: '2'
+                    relativeUrl: c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime
+                  - id: '3'
+                    relativeUrl: c82d160b-884c-5eac-bad4-89754f0069e0/trendedAttributes/presentValue/samples
+            schema:
+              type: object
+              example:
+                method: GET
+                requests:
+                - id: '1'
+                  relativeUrl: c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples
+                - id: '2'
+                  relativeUrl: c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime
+                - id: '3'
+                  relativeUrl: c82d160b-884c-5eac-bad4-89754f0069e0/trendedAttributes/presentValue/samples
+              required:
+              - method
+              - requests
+              properties:
+                method:
+                  type: string
+                  description: 'The HTTP method to use for each request. This property is
+
+                    restricted to `GET` for this version of the API.
+
+                    '
+                  enum:
+                  - GET
+                requests:
+                  type: array
+                  title: Request object
+                  description: A collection of entries that represent the operations to invoke.
+                  minItems: 1
+                  items:
+                    type: object
+                    required:
+                    - id
+                    - relativeUrl
+                    properties:
+                      id:
+                        type: string
+                        description: A client supplied unique identifier for this request. The `id` values supplied by the client will be used to uniquely identify the responses that correspond to each request.
+                      relativeUrl:
+                        type: string
+                        format: uri-reference
+                        description: A relative path (with respect to `/timeSeries/`) that identifies a resource for one of the supported operations.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                type: object
+                readOnly: true
+                required:
+                - responses
+                properties:
+                  responses:
+                    description: A collection of objects that represent the responses to the individual requests that were invoked.
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - status
+                      - body
+                      properties:
+                        id:
+                          type: string
+                          description: One of the client supplied unique request identifiers from the request. This identifier is used to match the response to the correct operation in the request.
+                        status:
+                          type: integer
+                          description: The HTTP Status code returned for the corresponding operation.
+                        body:
+                          description: The response body for the corresponding operation.
+                          oneOf:
+                          - $ref: '#/components/schemas/repoAttributeSamplesResponse'
+                          - $ref: '#/components/schemas/standardErrorMessage'
+              examples:
+                post-batch-repo-sample-response:
+                  $ref: '#/components/examples/post-time-series-batch-sample-repo-response'
+        '400':
+          description: The request body was invalid.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/standardErrorMessage'
+              examples:
+                badRequestDuplicateIds:
+                  summary: Bad request with duplicate IDs
+                  description: "The request included the same `id` multiple times as in the\nfollowing example.\n\n<details><summary>Click to see the bad request duplicate Ids</summary>\n\n```json\n{\n  \"method\": \"GET\"\n  \"requests\": [\n    {\n      \"id\": \"1\",\n      \"relativeUrl\": \"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples\"\n    },\n    {\n      \"id\": \"1\",\n      \"relativeUrl\": \"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples\"\n    }\n  ]\n}\n```\n\n</details>\n"
+                  value:
+                    code: api.error.duplicateId
+                    message: The batched request contains duplicate request IDs.
+                badRequestNonSupportedOperation:
+                  summary: Bad request mixed request non-supported.
+                  description: "The request included the mixed request route which are\nnon-supported as in the following example.\n\n<details><summary>Click to see the bad request with mixed request non-supported</summary>\n\n```json\n{\n  \"method\": \"GET\"\n  \"requests\": [\n    {\n      \"id\": \"1\",\n      \"relativeUrl\": \"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes\"\n    },\n    {\n      \"id\": \"2\",\n      \"relativeUrl\": \"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples\"\n    }\n  ]\n}\n```\n\n</details>\n"
+                  value:
+                    code: api.error.requestNotSupported
+                    message: The batched request contains request which are not supported in this batch operation.
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request POST \\\n  --url https://metasys-server.example.com/api/v6/timeSeries/batch \\\n  --header \"Authorization: Bearer $accessToken\" \\\n  --header 'Content-Type: application/json' \\\n  --data '{\"method\":\"GET\",\"requests\":[{\"id\":\"1\",\"relativeUrl\":\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples\"},{\"id\":\"2\",\"relativeUrl\":\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime\"},{\"id\":\"3\",\"relativeUrl\":\"c82d160b-884c-5eac-bad4-89754f0069e0/trendedAttributes/presentValue/samples\"}]}'"
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/timeSeries/batch\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .WithHeader(\"Content-Type\", \"application/json\")\n    .PostStringAsync(\"{\\\"method\\\":\\\"GET\\\",\\\"requests\\\":[{\\\"id\\\":\\\"1\\\",\\\"relativeUrl\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples\\\"},{\\\"id\\\":\\\"2\\\",\\\"relativeUrl\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime\\\"},{\\\"id\\\":\\\"3\\\",\\\"relativeUrl\\\":\\\"c82d160b-884c-5eac-bad4-89754f0069e0/trendedAttributes/presentValue/samples\\\"}]}\");"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/timeSeries/batch\" `\n  -Method Post `\n  -Body '{\"method\":\"GET\",\"requests\":[{\"id\":\"1\",\"relativeUrl\":\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples\"},{\"id\":\"2\",\"relativeUrl\":\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime\"},{\"id\":\"3\",\"relativeUrl\":\"c82d160b-884c-5eac-bad4-89754f0069e0/trendedAttributes/presentValue/samples\"}]}' `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n    'Content-Type' = 'application/json'\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /timeSeries/batch `\n  -Method Post `\n  -Body '{\"method\":\"GET\",\"requests\":[{\"id\":\"1\",\"relativeUrl\":\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples\"},{\"id\":\"2\",\"relativeUrl\":\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime\"},{\"id\":\"3\",\"relativeUrl\":\"c82d160b-884c-5eac-bad4-89754f0069e0/trendedAttributes/presentValue/samples\"}]}'"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n  'Content-Type': 'application/json',\n};\n\nconst response = await axiosClient.post(\n  '/timeSeries/batch',\n  '{\"method\":\"GET\",\"requests\":[{\"id\":\"1\",\"relativeUrl\":\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples\"},{\"id\":\"2\",\"relativeUrl\":\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime\"},{\"id\":\"3\",\"relativeUrl\":\"c82d160b-884c-5eac-bad4-89754f0069e0/trendedAttributes/presentValue/samples\"}]}', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/timeSeries/batch\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\" ,\n    \"Content-Type\": \"application/json\"\n}\npayload = \"{\\\"method\\\":\\\"GET\\\",\\\"requests\\\":[{\\\"id\\\":\\\"1\\\",\\\"relativeUrl\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples\\\"},{\\\"id\\\":\\\"2\\\",\\\"relativeUrl\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime\\\"},{\\\"id\\\":\\\"3\\\",\\\"relativeUrl\\\":\\\"c82d160b-884c-5eac-bad4-89754f0069e0/trendedAttributes/presentValue/samples\\\"}]}\"\n\nconn.request(\"POST\", url, payload, headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/timeSeries/batch\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .header(\"content-type\", \"application/json\")\n    .method(\"POST\", HttpRequest.BodyPublishers.ofString(\"{\\\"method\\\":\\\"GET\\\",\\\"requests\\\":[{\\\"id\\\":\\\"1\\\",\\\"relativeUrl\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples\\\"},{\\\"id\\\":\\\"2\\\",\\\"relativeUrl\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime\\\"},{\\\"id\\\":\\\"3\\\",\\\"relativeUrl\\\":\\\"c82d160b-884c-5eac-bad4-89754f0069e0/trendedAttributes/presentValue/samples\\\"}]}\"))\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /timeSeries/streams/{streamId}/subscriptions:
+    post:
+      tags:
+      - time series
+      summary: Create samples subscription (buffer)
+      description: Creates a subscription to trend buffer samples
+      operationId: postTimeSeriesStreamSubscription
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      requestBody:
+        description: New streaming subscription for time series data.
+        required: true
+        content:
+          application/json:
+            examples:
+              createSpeed:
+                $ref: '#/components/examples/create-time-series-streaming-subscription-request'
+            schema:
+              $ref: '#/components/schemas/timeSeriesStreamingSubscriptionRequest'
+      responses:
+        '201':
+          description: The subscription was successfully created.
+          headers:
+            METASYS-SUBSCRIPTION-LOCATION:
+              description: The location of the newly created subscription.
+              schema:
+                type: string
+                format: uri
+              example: https://metasys-server.example.com/api/v6/timeSeries/streams/72d4ee80-e324-4922-b0ec-1425079d892a/subscriptions/538f00be-5788-4f68-a60e-45a14356c7ef
+              required: true
+            Location:
+              description: The location of the newly created resource.
+              schema:
+                type: string
+                format: uri
+              example: https://metasys-server.example.com/api/v6/timeSeries/streams/72d4ee80-e324-4922-b0ec-1425079d892a/subscriptions/538f00be-5788-4f68-a60e-45a14356c7ef
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request POST \\\n  --url https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions \\\n  --header \"Authorization: Bearer $accessToken\" \\\n  --header 'Content-Type: application/json' \\\n  --data '{\"items\":[{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"presentValue\"},{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"reliability\",\"sampledById\":[\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"]},{\"objectId\":\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"}]}'"
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .WithHeader(\"Content-Type\", \"application/json\")\n    .PostStringAsync(\"{\\\"items\\\":[{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"presentValue\\\"},{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"reliability\\\",\\\"sampledById\\\":[\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"]},{\\\"objectId\\\":\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"}]}\");"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions\" `\n  -Method Post `\n  -Body '{\"items\":[{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"presentValue\"},{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"reliability\",\"sampledById\":[\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"]},{\"objectId\":\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"}]}' `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n    'Content-Type' = 'application/json'\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions `\n  -Method Post `\n  -Body '{\"items\":[{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"presentValue\"},{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"reliability\",\"sampledById\":[\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"]},{\"objectId\":\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"}]}'"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n  'Content-Type': 'application/json',\n};\n\nconst response = await axiosClient.post(\n  '/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions',\n  '{\"items\":[{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"presentValue\"},{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"reliability\",\"sampledById\":[\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"]},{\"objectId\":\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"}]}', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\" ,\n    \"Content-Type\": \"application/json\"\n}\npayload = \"{\\\"items\\\":[{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"presentValue\\\"},{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"reliability\\\",\\\"sampledById\\\":[\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"]},{\\\"objectId\\\":\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"}]}\"\n\nconn.request(\"POST\", url, payload, headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .header(\"content-type\", \"application/json\")\n    .method(\"POST\", HttpRequest.BodyPublishers.ofString(\"{\\\"items\\\":[{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"presentValue\\\"},{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"reliability\\\",\\\"sampledById\\\":[\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"]},{\\\"objectId\\\":\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"}]}\"))\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /timeSeries/streams/{streamId}/subscriptions/{subscriptionId}:
+    put:
+      tags:
+      - time series
+      summary: Update samples subscription (buffer)
+      description: Replaces an existing subscription to trend buffer samples.
+      operationId: putTimeSeriesStreamSubscription
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/subscriptionId'
+      requestBody:
+        description: Streaming subscription for time series data.
+        required: true
+        content:
+          application/json:
+            examples:
+              createSpeed:
+                $ref: '#/components/examples/create-time-series-streaming-subscription-request'
+            schema:
+              $ref: '#/components/schemas/timeSeriesStreamingSubscriptionRequest'
+      responses:
+        '200':
+          description: The subscription was successfully replaced.
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request PUT \\\n  --url https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5 \\\n  --header \"Authorization: Bearer $accessToken\" \\\n  --header 'Content-Type: application/json' \\\n  --data '{\"items\":[{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"presentValue\"},{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"reliability\",\"sampledById\":[\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"]},{\"objectId\":\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"}]}'"
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .WithHeader(\"Content-Type\", \"application/json\")\n    .PutStringAsync(\"{\\\"items\\\":[{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"presentValue\\\"},{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"reliability\\\",\\\"sampledById\\\":[\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"]},{\\\"objectId\\\":\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"}]}\");"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\" `\n  -Method Put `\n  -Body '{\"items\":[{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"presentValue\"},{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"reliability\",\"sampledById\":[\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"]},{\"objectId\":\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"}]}' `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n    'Content-Type' = 'application/json'\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5 `\n  -Method Put `\n  -Body '{\"items\":[{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"presentValue\"},{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"reliability\",\"sampledById\":[\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"]},{\"objectId\":\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"}]}'"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n  'Content-Type': 'application/json',\n};\n\nconst response = await axiosClient.put(\n  '/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5',\n  '{\"items\":[{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"presentValue\"},{\"objectId\":\"c550095d-ee4c-4314-b415-b0577e383ee9\",\"attributeId\":\"reliability\",\"sampledById\":[\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"]},{\"objectId\":\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\"}]}', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\" ,\n    \"Content-Type\": \"application/json\"\n}\npayload = \"{\\\"items\\\":[{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"presentValue\\\"},{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"reliability\\\",\\\"sampledById\\\":[\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"]},{\\\"objectId\\\":\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"}]}\"\n\nconn.request(\"PUT\", url, payload, headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .header(\"content-type\", \"application/json\")\n    .method(\"PUT\", HttpRequest.BodyPublishers.ofString(\"{\\\"items\\\":[{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"presentValue\\\"},{\\\"objectId\\\":\\\"c550095d-ee4c-4314-b415-b0577e383ee9\\\",\\\"attributeId\\\":\\\"reliability\\\",\\\"sampledById\\\":[\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"]},{\\\"objectId\\\":\\\"4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7\\\"}]}\"))\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    delete:
+      tags:
+      - time series
+      summary: Delete trend samples subscription
+      description: Deletes a subscription to trend samples.
+      operationId: deleteTimeSeriesStreamSubscription
+      parameters:
+      - $ref: '#/components/parameters/streamId'
+      - $ref: '#/components/parameters/subscriptionId'
+      responses:
+        '204':
+          description: The subscription was successfully deleted.
+        '404':
+          description: The subscription does not exist.
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request DELETE \\\n  --url https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5 \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .DeleteAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\" `\n  -Method Delete `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5 `\n  -Method Delete"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.delete(\n  '/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"DELETE\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/timeSeries/streams/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/subscriptions/626e5ac3-506d-4017-bb8f-973f1c54ddb5\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"DELETE\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+components:
+  examples:
+    get-repo-samples-response-with-boolean-values:
+      summary: Get samples from trend repository response - Boolean Data Type
+      description: Get samples from trend repository response containing only boolean values (non-multistate).
+      value:
+        total: 1
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: boolean
+                metasysType: bool
+              sampleTime:
+                type: string
+                format: date-time
+              reliability:
+                allOf:
+                - type: string
+                  metasysType: enum
+                - $ref: https://metasys-server.example.com/api/v6/schemas/enums/reliabilityEnumSet
+        items:
+        - value: true
+          sampleTime: '2021-01-01T12:00:00Z'
+          reliability: reliabilityEnumSet.unreliable
+        attribute: attributeEnumSet.outOfService
+        previous: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=1&sort=-sampleTime
+        next: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=3&sort=-sampleTime
+        self: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime
+        timeSeriesUrl: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9
+    get-objects-trended-attributes-response:
+      summary: Get Objects Trended Attributes Response
+      description: Get objects trended attributes response.
+      value:
+        total: 2
+        items:
+        - samplesUrl: https://metasys-server.example.com/api/v6/objects/b259cdd9-6bb5-57c9-aeca-3ef7df6ebb9a/trendedAttributes/presentValue/samples?startSampleTime=2021-05-23T04:39:01.545Z&endSampleTime=2021-05-24T04:39:01.545Z&pageSize=500&page=1&sort=-sampleTime
+          attribute: attributeEnumSet.presentValue
+          attributeSchema:
+            type: number
+            metasysType: float
+          sampledBy:
+          - self: https://metasys-server.example.com/api/v6/objects/0fae85ad-9d37-471d-acf2-b9c196dce3c2
+            item:
+              id: 0fae85ad-9d37-471d-acf2-b9c196dce3c2
+              itemReference: '{hostname}:{deviceHostname}/programming.meter1.trend1'
+              name: Meter Pricing Window Sample
+              enable: true
+          - self: https://metasys-server.example.com/api/v6/objects/111a4a42-d506-4c98-93b8-42a1243c8c23
+            item:
+              id: 111a4a42-d506-4c98-93b8-42a1243c8c23
+              itemReference: '{hostname}:{deviceHostname}/programming.meter1.trend2'
+              name: Meter CoV Sample
+              enable: false
+        - samplesUrl: https://metasys-server.example.com/api/v6/objects/b259cdd9-6bb5-57c9-aeca-3ef7df6ebb9a/trendedAttributes/outOfService/samples?startSampleTime=2021-05-23T04:39:01.545Z&endSampleTime=2021-05-24T04:39:01.545Z&pageSize=500&page=1&sort=-sampleTime
+          attribute: attributeEnumSet.outOfService
+          attributeSchema:
+            type: boolean
+            metasysType: bool
+          sampledBy:
+          - self: https://metasys-server.example.com/api/v6/objects/4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7
+            item:
+              id: 4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7
+              itemReference: '{hostname}:{deviceHostname}/programming.meter1.trend3'
+              name: Trend - Out Of Service
+              enable: true
+        self: https://metasys-server.example.com/api/v6/objects/b259cdd9-6bb5-57c9-aeca-3ef7df6ebb9a/trendedAttributes
+    get-repo-trended-attributes-response:
+      summary: Get trended attributes from the trend repository response
+      description: Get trended attributes from the trend repository response.
+      value:
+        total: 2
+        items:
+        - samplesUrl: https://metasys-server.example.com/api/v6/timeSeries/b259cdd9-6bb5-57c9-aeca-3ef7df6ebb9a/trendedAttributes/memoryUsage/samples?startSampleTime=2021-05-23T04:39:01.545Z&endSampleTime=2021-05-24T04:39:01.545Z&pageSize=500&page=1&sort=-sampleTime
+          attribute: attributeEnumSet.memoryUsage
+          attributeSchema:
+            type: number
+            metasysType: float
+        - samplesUrl: https://metasys-server.example.com/api/v6/timeSeries/b259cdd9-6bb5-57c9-aeca-3ef7df6ebb9a/trendedAttributes/alarmRate/samples?startSampleTime=2021-05-23T04:39:01.545Z&endSampleTime=2021-05-24T04:39:01.545Z&pageSize=500&page=1&sort=-sampleTime
+          attribute: attributeEnumSet.alarmRate
+          attributeSchema:
+            type: number
+            metasysType: ulong
+        self: https://metasys-server.example.com/api/v6/timeSeries/b259cdd9-6bb5-57c9-aeca-3ef7df6ebb9a/trendedAttributes
+    create-time-series-streaming-subscription-request:
+      summary: Create a time series streaming subscription
+      value:
+        items:
+        - objectId: c550095d-ee4c-4314-b415-b0577e383ee9
+          attributeId: presentValue
+        - objectId: c550095d-ee4c-4314-b415-b0577e383ee9
+          attributeId: reliability
+          sampledById:
+          - 4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7
+        - objectId: 4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7
+    get-objects-samples-response-with-enum-values:
+      summary: Get samples from trend object response - Enum Data Type
+      description: Get samples from trend object response containing only enum values (multistate).
+      value:
+        total: 1
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                allOf:
+                - type: string
+                  metasysType: enum
+                - $ref: https://metasys-server.example.com/api/v6/schemas/enums/offOnSet
+              sampleTime:
+                type: string
+                format: date-time
+              reliability:
+                allOf:
+                - type: string
+                  metasysType: enum
+                - $ref: https://metasys-server.example.com/api/v6/schemas/enums/reliabilityEnumSet
+        items:
+        - value: offOnSet.ooOn
+          sampleTime: '2021-01-01T12:00:00Z'
+          reliability: reliabilityEnumSet.unreliable
+        attribute: attributeEnumSet.presentValue
+        self: https://metasys-server.example.com/api/v6/objects/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&sort=-sampleTime
+        objectUrl: https://metasys-server.example.com/api/v6/objects/c550095d-ee4c-4314-b415-b0577e383ee9
+    get-repo-trended-attribute-response:
+      summary: Get Trended Attribute Response
+      description: Get trended attribute response.
+      value:
+        samplesUrl: https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples?startSampleTime=2024-07-07T09:02:34.965Z&endSampleTime=2024-07-08T09:02:34.965Z&pageSize=500&page=1&sort=-sampleTime
+        attribute: attributeEnumSet.presentValue
+        self: https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue
+    get-repo-samples-response-with-enum-values:
+      summary: Get samples from trend repository response - Enum Data Type
+      description: Get samples from the trend repository response containing only enum values (multistate).
+      value:
+        total: 1
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                allOf:
+                - type: string
+                  metasysType: enum
+                - $ref: https://metasys-server.example.com/api/v6/schemas/enums/offOnSet
+              sampleTime:
+                type: string
+                format: date-time
+              reliability:
+                allOf:
+                - type: string
+                  metasysType: enum
+                - $ref: https://metasys-server.example.com/api/v6/schemas/enums/reliabilityEnumSet
+        items:
+        - value: offOnSet.ooOn
+          sampleTime: '2021-01-01T12:00:00Z'
+          reliability: reliabilityEnumSet.unreliable
+        attribute: attributeEnumSet.presentValue
+        previous: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=1&sort=-sampleTime
+        next: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=3&sort=-sampleTime
+        self: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime
+        timeSeriesUrl: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9
+    get-objects-samples-response-with-boolean-values:
+      summary: Get samples from trend object response - Boolean Data Type
+      description: Get samples from trend object response containing only boolean values (non-multistate).
+      value:
+        total: 1
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: boolean
+                metasysType: bool
+              sampleTime:
+                type: string
+                format: date-time
+              reliability:
+                allOf:
+                - type: string
+                  metasysType: enum
+                - $ref: https://metasys-server.example.com/api/v6/schemas/enums/reliabilityEnumSet
+        items:
+        - value: true
+          sampleTime: '2021-01-01T12:00:00Z'
+          reliability: reliabilityEnumSet.unreliable
+        attribute: attributeEnumSet.outOfService
+        self: https://metasys-server.example.com/api/v6/objects/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/outOfService/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&sort=-sampleTime
+        objectUrl: https://metasys-server.example.com/api/v6/objects/c550095d-ee4c-4314-b415-b0577e383ee9
+    get-repo-samples-response-with-analog-values:
+      summary: Get samples from trend repository response - Analog Data Type
+      description: Get samples from the trend repository response containing only analog values.
+      value:
+        total: 1
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: number
+                metasysType: float
+                units: unitEnumSet.degF
+                displayPrecision: displayPrecisionEnumSet.displayPrecisionPt1
+              sampleTime:
+                type: string
+                format: date-time
+              reliability:
+                allOf:
+                - type: string
+                  metasysType: enum
+                - $ref: https://metasys-server.example.com/api/v6/schemas/enums/reliabilityEnumSet
+        items:
+        - value: 68.9
+          sampleTime: '2021-01-01T12:00:00Z'
+          reliability: reliabilityEnumSet.unreliable
+        attribute: attributeEnumSet.presentValue
+        previous: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=1&sort=-sampleTime
+        next: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=3&sort=-sampleTime
+        self: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&pageSize=1&page=2&sort=-sampleTime
+        timeSeriesUrl: https://metasys-server.example.com/api/v6/timeSeries/c550095d-ee4c-4314-b415-b0577e383ee9
+    get-objects-samples-response-with-analog-values:
+      summary: Get samples from trend object response - Analog Data Type
+      description: Get samples from trend object response containing only analog values.
+      value:
+        total: 1
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              value:
+                type: number
+                metasysType: float
+                units: unitEnumSet.degF
+                displayPrecision: displayPrecisionEnumSet.displayPrecisionPt1
+              sampleTime:
+                type: string
+                format: date-time
+              reliability:
+                allOf:
+                - type: string
+                  metasysType: enum
+                - $ref: https://metasys-server.example.com/api/v6/schemas/enums/reliabilityEnumSet
+        items:
+        - value: 68.9
+          sampleTime: '2021-01-01T12:00:00Z'
+          reliability: reliabilityEnumSet.unreliable
+        attribute: attributeEnumSet.presentValue
+        self: https://metasys-server.example.com/api/v6/objects/c550095d-ee4c-4314-b415-b0577e383ee9/trendedAttributes/presentValue/samples?startSampleTime=2020-05-12T16:46:47.000Z&endSampleTime=2021-01-19T18:13:58.007Z&sort=-sampleTime
+        objectUrl: https://metasys-server.example.com/api/v6/objects/c550095d-ee4c-4314-b415-b0577e383ee9
+    post-time-series-batch-sample-repo-response:
+      summary: Response to a batch request to fetch samples from repository
+      description: The response to a batch request to fetch samples for three different attributes.
+      value:
+        responses:
+        - id: '1'
+          status: 200
+          body:
+            total: 21869
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  value:
+                    type: number
+                    metasysType: float
+                    displayPrecision: displayPrecisionEnumSet.displayPrecisionPt1
+                    units: unitEnumSet.noUnits
+                  sampleTime:
+                    type: string
+                    format: date-time
+                  reliability:
+                    allOf:
+                    - type: string
+                      metasysType: enum
+                    - $ref: /schemas/enums/reliabilityEnumSet
+            items:
+            - value: 0
+              sampleTime: '2022-05-18T04:38:10Z'
+              reliability: reliabilityEnumSet.reliable
+            - value: 0
+              sampleTime: '2022-05-17T11:16:03Z'
+              reliability: reliabilityEnumSet.reliable
+            attribute: attributeEnumSet.presentValue
+            next: https://metasys-server.example.com/api/v6/timeSeries/4c593c9a-5159-5e2e-9e6c-362d3aff7373/trendedAttributes/presentValue/samples?startSampleTime=2022-07-20T07:42:42.186Z&endSampleTime=2022-07-21T07:42:42.186Z&pageSize=500&page=2&sort=-sampleTime
+            previous: null
+            self: https://metasys-server.example.com/api/v6/timeSeries/4c593c9a-5159-5e2e-9e6c-362d3aff7373/trendedAttributes/presentValue/samples?startSampleTime=2022-07-20T07:42:42.186Z&endSampleTime=2022-07-21T07:42:42.186Z&pageSize=500&page=1&sort=-sampleTime
+            timeSeriesUrl: https://metasys-server.example.com/api/v6/timeSeries/4c593c9a-5159-5e2e-9e6c-362d3aff7373
+        - id: '2'
+          status: 200
+          body:
+            total: 0
+            schema: null
+            items: []
+            attribute: attributeEnumSet.presentValue
+            next: null
+            previous: null
+            self: https://metasys-server.example.com/api/v6/timeSeries/45730f6d-cd53-5890-bbef-a19c1fe45c62/trendedAttributes/presentValue/samples?startSampleTime=2022-07-20T07:42:42.186Z&endSampleTime=2022-07-21T07:42:42.186Z&pageSize=500&page=1&sort=-sampleTime
+            timeSeriesUrl: https://metasys-server.example.com/api/v6/timeSeries/45730f6d-cd53-5890-bbef-a19c1fe45c62
+        - id: '3'
+          status: 404
+          body:
+            code: invalidObjectId
+            message: The requested objectId does not exist
+    get-repo-trended-object-response:
+      summary: Get Objects Trended Attributes Response
+      description: Get objects trended attributes response.
+      value:
+        id: 32cfddc0-411f-5b9e-9a6d-442cb62fecbb
+        itemReference: '{hostname}:{deviceHostname}/AV1'
+        name: AV1
+        sampledAttributes:
+        - samplesUrl: https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/trendedAttributes/presentValue/samples?startSampleTime=2024-07-02T12:00:45.278Z&endSampleTime=2024-07-03T12:00:45.278Z&pageSize=500&page=1&sort=-sampleTime
+          attribute: attributeEnumSet.presentValue
+          attributeSchema: null
+        self: https://metasys-server.example.com/api/v6/timeSeries/32cfddc0-411f-5b9e-9a6d-442cb62fecbb
+    get-time-series-response:
+      summary: Get list of historical time series
+      value:
+        total: 2
+        next: null
+        previous: null
+        items:
+        - id: c82d160b-884c-5eac-bad4-89754f0069e0
+          itemReference: '{hostname}:{deviceHostname}/AV2'
+          name: AV2
+          sampledAttributes:
+          - samplesUrl: https://metasys-server.example.com/api/v6/timeSeries/c82d160b-884c-5eac-bad4-89754f0069e0/attributes/presentValue/samples
+            attribute: attributeEnumSet.presentValue
+        - id: 0e59b020-4b6d-5498-8c56-82d95709c5a7
+          itemReference: '{hostname}:{deviceHostname}/Programming.AV3'
+          name: AV3
+          sampledAttributes:
+          - samplesUrl: https://metasys-server.example.com/api/v6/timeSeries/0e59b020-4b6d-5498-8c56-82d95709c5a7/attributes/presentValue/samples
+            attribute: attributeEnumSet.presentValue
+        self: https://metasys-server.example.com/api/v6/timeSeries?page=1&pageSize=100&sort=itemReference
+  parameters:
+    attributeId:
+      name: attributeId
+      in: path
+      required: true
+      schema:
+        type: string
+      x-metasysType: enum
+      x-metasysEnum: attributeEnumSet
+      description: 'The identifier of the attribute.
+
+
+        The acceptable values for this parameter come from the `attributeEnumSet` enumeration.
+
+        It is acceptable to use the short name of the attribute (for example, `presentValue` instead of `attributeEnumSet.presentValue`) because the enumeration set is known from context.
+
+        Find the definition of `attributeEnumSet` at the relative URL of `/schemas/enums/attributeEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      example: presentValue
+    page:
+      name: page
+      in: query
+      description: The page number of items to return.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      example: 1
+    objectId:
+      name: objectId
+      in: path
+      description: The identifier of the object.
+      example: 32cfddc0-411f-5b9e-9a6d-442cb62fecbb
+      required: true
+      schema:
+        type: string
+    sampledById:
+      name: sampledById
+      in: query
+      required: false
+      explode: true
+      schema:
+        type: array
+        items:
+          type: string
+      description: 'Filter samples by objects by supplying one or more `sampledById` values.
+
+
+        An attribute may have multiple objects sampling it. Use this parameter to
+
+        include samples only from a specific object or set of objects. If no value
+
+        is given for this parameter, then the response will contain samples from all
+
+        of the objects sampling this attribute.
+
+        '
+      examples:
+        multipleIds:
+          summary: Multiple identifiers
+          value:
+          - 4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7
+          - 4ffd6456-3d36-5e08-8efb-ba91d4a81126
+        singleId:
+          summary: Single identifier
+          value:
+          - 4ffd6456-3d36-5e08-8efb-ba91d4a81126
+    metasysSubscribe:
+      name: METASYS-SUBSCRIBE
+      in: header
+      description: 'If present, subscribes the client for streaming events associated with the
+
+        resource. The value of this header is a stream id obtained by opening a
+
+        stream with _Get a stream_. The response will have a
+
+        `METASYS-SUBSCRIPTION-LOCATION` header which identifies the created
+
+        subscription.
+
+
+        **See also:**
+
+
+        - [Get a stream](#operation/getStream)
+
+        '
+      required: false
+      schema:
+        type: string
+      example: 40e47e37-0f24-4101-8e1d-de96af4b648b
+    streamId:
+      name: streamId
+      in: path
+      required: true
+      description: 'The stream identifier that contains the subscription. This is the unique
+
+        identifier for the client''s stream obtained via `GET /stream`.
+
+        '
+      schema:
+        type: string
+      example: 32cfddc0-411f-5b9e-9a6d-442cb62fecbb
+    subscriptionId:
+      name: subscriptionId
+      in: path
+      required: true
+      description: 'The identifier of the subscription to act upon. This is the unique
+
+        identifier to the subscription for a specific resource or type of event.
+
+        This value is found as the last parameter of a
+
+        `METASYS-SUBSCRIPTION-LOCATION` header returned for the original
+
+        subscription request.
+
+        '
+      schema:
+        type: string
+      example: 626e5ac3-506d-4017-bb8f-973f1c54ddb5
+  schemas:
+    objectsAttributeSamplesResponse:
+      title: Samples
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        schema:
+          type: object
+          description: JSON Schema definition of the items property.
+        items:
+          type: array
+          description: Collection of time series samples.
+          items:
+            type: object
+            properties:
+              value:
+                oneOf:
+                - type: number
+                - type: boolean
+                - type: string
+              sampleTime:
+                type: string
+                format: date-time
+                description: The date and time that the sample was recorded.
+              reliability:
+                type: string
+                x-metasysType: enum
+                x-metasysEnum: reliabilityEnumSet
+                description: 'Indicator of the reliability of the sample.
+
+
+                  If at the time of this sample''s recording the object had the
+
+                  BACnet Status flag of "FAULT" set to `true`, this value will be
+
+                  set to "reliabilityEnumSet.unreliable". Otherwise, the value will
+
+                  be set to "reliabilityEnumSet.reliable".
+
+
+
+                  The values for this property come from the `reliabilityEnumSet` enumeration.
+
+                  Find the definition of `reliabilityEnumSet` at the relative URL of `/schemas/enums/reliabilityEnumSet`.
+
+
+                  **See also:**
+
+                  * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+            required:
+            - value
+            - sampleTime
+            - reliability
+        self:
+          type: string
+          format: uri
+          description: A link to this collection of value samples.
+        objectUrl:
+          type: string
+          format: uri
+          description: A link to the object that is collecting and storing the samples.
+        attribute:
+          type: string
+          description: The sampled attribute.
+      required:
+      - total
+      - schema
+      - items
+      - self
+      - objectUrl
+      - attribute
+    timeSeriesStreamingSubscriptionRequest:
+      title: Time series streaming subscription request payload
+      type: object
+      properties:
+        items:
+          type: array
+          description: Collection of items to sign up for.
+          items:
+            type: object
+            properties:
+              objectId:
+                type: string
+                description: 'The identifier of the object.
+
+
+                  If only `objectId` is specified and not `attributeId`, then trend
+
+                  objects which are objects that have an `objectType` of
+
+                  `trendLogClass`, `trendMapperClass`, `bacnetTrendLogExtClass`,
+
+                  `trendLogNoextensionClass`, `bacnetTrendLogClass` or
+
+                  `bacnetTrendLogMultipleClass` are only supported.
+
+                  '
+              attributeId:
+                type: string
+                x-metasysType: enum
+                x-metasysEnum: attributeEnumSet
+                description: 'The identifier of the attribute.
+
+
+                  The values for this property come from the `attributeEnumSet` enumeration.
+
+                  Find the definition of `attributeEnumSet` at the relative URL of `/schemas/enums/attributeEnumSet`.
+
+
+                  **See also:**
+
+                  * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+              sampledById:
+                type: array
+                items:
+                  type: string
+                description: 'Filter samples by objects by supplying one or more `sampledById`
+
+                  values.
+
+
+                  An attribute may have multiple objects sampling it. Use this
+
+                  parameter to subscribe to samples only from a specific object or
+
+                  set of objects. If no value is given for this parameter, then it
+
+                  will subscribe to samples from all of the objects sampling this
+
+                  attribute.
+
+                  '
+            required:
+            - objectId
+      example:
+        items:
+        - objectId: c550095d-ee4c-4314-b415-b0577e383ee9
+          attributeId: presentValue
+        - objectId: c550095d-ee4c-4314-b415-b0577e383ee9
+          attributeId: reliability
+          sampledById:
+          - 4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7
+        - objectId: 4cc1cb52-b2db-4129-ac93-0d4a5e6dd6d7
+    repoTrendedAttributesResponse:
+      title: Time Series Get Trended Attributes Retrieval Success
+      type: object
+      additionalProperties: false
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: The collection of available samples.
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              samplesUrl:
+                type: string
+                format: uri
+                description: A link to this collection of object value samples.
+              attribute:
+                type: string
+                x-metasysType: enum
+                x-metasysEnum: attributeEnumSet
+                description: 'The attribute on which the samples were taken.
+
+
+                  The values for this property come from the `attributeEnumSet` enumeration.
+
+                  Find the definition of `attributeEnumSet` at the relative URL of `/schemas/enums/attributeEnumSet`.
+
+
+                  **See also:**
+
+                  * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+              attributeSchema:
+                type: object
+                description: JSON Schema of the attribute being sampled.
+            required:
+            - samplesUrl
+            - attribute
+            - attributeSchema
+        self:
+          type: string
+          format: uri
+          description: A link to this collection.
+      required:
+      - total
+      - items
+      - self
+    schemas_self:
+      title: self url
+      type: string
+      readOnly: true
+      format: uri
+      description: A link to this payload
+    repoAttributeSamplesResponse:
+      title: Time Series Samples Retrieval Success
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        schema:
+          description: JSON Schema definition of the items array and its samples in this response.
+        items:
+          type: array
+          description: Collection of time series samples.
+          items:
+            type: object
+            properties:
+              value:
+                oneOf:
+                - type: number
+                - type: boolean
+                - type: string
+              sampleTime:
+                type: string
+                format: date-time
+                description: The date and time for when the sample was recorded.
+              reliability:
+                type: string
+                x-metasysType: enum
+                x-metasysEnum: reliabilityEnumSet
+                description: 'Indicator of the reliability of the sample.
+
+
+                  If at the time of this sample''s recording the object had the
+
+                  BACnet Status flag of "FAULT" set to `true`, this value will be
+
+                  set to "reliabilityEnumSet.unreliable". Otherwise, the value will
+
+                  be set to "reliabilityEnumSet.reliable".
+
+
+
+                  The values for this property come from the `reliabilityEnumSet` enumeration.
+
+                  Find the definition of `reliabilityEnumSet` at the relative URL of `/schemas/enums/reliabilityEnumSet`.
+
+
+                  **See also:**
+
+                  * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+            required:
+            - value
+            - sampleTime
+            - reliability
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: A link to the previous page of this set of value samples.
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          description: A link to the next page of this set of value samples.
+        self:
+          type: string
+          format: uri
+          description: A link to this collection of value samples.
+        timeSeriesUrl:
+          type: string
+          format: uri
+          description: A link to the object from which these samples were generated.
+        attribute:
+          type: string
+          x-metasysType: enum
+          x-metasysEnum: attributeEnumSet
+          description: 'The sampled attribute.
+
+
+            The values for this property come from the `attributeEnumSet` enumeration.
+
+            Find the definition of `attributeEnumSet` at the relative URL of `/schemas/enums/attributeEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      required:
+      - total
+      - schema
+      - items
+      - self
+      - timeSeriesUrl
+      - attribute
+    standardErrorMessage:
+      title: Standard Error
+      description: A general error of the API.
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'A Metasys specific status code. The format of this code is variable. It
+
+            uses namespace/qualified format for `statusName` values. If the value is
+
+            qualified with just an enumeration
+
+            ("{namespace}:{enumeration}.{member}", e.g.
+
+            "enum.core:statusEnumSet.attributeNotFound"), then the display text
+
+            comes from the enumeration schema available at
+
+            `/schemas/enums/{enumeration}`. If the value is qualified with a
+
+            namespace ("{namespace}:{enumeration}.{member}", e.g.
+
+            "api.diagram:error.saveFailed"), then the display text is the
+
+            responsibility of the client.
+
+            '
+        message:
+          type: string
+          description: The display string message that correlates to `statusName`.
+        details:
+          type:
+          - object
+          - 'null'
+          description: 'An object containing specific details to the type of error. Each type of
+
+            error may have different detail properties and value types.
+
+            '
+        innerError:
+          allOf:
+          - description: 'An error that is more detailed or a cause of the containing error.
+
+              This allows for a recursive error structure which a client can
+
+              digest to as much detail as they understand. This is mutually
+
+              exclusive with `innerErrors`.
+
+              '
+          - $ref: '#/components/schemas/standardErrorMessage'
+        innerErrors:
+          description: 'A collection of errors that is more detailed or causes of the containing
+
+            error. This allows for a recursive error structure which a client can
+
+            digest to as much detail as they understand. This is mutually exclusive
+
+            with `innerError`.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/standardErrorMessage'
+    trendedAttributesResponse:
+      title: Time Series Get Trended Attributes Retrieval Success
+      type: object
+      additionalProperties: false
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: The collection of available samples.
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              samplesUrl:
+                type: string
+                format: uri
+                description: A link to this collection of object value samples.
+              attribute:
+                type: string
+                x-metasysType: enum
+                x-metasysEnum: attributeEnumSet
+                description: 'The attribute on which the samples were taken.
+
+
+                  The values for this property come from the `attributeEnumSet` enumeration.
+
+                  Find the definition of `attributeEnumSet` at the relative URL of `/schemas/enums/attributeEnumSet`.
+
+
+                  **See also:**
+
+                  * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+              attributeSchema:
+                type: object
+                description: JSON Schema of the attribute being sampled.
+              sampledBy:
+                type: array
+                description: A list of objects that are sampling this attribute.
+                items:
+                  type: object
+                  additionalProperties: false
+                  properties:
+                    self:
+                      $ref: '#/components/schemas/self'
+                    item:
+                      type: object
+                      description: JSON Schema definition of an object.
+                      additionalProperties: false
+                      properties:
+                        id:
+                          type: string
+                          format: guid
+                          description: The identifier of an object.
+                        itemReference:
+                          type: string
+                          description: The fully qualified reference of an object.
+                        name:
+                          type: string
+                          description: The name of an object.
+                        enable:
+                          type: boolean
+                          description: The status of an object.
+                      required:
+                      - id
+                      - itemReference
+                      - name
+                      - enable
+                  required:
+                  - self
+                  - item
+            required:
+            - samplesUrl
+            - attribute
+            - attributeSchema
+            - sampledBy
+        self:
+          type: string
+          format: uri
+          description: A link to this collection.
+      required:
+      - total
+      - items
+      - self
+    self:
+      type: string
+      description: A link to this object.
+      format: uri
+      readOnly: true
+    trendedAttributeResponse:
+      title: Time Series Get Trended Object Retrieval Success
+      type: object
+      additionalProperties: false
+      properties:
+        samplesUrl:
+          type: string
+          format: uri
+          description: A link to this collection of object value samples.
+        attribute:
+          type: string
+          description: The attribute on which the samples were taken.
+        self:
+          type: string
+          format: uri
+          description: A link to this collection.
+      required:
+      - samplesUrl
+      - attribute
+      - self
+    repoTrendedObjectResponse:
+      title: Time Series Get Trended Object Retrieval Success
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Id of trended object.
+        itemReference:
+          type: string
+          description: Item reference of object Id.
+        name:
+          type: string
+          description: Name of the object.
+        sampledAttributes:
+          type: array
+          description: The collection of available sample based on object Id.
+          items:
+            type: object
+            additionalProperties: false
+            properties:
+              samplesUrl:
+                type: string
+                format: uri
+                description: A link to this collection of object value samples.
+              attribute:
+                type: string
+                x-metasysType: enum
+                x-metasysEnum: attributeEnumSet
+                description: 'The attribute on which the samples were taken.
+
+
+                  The values for this property come from the `attributeEnumSet` enumeration.
+
+                  Find the definition of `attributeEnumSet` at the relative URL of `/schemas/enums/attributeEnumSet`.
+
+
+                  **See also:**
+
+                  * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+              attributeSchema:
+                type:
+                - object
+                - 'null'
+                description: JSON Schema of the attribute being sampled.
+            required:
+            - samplesUrl
+            - attribute
+            - attributeSchema
+        self:
+          type: string
+          format: uri
+          description: A link to this collection.
+      required:
+      - id
+      - itemReference
+      - name
+      - sampledAttributes
+      - self
+  securitySchemes:
+    Bearer-Authentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Most of the calls in the API use bearer token authentication. What this
+
+        means is that these requests require an `Authorization` header to be set to
+
+        a value with the following format: `Bearer: {accessToken}`. Use the
+
+        [`/login`](#operation/createToken) operation to request an `accessToken`. An
+
+        example of the full header would look like the following:
+
+        `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...`.
+
+
+        **Note:** This example access token is truncated.
+
+
+        The expiration time of the access token is based on the user''s Metasys
+
+        profile.
+
+        '
+    API-Key-Authentication:
+      type: apiKey
+      in: query
+      name: access_token
+      description: 'The [Streaming operation](#operation/getStream) is the only operation to use
+
+        API key authentication, because web browsers do not allow setting custom
+
+        headers when initiating Server Sent Event connections.
+
+        '
+x-refined-from:
+- metasys-api-v6-16.json
+- johnson-controls-metasys-openapi.yml
+x-servers:
+  apps:
+    url: https://{hostname}/apps
+    description: The base url for accessing APIs of non-core applications
+    variables:
+      hostname:
+        default: metasys-server.example.com
+        description: This is the name of your site

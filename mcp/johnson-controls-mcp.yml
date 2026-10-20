@@ -1,0 +1,214 @@
+generated: '2026-10-20'
+method: derived
+generator: derive-mcp-candidate.py
+source:
+- openapi/johnson-controls-metasys-openapi.yml
+status: candidate
+deployment:
+  mode: none
+  auth: unknown
+  verified: probed
+note: No MCP server was found. The pre-flight posted tools/list to /mcp on api.johnsoncontrols.com, www.johnsoncontrols.com, cn.johnsoncontrols.com,
+  investors.johnsoncontrols.com; verdict absent. Candidate tools below are derived from the 70 operation(s) in the provider's own OpenAPI (40
+  listed); they describe what a server WOULD expose, not one that exists.
+tools:
+- name: create_token
+  operationId: createToken
+  method: POST
+  path: /login
+  description: Request access token
+- name: get_token
+  operationId: getToken
+  method: GET
+  path: /refreshToken
+  description: Refresh a token
+- name: get_activities
+  operationId: getActivities
+  method: GET
+  path: /activities
+  description: List activities
+- name: post_activities_batch
+  operationId: postActivitiesBatch
+  method: POST
+  path: /activities/batch
+  description: Batch operations
+- name: delete_activities_subscription
+  operationId: deleteActivitiesSubscription
+  method: DELETE
+  path: /activities/streams/{streamId}/subscriptions/{subscriptionId}
+  description: Delete activities subscription
+- name: get_objects
+  operationId: getObjects
+  method: GET
+  path: /objects
+  description: List objects
+- name: post_objects
+  operationId: postObjects
+  method: POST
+  path: /objects
+  description: Create object
+- name: get_child_objects
+  operationId: getChildObjects
+  method: GET
+  path: /objects/{objectId}/objects
+  description: List child objects
+- name: get_object_identifier
+  operationId: getObjectIdentifier
+  method: GET
+  path: /objectIdentifiers
+  description: Get object id
+- name: get_objects_identifiers
+  operationId: getObjectsIdentifiers
+  method: GET
+  path: /objects/identifiers
+  description: Lookup object identifier
+- name: get_object
+  operationId: getObject
+  method: GET
+  path: /objects/{objectId}
+  description: Get an object
+- name: patch_object
+  operationId: patchObject
+  method: PATCH
+  path: /objects/{objectId}
+  description: Edit an object
+- name: delete_object
+  operationId: deleteObject
+  method: DELETE
+  path: /objects/{objectId}
+  description: Delete an object
+- name: get_object_views
+  operationId: getObjectViews
+  method: GET
+  path: /objects/{objectId}/views
+  description: List the views of an object
+- name: get_object_attributes
+  operationId: getObjectAttributes
+  method: GET
+  path: /objects/{objectId}/attributes
+  description: List attributes of an object
+- name: get_object_attribute
+  operationId: getObjectAttribute
+  method: GET
+  path: /objects/{objectId}/attributes/{attributeId}
+  description: Get attribute value
+- name: get_object_commands
+  operationId: getObjectCommands
+  method: GET
+  path: /objects/{objectId}/commands
+  description: List commands
+- name: put_object_command
+  operationId: putObjectCommand
+  method: PUT
+  path: /objects/{objectId}/commands/{commandId}
+  description: Send command
+- name: get_object_supported_child_types
+  operationId: getObjectSupportedChildTypes
+  method: GET
+  path: /objects/{objectId}/supportedChildTypes
+  description: List supported child types
+- name: get_object_points
+  operationId: getObjectPoints
+  method: GET
+  path: /objects/{objectId}/points
+  description: List object equipment points
+- name: post_objects_batch
+  operationId: postObjectsBatch
+  method: POST
+  path: /objects/batch
+  description: Batch operations
+- name: get_object_alarms
+  operationId: getObjectAlarms
+  method: GET
+  path: /objects/{objectId}/alarms
+  description: Get alarms for an object
+- name: get_object_audits
+  operationId: getObjectAudits
+  method: GET
+  path: /objects/{objectId}/audits
+  description: Get audits for an object
+- name: get_enumeration_as_json_schema
+  operationId: getEnumerationAsJsonSchema
+  method: GET
+  path: /schemas/enums/{enumId}
+  description: Get enumeration
+- name: get_object_type_schema
+  operationId: getObjectTypeSchema
+  method: GET
+  path: /schemas/objectTypes/{objectType}
+  description: Get object type schema
+- name: get_time_series
+  operationId: getTimeSeries
+  method: GET
+  path: /timeSeries
+  description: List all time series (repository)
+- name: get_object_trended_attributes
+  operationId: getObjectTrendedAttributes
+  method: GET
+  path: /objects/{objectId}/trendedAttributes
+  description: List trended attributes (buffer)
+- name: get_repo_trended_object
+  operationId: getRepoTrendedObject
+  method: GET
+  path: /timeSeries/{objectId}
+  description: Get trend object (repository)
+- name: get_repo_trended_attributes
+  operationId: getRepoTrendedAttributes
+  method: GET
+  path: /timeSeries/{objectId}/trendedAttributes
+  description: List trended attributes (repository)
+- name: get_trended_attribute
+  operationId: getTrendedAttribute
+  method: GET
+  path: /timeSeries/{objectId}/trendedAttributes/{attributeId}
+  description: Get trended attribute (repository)
+- name: get_object_attribute_samples_from_buffer
+  operationId: getObjectAttributeSamplesFromBuffer
+  method: GET
+  path: /objects/{objectId}/trendedAttributes/{attributeId}/samples
+  description: Get attribute samples (buffer)
+- name: get_repo_samples
+  operationId: getRepoSamples
+  method: GET
+  path: /timeSeries/{objectId}/trendedAttributes/{attributeId}/samples
+  description: Get attribute samples (repository)
+- name: post_repo_batch_time_series
+  operationId: postRepoBatchTimeSeries
+  method: POST
+  path: /timeSeries/batch
+  description: Batch operations for time series (repository)
+- name: post_time_series_stream_subscription
+  operationId: postTimeSeriesStreamSubscription
+  method: POST
+  path: /timeSeries/streams/{streamId}/subscriptions
+  description: Create samples subscription (buffer)
+- name: put_time_series_stream_subscription
+  operationId: putTimeSeriesStreamSubscription
+  method: PUT
+  path: /timeSeries/streams/{streamId}/subscriptions/{subscriptionId}
+  description: Update samples subscription (buffer)
+- name: delete_time_series_stream_subscription
+  operationId: deleteTimeSeriesStreamSubscription
+  method: DELETE
+  path: /timeSeries/streams/{streamId}/subscriptions/{subscriptionId}
+  description: Delete trend samples subscription
+- name: get_stream
+  operationId: getStream
+  method: GET
+  path: /stream
+  description: Get a stream
+- name: get_network_devices
+  operationId: getNetworkDevices
+  method: GET
+  path: /networkDevices
+  description: List network devices
+- name: get_network_device
+  operationId: getNetworkDevice
+  method: GET
+  path: /networkDevices/{networkDeviceId}
+  description: Get a single network device
+- name: delete_network_device
+  operationId: deleteNetworkDevice
+  method: DELETE
+  path: /networkDevices/{networkDeviceId}
+  description: Deletes a network device

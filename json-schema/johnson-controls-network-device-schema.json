@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/johnson-controls/main/json-schema/johnson-controls-network-device-schema.json",
+  "title": "networkDevice",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/johnson-controls-metasys-openapi.yml#/components/schemas/networkDevice",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The identifier of the network device."
+    },
+    "itemReference": {
+      "type": "string",
+      "description": "The fully qualified reference of the network device."
+    },
+    "name": {
+      "type": "string",
+      "description": "The full name of the network device."
+    },
+    "objectType": {
+      "type": "string",
+      "description": "The type of this network device as defined by the `objectTypeEnumSet`.\n\nThe values for this property come from the `objectTypeEnumSet` enumeration.\nFind the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+      "x-metasysType": "enum",
+      "x-metasysEnum": "objectTypeEnumSet"
+    },
+    "objectTypeVersion": {
+      "type": "string",
+      "description": "The version of `objectType` that is used for this object.",
+      "readOnly": true
+    },
+    "productVersion": {
+      "type": "string",
+      "description": "The product version of the object.",
+      "readOnly": true
+    },
+    "description": {
+      "type": "string",
+      "description": "The description for the network device."
+    },
+    "firmwareVersion": {
+      "type": "string",
+      "description": "The firmware version for the network device. This property will be an empty string \"\" if the device does not support a firmware version."
+    },
+    "objectCategory": {
+      "type": "string",
+      "description": "The authorization category for the network device.\n\nThe values for this property come from the `objectCategoryEnumSet` enumeration.\nFind the definition of `objectCategoryEnumSet` at the relative URL of `/schemas/enums/objectCategoryEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+      "x-metasysType": "enum",
+      "x-metasysEnum": "objectCategoryEnumSet"
+    },
+    "timeZone": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The time zone for the network device. This property will be `null` if the device does not support a time zone.\n\nThe values for this property come from the `timeZoneEnumSet` enumeration.\nFind the definition of `timeZoneEnumSet` at the relative URL of `/schemas/enums/timeZoneEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+      "x-metasysType": "enum",
+      "x-metasysEnum": "timeZoneEnumSet"
+    },
+    "self": {
+      "type": "string",
+      "description": "The link to the network device.",
+      "format": "uri"
+    },
+    "parentUrl": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "A link to the network device that is the parent of this network device.",
+      "format": "uri"
+    },
+    "networkDevicesUrl": {
+      "type": "string",
+      "description": "A link to the network devices that are children of this network device.",
+      "format": "uri"
+    },
+    "equipmentUrl": {
+      "type": "string",
+      "description": "A link to the equipment instances hosted by this network device.",
+      "format": "uri"
+    },
+    "spacesUrl": {
+      "type": "string",
+      "description": "A link to the spaces that are served by this network device.",
+      "format": "uri"
+    },
+    "objectsUrl": {
+      "type": "string",
+      "description": "A link to the objects contained within this network device.",
+      "format": "uri"
+    },
+    "trendedAttributesUrl": {
+      "type": "string",
+      "description": "A link to the attributes on this network device for which samples are available.",
+      "format": "uri"
+    },
+    "alarmsUrl": {
+      "type": "string",
+      "description": "A link to the alarms available for this network device.",
+      "format": "uri"
+    },
+    "allowHttp": {
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "type": "boolean",
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nIndicates if the network device allows HTTP communication. This property will be `false` if the device has blocked the HTTP port (port 80)."
+    },
+    "jciIpCommMode": {
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "type": "string",
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nThe BACnet IP communication mode for the network device.\n\nThe values for this property come from the `ipCommModeEnumSet` enumeration.\nFind the definition of `ipCommModeEnumSet` at the relative URL of `/schemas/enums/ipCommModeEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+      "x-metasysType": "enum",
+      "x-metasysEnum": "ipCommModeEnumSet"
+    },
+    "ipAddress": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The IPv4 address of the network device. This will be `null` if the device does not support an IP address.",
+      "format": "ipv4"
+    },
+    "deviceIpv6Address": {
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nThe IPv6 address of the network device. This will be `null` if the device does not support an IPv6 address.",
+      "format": "ipv6"
+    },
+    "certificateExpirationDate": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The expiration date & time of the device's HTTPS certificate. This will\nbe `null` if the device does not support HTTPS certificates or there is\nno certificate present.\n",
+      "format": "date-time"
+    },
+    "pairing": {
+      "type": "object",
+      "description": "Provides indicators to the pairing capabilities of the network device.",
+      "properties": {
+        "supported": {
+          "type": "boolean",
+          "description": "Indicates if the device supports the pairing operation."
+        },
+        "paired": {
+          "type": "boolean",
+          "description": "Indicates if the device has been authenticated with the site director. This property will always be `false` if `supported` is `false`."
+        }
+      },
+      "required": [
+        "supported",
+        "paired"
+      ]
+    },
+    "ethernetMacAddress": {
+      "x-releases": {
+        "implementedAt": "16.0"
+      },
+      "type": "string",
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASE</span>:<span style=\"color: #186faf;\"> <strong>16.0</strong></span>\\\nThe MAC address of the network device.",
+      "format": "mac-address"
+    },
+    "modelName": {
+      "x-releases": {
+        "implementedAt": "16.0"
+      },
+      "type": "string",
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASE</span>:<span style=\"color: #186faf;\"> <strong>16.0</strong></span>\\\nThe model name of the network device."
+    }
+  },
+  "required": [
+    "id",
+    "itemReference",
+    "name",
+    "objectType",
+    "description",
+    "firmwareVersion",
+    "objectCategory",
+    "timeZone",
+    "self",
+    "parentUrl",
+    "networkDevicesUrl",
+    "equipmentUrl",
+    "spacesUrl",
+    "objectsUrl",
+    "trendedAttributesUrl",
+    "alarmsUrl",
+    "ipAddress",
+    "certificateExpirationDate",
+    "pairing"
+  ]
+}

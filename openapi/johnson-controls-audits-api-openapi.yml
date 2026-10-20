@@ -1,0 +1,1565 @@
+openapi: 3.2.0
+info:
+  title: Johnson Controls Audits API
+  version: Version 6 for 16.0
+  x-logo:
+    url: source/images/logo.svg
+    href: https://jci-metasys.github.io/
+  x-releases:
+  - '14.0'
+  - '14.1'
+  - '15.0'
+  - '16.0'
+  x-revision: 'Commit ID: 4b227676a'
+  description: 'Operations tagged audits across 2 of this provider''s published API definitions: metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{hostname}/api/v6
+  description: The base URL of all API routes
+  variables:
+    hostname:
+      default: metasys-server.example.com
+      description: This is the name of your site director device
+security:
+- Bearer-Authentication: []
+tags:
+- name: Audits
+  description: 'How to retrieve, discard, and annotate audits.
+
+
+    ### Relationships
+
+
+    Audits have relationships to other resources in the system. Find information
+
+    about the most important below.
+
+
+    - **objects**
+
+
+    When users or the system affect objects in the Metasys system, such as analog
+
+    inputs, multistate objects, or binary outputs, audits are generated. Those
+
+    "acted upon" objects then relate to those audits. That relationship is returned
+
+    as part of any audit response.
+
+
+    - **equipment instances**
+
+
+    Equipment instance associations to audits build off of the objects association
+
+    explanation. Each equipment instance can contain many points, such as Outdoor
+
+    Air Temperature, Damper Position, or Zone Setpoint. Those points map to actual
+
+    objects in Metasys, as noted above. When users or the system affect those
+
+    objects, audits are generated. If an equipment instance''s point is mapped to one
+
+    of those affected objects the instance is then associated with that audit.
+
+
+    In short, an equipment instance contains points which map to Metasys objects
+
+    which are affected by an audited action.
+
+
+    - **spaces**
+
+
+    Space associations to audits build off of the equipment instance association
+
+    explanation. Equipment instances can serve spaces, such as an Air Handler Unit
+
+    (AHU) serving the floor of a building. Therefore, audits associated with a
+
+    particular equipment instance are associated to the spaces they serve.'
+paths:
+  /objects/{objectId}/audits:
+    get:
+      summary: Get audits for an object
+      description: Retrieves a collection of audits for the specified object.
+      operationId: getObjectAudits
+      parameters:
+      - $ref: '#/components/parameters/objectId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/originApplication'
+      - $ref: '#/components/parameters/classLevel'
+      - $ref: '#/components/parameters/actionType'
+      - $ref: '#/components/parameters/user'
+      - $ref: '#/components/parameters/parameters_includeDiscarded'
+      - $ref: '#/components/parameters/equipment'
+      - $ref: '#/components/parameters/space'
+      - $ref: '#/components/parameters/page'
+      - name: pageSize
+        in: query
+        description: The maximum number of items to return in the response.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          default: 100
+        example: 100
+      - $ref: '#/components/parameters/auditsSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/audits'
+              examples:
+                tenAlarms:
+                  $ref: '#/components/examples/first-two-object-audits'
+                twoAudits15:
+                  $ref: '#/components/examples/first-two-object-audits15'
+      tags:
+      - Audits
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/audits \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/audits\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/audits\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/audits'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/audits', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/audits\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/audits\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /audits/{auditId}:
+    get:
+      summary: Get an audit
+      description: Retrieves the specific audit.
+      operationId: getAudit
+      parameters:
+      - $ref: '#/components/parameters/auditId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/audit'
+              examples:
+                avAudit:
+                  $ref: '#/components/examples/av-audit'
+                avAudit15:
+                  $ref: '#/components/examples/av-audit-15'
+      tags:
+      - Audits
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    patch:
+      summary: Edit an audit
+      description: Allows for discarding an audit.
+      operationId: patchAudit
+      parameters:
+      - $ref: '#/components/parameters/auditId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activityManagementStatus:
+                  type: string
+                  description: 'The new activity management status of the audit.
+
+
+                    The only accepted value of this property is `discarded` because
+
+                    it is the only valid activity management state transition for an
+
+                    audit. Once an audit is discarded, it cannot be changed to any
+
+                    other state.
+
+                    '
+                  enum:
+                  - discarded
+                annotationText:
+                  type:
+                  - string
+                  - 'null'
+                  description: The annotation to associate with the change of audit state.
+              required:
+              - activityManagementStatus
+              example:
+                activityManagementStatus: discarded
+            examples:
+              discardAudit:
+                summary: Discard an audit
+                value:
+                  activityManagementStatus: discarded
+        required: true
+      responses:
+        '204':
+          description: Success.
+        '403':
+          $ref: '#/components/responses/general403'
+        '405':
+          description: 'Method not allowed. The audit is already discarded.
+
+            '
+      tags:
+      - Audits
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request PATCH \\\n  --url https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c \\\n  --header \"Authorization: Bearer $accessToken\" \\\n  --header 'Content-Type: application/json' \\\n  --data '{\"activityManagementStatus\":\"discarded\"}'"
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .WithHeader(\"Content-Type\", \"application/json\")\n    .PatchStringAsync(\"{\\\"activityManagementStatus\\\":\\\"discarded\\\"}\");"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c\" `\n  -Method Patch `\n  -Body '{\"activityManagementStatus\":\"discarded\"}' `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n    'Content-Type' = 'application/json'\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c `\n  -Method Patch `\n  -Body '{\"activityManagementStatus\":\"discarded\"}'"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n  'Content-Type': 'application/json',\n};\n\nconst response = await axiosClient.patch(\n  '/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c',\n  '{\"activityManagementStatus\":\"discarded\"}', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\" ,\n    \"Content-Type\": \"application/json\"\n}\npayload = \"{\\\"activityManagementStatus\\\":\\\"discarded\\\"}\"\n\nconn.request(\"PATCH\", url, payload, headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .header(\"content-type\", \"application/json\")\n    .method(\"PATCH\", HttpRequest.BodyPublishers.ofString(\"{\\\"activityManagementStatus\\\":\\\"discarded\\\"}\"))\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /audits/{auditId}/annotations:
+    get:
+      summary: Get audit annotations
+      description: Retrieves the collection of annotations available for the specified audit.
+      operationId: getAuditAnnotations
+      parameters:
+      - $ref: '#/components/parameters/auditId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/page'
+      - name: pageSize
+        in: query
+        description: The maximum number of items to return in the response.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          default: 100
+        example: 100
+      - name: sort
+        in: query
+        description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+        schema:
+          type: string
+          default: creationTime
+          enum:
+          - creationTime
+          - -creationTime
+        example: creationTime
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/auditAnnotations'
+              examples:
+                tenAlarms:
+                  $ref: '#/components/examples/audit-annotations'
+      tags:
+      - Audits
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    post:
+      summary: Add audit annotation
+      description: Adds an annotation to an audit.
+      operationId: postAuditAnnotation
+      parameters:
+      - $ref: '#/components/parameters/auditId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            example:
+              text: Looks okay.
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  description: The text of the annotation to create. This must not be `null`, empty, nor only whitespace. Additionally, any surrounding whitespace will be trimmed.
+                  minLength: 1
+                  maxLength: 255
+                  pattern: \S
+              required:
+              - text
+              example:
+                text: Looks okay.
+      responses:
+        '201':
+          description: Success.
+        '400':
+          description: 'Bad request.
+
+
+            Beyond any request that doesn''t adhere to the expected constraints, this
+
+            operation may fail if the audit is already discarded.
+
+            '
+      tags:
+      - Audits
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request POST \\\n  --url https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations \\\n  --header \"Authorization: Bearer $accessToken\" \\\n  --header 'Content-Type: application/json' \\\n  --data '{\"text\":\"Looks okay.\"}'"
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .WithHeader(\"Content-Type\", \"application/json\")\n    .PostStringAsync(\"{\\\"text\\\":\\\"Looks okay.\\\"}\");"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations\" `\n  -Method Post `\n  -Body '{\"text\":\"Looks okay.\"}' `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n    'Content-Type' = 'application/json'\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations `\n  -Method Post `\n  -Body '{\"text\":\"Looks okay.\"}'"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n  'Content-Type': 'application/json',\n};\n\nconst response = await axiosClient.post(\n  '/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations',\n  '{\"text\":\"Looks okay.\"}', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\" ,\n    \"Content-Type\": \"application/json\"\n}\npayload = \"{\\\"text\\\":\\\"Looks okay.\\\"}\"\n\nconn.request(\"POST\", url, payload, headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .header(\"content-type\", \"application/json\")\n    .method(\"POST\", HttpRequest.BodyPublishers.ofString(\"{\\\"text\\\":\\\"Looks okay.\\\"}\"))\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /audits/users:
+    get:
+      summary: List audit users
+      description: 'Retrieves a list of unique usernames from all users present in a currently
+
+        stored audit. The provided usernames may or may not reflect known users of
+
+        the current system, but were known when the system recorded an audit for
+
+        them.'
+      operationId: getAuditsUsers
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/auditsUsers'
+              examples:
+                all:
+                  $ref: '#/components/examples/audits-users'
+      tags:
+      - Audits
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/audits/users \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/audits/users\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/audits/users\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /audits/users'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/audits/users', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/audits/users\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/audits/users\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+components:
+  parameters:
+    classLevel:
+      name: classLevel
+      in: query
+      description: 'Filter by list of class levels. The class level of an audit indicates the
+
+        class or family the audit belongs to. Typically, each level of audit
+
+        provides additional detail about the system, with Diagnostic audits being
+
+        the most verbose.
+
+
+        The Enabled Audit Level attribute (`attributeEnumSet.auditEnabledClasLev`)
+
+        determines which audit levels the system generates. Therefore, be aware that
+
+        there will be no audits to return if the Enabled Audit Level attribute is
+
+        set too low to generate audits at the desired class level in this filter.
+
+        This attribute is set per device (for audits generated on that device).
+
+
+
+        The acceptable values for the elements of this parameter come from the `auditClassesEnumSet` enumeration.
+
+        Only the long name of the class level (for example, `auditClassesEnumSet.userActionAuditClass` instead of `userActionAuditClass`) is accepted.
+
+        Find the definition of `auditClassesEnumSet` at the relative URL of `/schemas/enums/auditClassesEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      examples:
+        singleClass:
+          summary: Single Level
+          value:
+          - auditClassesEnumSet.userActionAuditClass
+        multipleClasses:
+          summary: Multiple levels
+          value:
+          - auditClassesEnumSet.userActionAuditClass
+          - auditClassesEnumSet.systemErrorAuditClass
+      x-metasysEnum: auditClassesEnumSet
+      schema:
+        type: array
+        items:
+          type: string
+          x-metasysType: enum
+          x-metasysEnum: auditClassesEnumSet
+    endTime:
+      name: endTime
+      in: query
+      description: Only include results generated on or before this date-time.
+      schema:
+        type: string
+        format: date-time
+      example: '2018-05-21T13:58:20.243Z'
+    auditId:
+      name: auditId
+      in: path
+      description: The identifier of the audit.
+      required: true
+      schema:
+        type: string
+      example: 4990ee27-7a0a-4b2b-9b27-279e3f1a060c
+    originApplication:
+      name: originApplication
+      in: query
+      description: 'Filter by list of origin applications. The origin application property
+
+        indicates which application in Metasys generated the audit message.
+
+
+
+        The acceptable values for the elements of this parameter come from the `auditOriginAppEnumSet` enumeration.
+
+        Only the long name of the origin application (for example, `auditOriginAppEnumSet.deviceManagerAuditOriginApp` instead of `deviceManagerAuditOriginApp`) is accepted.
+
+        Find the definition of `auditOriginAppEnumSet` at the relative URL of `/schemas/enums/auditOriginAppEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      examples:
+        singleOrigin:
+          summary: Single Origin
+          value:
+          - auditOriginAppEnumSet.deviceManagerAuditOriginApp
+        multipleOrigins:
+          summary: Multiple Origins
+          value:
+          - auditOriginAppEnumSet.deviceManagerAuditOriginApp
+          - auditOriginAppEnumSet.siteServicesAuditOriginApp
+      x-metasysEnum: auditOriginAppEnumSet
+      schema:
+        type: array
+        items:
+          type: string
+          x-metasysType: enum
+          x-metasysEnum: auditOriginAppEnumSet
+    actionType:
+      name: actionType
+      in: query
+      description: 'Filter by list of action types. The action type property indicates the user
+
+        or system action performed.
+
+
+
+        The acceptable values for the elements of this parameter come from the `auditActionTypeEnumSet` enumeration.
+
+        Only the long name of the action type (for example, `auditActionTypeEnumSet.writeAuditActionType` instead of `writeAuditActionType`) is accepted.
+
+        Find the definition of `auditActionTypeEnumSet` at the relative URL of `/schemas/enums/auditActionTypeEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      examples:
+        singleAction:
+          summary: Single Action Type
+          value:
+          - auditActionTypeEnumSet.writeAuditActionType
+        multipleActions:
+          summary: Multiple Action Types
+          value:
+          - auditActionTypeEnumSet.writeAuditActionType
+          - auditActionTypeEnumSet.commandAuditActionType
+      x-metasysEnum: auditActionTypeEnumSet
+      schema:
+        type: array
+        items:
+          type: string
+          x-metasysType: enum
+          x-metasysEnum: auditActionTypeEnumSet
+    page:
+      name: page
+      in: query
+      description: The page number of items to return.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      example: 1
+    space:
+      name: space
+      in: query
+      description: Filter by list of space identifiers.
+      example:
+      - 214f52d1-0c56-4a29-a690-abe5656d1647
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+    equipment:
+      name: equipment
+      in: query
+      description: Filter by list of equipment identifiers.
+      example:
+      - b7ed8b3e-cb95-410d-aaa7-37158852c398
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+    objectId:
+      name: objectId
+      in: path
+      description: The identifier of the object.
+      example: 32cfddc0-411f-5b9e-9a6d-442cb62fecbb
+      required: true
+      schema:
+        type: string
+    auditsSort:
+      name: sort
+      in: query
+      description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+      schema:
+        type: string
+        default: creationTime
+        enum:
+        - creationTime
+        - -creationTime
+      example: creationTime
+    parameters_includeDiscarded:
+      name: includeDiscarded
+      in: query
+      description: "Determines whether discarded audits will be included in the results.\n\n- `true` - Return only discarded audits in the response.\n- `false` - Do not include any discarded audits in the response.\n- _missing_ - Discarded status is ignored; both discarded and non-discarded\n  audits are returned.\n"
+      example: false
+      schema:
+        type: boolean
+    user:
+      name: user
+      in: query
+      description: 'Filter by list of users. The user property indicates which user initiated
+
+        the action being audited.
+
+        '
+      examples:
+        singleUser:
+          summary: Single User
+          value:
+          - metasysuser
+        multipleUsers:
+          summary: Multiple Users
+          value:
+          - metasysuser
+          - johnsmith
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+    startTime:
+      name: startTime
+      in: query
+      description: Only include results generated on or after this date-time.
+      schema:
+        type: string
+        format: date-time
+      example: '2018-05-21T13:58:20.243Z'
+  schemas:
+    auditAnnotation:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The identifier of the annotation.
+        text:
+          type:
+          - string
+          - 'null'
+          description: The annotation text.
+        user:
+          type: string
+          description: 'The user name of the user that initiated the audit annotation.
+
+            '
+        creationTime:
+          type: string
+          description: The date-time for when the annotation was created.
+          format: date-time
+        signature:
+          type:
+          - object
+          - 'null'
+          description: The signature associated with the activity.
+          properties:
+            fullName:
+              type: string
+              description: The full name of the person signing the annotation.
+            reason:
+              type: string
+              description: The reason for the action requiring an annotation.
+        action:
+          type: string
+          description: "The action on which the annotation was created. In the case that the\nannotation was not created during an action, the default value will be\n`none`.\n\nThe description for the values of this property are as follows:\n\n- **`none`** - Indicates an annotation that was added as part of a\n  non-user action.\n- **`discarded`** - Indicates an annotation that was added as part of a\n  discarded action.\n"
+          enum:
+          - none
+          - discarded
+        auditUrl:
+          type: string
+          description: A link to the audit.
+          format: uri
+      required:
+      - id
+      - user
+      - creationTime
+      - signature
+      - action
+      - auditUrl
+    auditsUsers:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of usernames in the collection.
+        items:
+          type: array
+          description: Collection of unique usernames in audits.
+          items:
+            type: string
+        self:
+          type: string
+          description: A link to this collection.
+          format: uri
+      required:
+      - total
+      - items
+      - self
+    audit:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the audit.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the object.
+        objectName:
+          type: string
+          description: The name of the object.
+        objectUrl:
+          type: string
+          description: A link to the object.
+          format: uri
+        description:
+          type:
+          - string
+          - 'null'
+          description: A more detailed description of the audited action.
+        activityManagementStatus:
+          type: string
+          description: "The activity management status of this item.\n\nThe values of this property are described as follows:\n\n- `pending` - Indicates the activity has yet to be acted upon.\n- `discarded` - Indicates that the activity has been acted upon or\n  deemed invalid by a user.\n"
+          enum:
+          - pending
+          - discarded
+        discardedTime:
+          type:
+          - string
+          - 'null'
+          description: 'The date-time representing when the user discarded this activity.
+
+            '
+          format: date-time
+        creationTime:
+          type: string
+          description: 'The date-time when the system audited the action.
+
+            '
+          format: date-time
+        originApplication:
+          type: string
+          description: 'The Metasys application or component that generated the audit.
+
+
+
+            The values for this property come from the `auditOriginAppEnumSet` enumeration.
+
+            Find the definition of `auditOriginAppEnumSet` at the relative URL of `/schemas/enums/auditOriginAppEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: auditOriginAppEnumSet
+        actionType:
+          type: string
+          description: 'The type of action audited by the system.
+
+
+            The values for this property come from the `auditActionTypeEnumSet` enumeration.
+
+            Find the definition of `auditActionTypeEnumSet` at the relative URL of `/schemas/enums/auditActionTypeEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: auditActionTypeEnumSet
+        parameters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/anyDataTypeSchemaRequired'
+          description: Parameters passed for audited commands or writes.
+        user:
+          type:
+          - string
+          - 'null'
+          description: The username of the user that initiated the audited action.
+        signature:
+          $ref: '#/components/schemas/signature'
+        classLevel:
+          type: string
+          description: 'The level at which the system generated this audit.
+
+
+            The values for this property come from the `auditClassesEnumSet` enumeration.
+
+            Find the definition of `auditClassesEnumSet` at the relative URL of `/schemas/enums/auditClassesEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: auditClassesEnumSet
+        status:
+          type:
+          - string
+          - 'null'
+          description: 'The status of the audited action.
+
+
+            The values for this property come from the `statusEnumSet` enumeration.
+
+            Find the definition of `statusEnumSet` at the relative URL of `/schemas/enums/statusEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: statusEnumSet
+        errorString:
+          type:
+          - string
+          - 'null'
+          description: Error message for the audited action.
+        preData:
+          description: 'The prior value held before this audited command or edit changed it.
+
+            '
+          anyOf:
+          - type:
+            - object
+            - 'null'
+          - $ref: '#/components/schemas/anyDataTypeSchemaRequired'
+        postData:
+          description: The new value this audited command or edit changed to.
+          anyOf:
+          - type:
+            - object
+            - 'null'
+          - $ref: '#/components/schemas/anyDataTypeSchemaRequired'
+        spaces:
+          type: array
+          description: 'The collection of spaces associated with the object on which the
+
+            activity occurred.
+
+            '
+          items:
+            $ref: '#/components/schemas/space'
+        equipment:
+          type: array
+          description: 'The collection of equipment associated with the object on which the
+
+            activity occurred.
+
+            '
+          items:
+            $ref: '#/components/schemas/equipment'
+        annotationsUrl:
+          type: string
+          description: A link to the annotations available on the audit.
+          format: uri
+        annotationsCount:
+          type: integer
+          description: The total number of annotations associated with the audit.
+        signedAnnotationsCount:
+          type: integer
+          description: 'The total number of MVE Annotations associated with the audit.
+
+            '
+        self:
+          type: string
+          description: A link to this audit.
+          format: uri
+      required:
+      - id
+      - itemReference
+      - objectName
+      - objectUrl
+      - description
+      - activityManagementStatus
+      - creationTime
+      - originApplication
+      - actionType
+      - user
+      - classLevel
+      - status
+      - errorString
+      - preData
+      - postData
+      - annotationsUrl
+      - annotationsCount
+      - self
+    audits:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: Collection of audits.
+          items:
+            $ref: '#/components/schemas/audit'
+        effectivePermissions:
+          type: array
+          description: 'A collection of permissions that apply to the audits in `items`.
+
+            '
+          items:
+            $ref: '#/components/schemas/schemas_effectivePermission'
+        next:
+          type:
+          - string
+          - 'null'
+          description: A link to the next page of results.
+          format: uri
+        previous:
+          type:
+          - string
+          - 'null'
+          description: A link to the previous page of results.
+          format: uri
+        self:
+          type: string
+          description: A link to this audit collection.
+          format: uri
+      required:
+      - total
+      - items
+      - effectivePermissions
+      - next
+      - previous
+      - self
+    standardErrorMessage:
+      title: Standard Error
+      description: A general error of the API.
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'A Metasys specific status code. The format of this code is variable. It
+
+            uses namespace/qualified format for `statusName` values. If the value is
+
+            qualified with just an enumeration
+
+            ("{namespace}:{enumeration}.{member}", e.g.
+
+            "enum.core:statusEnumSet.attributeNotFound"), then the display text
+
+            comes from the enumeration schema available at
+
+            `/schemas/enums/{enumeration}`. If the value is qualified with a
+
+            namespace ("{namespace}:{enumeration}.{member}", e.g.
+
+            "api.diagram:error.saveFailed"), then the display text is the
+
+            responsibility of the client.
+
+            '
+        message:
+          type: string
+          description: The display string message that correlates to `statusName`.
+        details:
+          type:
+          - object
+          - 'null'
+          description: 'An object containing specific details to the type of error. Each type of
+
+            error may have different detail properties and value types.
+
+            '
+        innerError:
+          allOf:
+          - description: 'An error that is more detailed or a cause of the containing error.
+
+              This allows for a recursive error structure which a client can
+
+              digest to as much detail as they understand. This is mutually
+
+              exclusive with `innerErrors`.
+
+              '
+          - $ref: '#/components/schemas/standardErrorMessage'
+        innerErrors:
+          description: 'A collection of errors that is more detailed or causes of the containing
+
+            error. This allows for a recursive error structure which a client can
+
+            digest to as much detail as they understand. This is mutually exclusive
+
+            with `innerError`.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/standardErrorMessage'
+    anyDataTypeSchemaRequired:
+      type: object
+      description: A variant data type that can hold a value of any of the built-in data types of the Metasys object model.
+      x-metasysType: any
+      properties:
+        item: {}
+        schema:
+          $ref: '#/components/schemas/dataTypeMetaSchema'
+      required:
+      - item
+      - schema
+    signature:
+      x-releases:
+        implementedAt: '15.0'
+      type:
+      - object
+      - 'null'
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        The signature associated with the activity.'
+      properties:
+        fullName:
+          type: string
+          description: The full name of the person signing the annotation.
+        reason:
+          type: string
+          description: The reason for the action requiring an annotation.
+    auditAnnotations:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: Collection of annotations.
+          items:
+            $ref: '#/components/schemas/auditAnnotation'
+        next:
+          type:
+          - string
+          - 'null'
+          description: A link to the next page of results.
+          format: uri
+        previous:
+          type:
+          - string
+          - 'null'
+          description: A link to the previous page of results.
+          format: uri
+        self:
+          type: string
+          description: A link to this annotation collection.
+          format: uri
+      required:
+      - total
+      - items
+      - next
+      - previous
+      - self
+    space:
+      type: object
+      description: 'A space associated with the object on which the activity occurred.
+
+        '
+      properties:
+        id:
+          type: string
+          description: The identifier of the space.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the space.
+        name:
+          type: string
+          description: The name of the space.
+        spaceUrl:
+          type: string
+          description: The URL to the space.
+          format: uri
+      required:
+      - id
+      - itemReference
+      - name
+      - spaceUrl
+    equipment:
+      type: object
+      description: 'An equipment instance associated with the object on which the activity
+
+        occurred.
+
+        '
+      properties:
+        id:
+          type: string
+          description: The identifier of the equipment instance.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the equipment instance.
+        equipmentName:
+          type: string
+          description: The name of the equipment instance.
+        shortName:
+          type: string
+          description: The name of the mapped point.
+        equipmentUrl:
+          type: string
+          description: The URL to the equipment instance.
+          format: uri
+      required:
+      - id
+      - itemReference
+      - equipmentName
+      - shortName
+      - equipmentUrl
+    dataTypeMetaSchema:
+      type: object
+      properties:
+        type:
+          type: string
+        metasysType:
+          type: string
+          enum:
+          - any
+          - array
+          - attributeReference
+          - bitString
+          - bacOid
+          - bool
+          - byte
+          - choice
+          - date
+          - double
+          - enum
+          - enumMemberId
+          - flags
+          - float
+          - list
+          - listof
+          - long
+          - none
+          - numeric
+          - objectReference
+          - octetString
+          - oid
+          - short
+          - string
+          - struct
+          - time
+          - ulong
+          - ushort
+      additionalProperties: true
+    schemas_effectivePermission:
+      type: object
+      description: 'Indicates the ability for the current user to take action on a given audit.
+
+        '
+      properties:
+        id:
+          type: string
+          description: The ID of the audit that these permissions apply to.
+        canDiscard:
+          type: boolean
+          description: 'Indicates whether the audit can be discarded by the current user.
+
+            '
+        canAnnotate:
+          type: boolean
+          description: 'Indicates whether the audit can be annotated by the current user. This
+
+            may be absent if the current platform doesn''t support annotations.
+
+            '
+      required:
+      - id
+      - canDiscard
+  examples:
+    audit-annotations:
+      summary: Discarded annotation
+      value:
+        total: 1
+        next: null
+        previous: null
+        items:
+        - id: 2
+          auditUrl: https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c
+          creationTime: '2021-09-28T19:00:48.043Z'
+          user: jane-doe
+          signature: null
+          action: discarded
+        self: https://metasys-server.example.com/api/v6/audits/4990ee27-7a0a-4b2b-9b27-279e3f1a060c/annotations?page=1&pageSize=100&sort=-creationtime
+    first-two-object-audits15:
+      summary: Audits (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        Two audit entries for an object.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        total: 400
+        next: https://metasys-server.example.com/api/v6/objects/a68f10e5-da10-5b87-a96b-42a36e9919ae/audits?page=2&pageSize=10&sort=-creationtime
+        previous: null
+        items:
+        - id: b11d01b5-52a4-4933-819b-d37ccac23d82
+          creationTime: '2021-11-23T23:39:33.413Z'
+          actionType: auditActionTypeEnumSet.subsystemAuditActionType
+          activityManagementStatus: pending
+          status: null
+          preData: null
+          postData:
+            item: ::1
+            schema:
+              type: string
+              metasysType: string
+          parameters: []
+          errorString: null
+          user: api_user
+          objectUrl: https://metasys-server.example.com/api/v6/objects/a68f10e5-da10-5b87-a96b-42a36e9919ae
+          self: https://metasys-server.example.com/api/v6/audits/b11d01b5-52a4-4933-819b-d37ccac23d82
+          itemReference: '{hostname}:{deviceHostname}'
+          objectName: My Engine
+          annotationsUrl: https://metasys-server.example.com/api/v6/audits/b11d01b5-52a4-4933-819b-d37ccac23d82/annotations
+          signedAnnotationsCount: 0
+          annotationsCount: 0
+          classLevel: auditClassesEnumSet.userActionAuditClass
+          originApplication: auditOriginAppEnumSet.systemSecurityAuditOriginApp
+          description: auditTrailStringsEnumSet.atstrSecurityUserLoginSuccessful
+          signature: null
+        - id: 9b296b69-8dd1-479a-9f37-c19ac9c0f05b
+          creationTime: '2021-11-23T23:39:27Z'
+          actionType: auditActionTypeEnumSet.writeAuditActionType
+          activityManagementStatus: discarded
+          status: statusEnumSet.ok
+          preData:
+            item: ''
+            schema:
+              type: string
+              metasysType: string
+          postData:
+            item: ''
+            schema:
+              type: string
+              metasysType: string
+          parameters: []
+          errorString: null
+          user: api_user
+          objectUrl: https://metasys-server.example.com/api/v6/objects/a68f10e5-da10-5b87-a96b-42a36e9919ae
+          self: https://metasys-server.example.com/api/v6/audits/9b296b69-8dd1-479a-9f37-c19ac9c0f05b
+          itemReference: '{hostname}:{deviceHostname}'
+          objectName: My Engine
+          annotationsUrl: https://metasys-server.example.com/api/v6/audits/9b296b69-8dd1-479a-9f37-c19ac9c0f05b/annotations
+          signedAnnotationsCount: 1
+          annotationsCount: 2
+          classLevel: auditClassesEnumSet.userActionAuditClass
+          originApplication: auditOriginAppEnumSet.systemSecurityAuditOriginApp
+          description: auditTrailStringsEnumSet.atstrUsageAnalyticsTermsAccepted
+          signature:
+            fullName: Aaron
+            reason: Review
+        effectivePermissions:
+        - id: b11d01b5-52a4-4933-819b-d37ccac23d82
+          canDiscard: true
+          canAnnotate: true
+        - id: 9b296b69-8dd1-479a-9f37-c19ac9c0f05b
+          canDiscard: true
+          canAnnotate: true
+        self: https://metasys-server.example.com/api/v6/audits?page=1&pageSize=10&sort=-creationtime
+    first-two-object-audits:
+      summary: Audits
+      value:
+        total: 400
+        next: https://metasys-server.example.com/api/v6/objects/a68f10e5-da10-5b87-a96b-42a36e9919ae/audits?page=2&pageSize=10&sort=-creationtime
+        previous: null
+        items:
+        - id: b11d01b5-52a4-4933-819b-d37ccac23d82
+          creationTime: '2021-11-23T23:39:33.413Z'
+          actionType: auditActionTypeEnumSet.subsystemAuditActionType
+          activityManagementStatus: pending
+          status: null
+          preData: null
+          postData:
+            item: ::1
+            schema:
+              type: string
+              metasysType: string
+          parameters: []
+          errorString: null
+          user: api_user
+          objectUrl: https://metasys-server.example.com/api/v6/objects/a68f10e5-da10-5b87-a96b-42a36e9919ae
+          self: https://metasys-server.example.com/api/v6/audits/b11d01b5-52a4-4933-819b-d37ccac23d82
+          itemReference: '{hostname}:{deviceHostname}'
+          objectName: My Engine
+          annotationsUrl: https://metasys-server.example.com/api/v6/audits/b11d01b5-52a4-4933-819b-d37ccac23d82/annotations
+          signedAnnotationsCount: 0
+          annotationsCount: 0
+          classLevel: auditClassesEnumSet.userActionAuditClass
+          originApplication: auditOriginAppEnumSet.systemSecurityAuditOriginApp
+          description: auditTrailStringsEnumSet.atstrSecurityUserLoginSuccessful
+        - id: 9b296b69-8dd1-479a-9f37-c19ac9c0f05b
+          creationTime: '2021-11-23T23:39:27Z'
+          actionType: auditActionTypeEnumSet.writeAuditActionType
+          activityManagementStatus: discarded
+          status: statusEnumSet.ok
+          preData:
+            item: ''
+            schema:
+              type: string
+              metasysType: string
+          postData:
+            item: ''
+            schema:
+              type: string
+              metasysType: string
+          parameters: []
+          errorString: null
+          user: api_user
+          objectUrl: https://metasys-server.example.com/api/v6/objects/a68f10e5-da10-5b87-a96b-42a36e9919ae
+          self: https://metasys-server.example.com/api/v6/audits/9b296b69-8dd1-479a-9f37-c19ac9c0f05b
+          itemReference: '{hostname}:{deviceHostname}'
+          objectName: My Engine
+          annotationsUrl: https://metasys-server.example.com/api/v6/audits/9b296b69-8dd1-479a-9f37-c19ac9c0f05b/annotations
+          signedAnnotationsCount: 1
+          annotationsCount: 2
+          classLevel: auditClassesEnumSet.userActionAuditClass
+          originApplication: auditOriginAppEnumSet.systemSecurityAuditOriginApp
+          description: auditTrailStringsEnumSet.atstrUsageAnalyticsTermsAccepted
+        effectivePermissions:
+        - id: b11d01b5-52a4-4933-819b-d37ccac23d82
+          canDiscard: true
+          canAnnotate: true
+        - id: 9b296b69-8dd1-479a-9f37-c19ac9c0f05b
+          canDiscard: true
+          canAnnotate: true
+        self: https://metasys-server.example.com/api/v6/audits?page=1&pageSize=10&sort=-creationtime
+    av-audit-15:
+      summary: AV Audit (15.0)
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        An audit for an analog value object.'
+      x-releases:
+        implementedAt: '15.0'
+      value:
+        id: 6c6ae3dd-c514-423d-bd22-0b48678c5384
+        creationTime: '2021-12-10T21:05:53Z'
+        actionType: auditActionTypeEnumSet.commandAuditActionType
+        activityManagementStatus: pending
+        status: statusEnumSet.ok
+        spaces: []
+        equipment: []
+        preData:
+          item: 52
+          schema:
+            type: number
+            metasysType: float
+            displayPrecision:
+              id: displayPrecisionEnumSet.displayPrecisionPt1
+              displayMultipleOf: 0.1
+        postData: null
+        parameters:
+        - item: 50
+          schema:
+            type: number
+            metasysType: float
+            units:
+              id: unitEnumSet.noUnits
+              title: ''
+            displayPrecision:
+              id: displayPrecisionEnumSet.displayPrecisionPt1
+              displayMultipleOf: 0.1
+        errorString: null
+        user: null
+        objectUrl: https://metasys-server.example.com/api/v6/objects/283fd3ad-ab1c-5849-8bdb-d635c5c274d9
+        self: https://metasys-server.example.com/api/v6/audits/6c6ae3dd-c514-423d-bd22-0b48678c5384
+        itemReference: '{hostname}:{deviceHostname}/AV1'
+        objectName: Interlock1/AV1
+        annotationsUrl: https://metasys-server.example.com/api/v6/audits/6c6ae3dd-c514-423d-bd22-0b48678c5384/annotations
+        signedAnnotationsCount: 0
+        annotationsCount: 0
+        classLevel: auditClassesEnumSet.applicationAuditClass
+        originApplication: auditOriginAppEnumSet.interlockAuditOriginApp
+        description: commandIdEnumSet.adjustCommand
+        signature: null
+    audits-users:
+      summary: Audits users
+      value:
+        items:
+        - aaron
+        - brian
+        - chris
+        - diana
+        - emily
+        total: 5
+        self: https://metasys-server.example.com/api/v6/audits/users
+    av-audit:
+      summary: AV Audit
+      description: An audit for an analog value object.
+      value:
+        id: 6c6ae3dd-c514-423d-bd22-0b48678c5384
+        creationTime: '2021-12-10T21:05:53Z'
+        actionType: auditActionTypeEnumSet.commandAuditActionType
+        activityManagementStatus: pending
+        status: statusEnumSet.ok
+        spaces: []
+        equipment: []
+        preData:
+          item: 52
+          schema:
+            type: number
+            metasysType: float
+            displayPrecision:
+              id: displayPrecisionEnumSet.displayPrecisionPt1
+              displayMultipleOf: 0.1
+        postData: null
+        parameters:
+        - item: 50
+          schema:
+            type: number
+            metasysType: float
+            units:
+              id: unitEnumSet.noUnits
+              title: ''
+            displayPrecision:
+              id: displayPrecisionEnumSet.displayPrecisionPt1
+              displayMultipleOf: 0.1
+        errorString: null
+        user: null
+        objectUrl: https://metasys-server.example.com/api/v6/objects/283fd3ad-ab1c-5849-8bdb-d635c5c274d9
+        self: https://metasys-server.example.com/api/v6/audits/6c6ae3dd-c514-423d-bd22-0b48678c5384
+        itemReference: '{hostname}:{deviceHostname}/AV1'
+        objectName: Interlock1/AV1
+        annotationsUrl: https://metasys-server.example.com/api/v6/audits/6c6ae3dd-c514-423d-bd22-0b48678c5384/annotations
+        signedAnnotationsCount: 0
+        annotationsCount: 0
+        classLevel: auditClassesEnumSet.applicationAuditClass
+        originApplication: auditOriginAppEnumSet.interlockAuditOriginApp
+        description: commandIdEnumSet.adjustCommand
+  responses:
+    general403:
+      description: "Operation is forbidden. This could be one of several reasons.\n\n- User does not have privilege to perform this operation.\n- This device is validated and requires a validated request unsupported by\n  this operation.\n"
+      content:
+        application/vnd.metasysapi.v6+json:
+          schema:
+            $ref: '#/components/schemas/standardErrorMessage'
+  securitySchemes:
+    Bearer-Authentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Most of the calls in the API use bearer token authentication. What this
+
+        means is that these requests require an `Authorization` header to be set to
+
+        a value with the following format: `Bearer: {accessToken}`. Use the
+
+        [`/login`](#operation/createToken) operation to request an `accessToken`. An
+
+        example of the full header would look like the following:
+
+        `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...`.
+
+
+        **Note:** This example access token is truncated.
+
+
+        The expiration time of the access token is based on the user''s Metasys
+
+        profile.
+
+        '
+    API-Key-Authentication:
+      type: apiKey
+      in: query
+      name: access_token
+      description: 'The [Streaming operation](#operation/getStream) is the only operation to use
+
+        API key authentication, because web browsers do not allow setting custom
+
+        headers when initiating Server Sent Event connections.
+
+        '
+x-refined-from:
+- metasys-api-v6-16.json
+- johnson-controls-metasys-openapi.yml
+x-servers:
+  apps:
+    url: https://{hostname}/apps
+    description: The base url for accessing APIs of non-core applications
+    variables:
+      hostname:
+        default: metasys-server.example.com
+        description: This is the name of your site

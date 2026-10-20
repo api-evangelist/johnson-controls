@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/johnson-controls/main/json-schema/johnson-controls-equipment-item-schema.json",
+  "title": "Equipment",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/johnson-controls-metasys-openapi.yml#/components/schemas/equipmentItem",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The identifier of the equipment instance."
+    },
+    "name": {
+      "type": "string",
+      "description": "The full name of the equipment instance."
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The name of the equipment definition for this equipment instance. If this instance is not associated with an equipment definition, this value will be null."
+    },
+    "self": {
+      "type": "string",
+      "description": "A link to this equipment instance.",
+      "format": "uri"
+    },
+    "spacesUrl": {
+      "type": "string",
+      "description": "A link to the spaces served by this equipment instance.",
+      "format": "uri"
+    },
+    "equipmentUrl": {
+      "type": "string",
+      "description": "A link to the equipment served by this equipment instance.",
+      "format": "uri"
+    },
+    "equipmentDefinitionId": {
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nThe identifier of the equipment definition for this equipment instance. If this instance is not associated with an equipment definition, this value will be null."
+    },
+    "upstreamEquipmentUrl": {
+      "type": "string",
+      "description": "A link to the equipment that serves this equipment instance.",
+      "format": "uri"
+    },
+    "networkDevicesUrl": {
+      "type": "string",
+      "description": "A link to the network devices that host this equipment instance.",
+      "format": "uri"
+    },
+    "pointsUrl": {
+      "type": "string",
+      "description": "A link to the point mappings defined by this equipment instance.",
+      "format": "uri"
+    },
+    "hasUpstreamEquipment": {
+      "type": "boolean",
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nIndicates if the equipment instance has upstream equipment that serves it.\n"
+    },
+    "upstreamEquipment": {
+      "type": "array",
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nA collection of upstream equipment."
+    },
+    "itemReference": {
+      "type": "string",
+      "description": "The fully qualified reference of the object."
+    },
+    "description": {
+      "type": "string",
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nThe description of the equipment."
+    },
+    "category": {
+      "type": "string",
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nThe authorization category of the equipment\n\n\nThe values for this property come from the `objectCategoryEnumSet` enumeration.\nFind the definition of `objectCategoryEnumSet` at the relative URL of `/schemas/enums/objectCategoryEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+      "x-metasysType": "enum",
+      "x-metasysEnum": "objectCategoryEnumSet"
+    },
+    "subsystemCategory": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nThe system subtype of the equipment definition for this equipment instance. If this instance is not associated with an equipment definition, this value will be null.\n\nThe values for this property come from the `subsystemCategoryEnumSet` enumeration.\nFind the definition of `subsystemCategoryEnumSet` at the relative URL of `/schemas/enums/subsystemCategoryEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+      "x-metasysEnum": "subsystemCategoryEnumSet"
+    },
+    "graphicAlias": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nThe alias to apply to the graphics associated with the equipment.\n"
+    }
+  },
+  "required": [
+    "id",
+    "itemReference",
+    "name",
+    "type",
+    "self",
+    "spacesUrl",
+    "equipmentUrl",
+    "upstreamEquipmentUrl",
+    "networkDevicesUrl",
+    "pointsUrl"
+  ]
+}

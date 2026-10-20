@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/johnson-controls/main/json-schema/johnson-controls-equipment-points-schema.json",
+  "title": "equipmentPoints",
+  "description": "The collection of points mapped to the equipment.",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/johnson-controls-metasys-openapi.yml#/components/schemas/equipmentPoints",
+  "type": "object",
+  "properties": {
+    "total": {
+      "type": "integer",
+      "description": "The total number of items in the collection."
+    },
+    "items": {
+      "type": "array",
+      "description": "The collection of equipment point mappings.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The identifier of the mapped equipment instance."
+          },
+          "itemReference": {
+            "type": "string",
+            "description": "The fully qualified reference of the mapped equipment instance."
+          },
+          "equipmentName": {
+            "type": "string",
+            "description": "The full name of the mapped equipment instance."
+          },
+          "shortName": {
+            "type": "string",
+            "description": "The short name for the equipment point."
+          },
+          "label": {
+            "type": "string",
+            "description": "The label for the equipment point."
+          },
+          "category": {
+            "type": "string",
+            "description": "The category for the equipment point. This is generally unused."
+          },
+          "isDisplayData": {
+            "type": "boolean",
+            "description": "Indicates that the equipment point should be shown to an end user more prominently than other points. This value can be configured via the Equipment Definition."
+          },
+          "equipmentUrl": {
+            "type": "string",
+            "description": "A link to the mapped equipment.",
+            "format": "uri"
+          },
+          "objectUrl": {
+            "type": "string",
+            "description": "A link to the mapped object.",
+            "format": "uri"
+          },
+          "objectReference": {
+            "x-releases": {
+              "implementedAt": "15.0"
+            },
+            "type": "string",
+            "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nThe fully qualified reference of the mapped object."
+          },
+          "attribute": {
+            "type": "string",
+            "description": "The attribute of the mapped object which the point's value represents.\n\nThe values for this property come from the `attributeEnumSet` enumeration.\nFind the definition of `attributeEnumSet` at the relative URL of `/schemas/enums/attributeEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+            "x-metasysEnum": "attributeEnumSet"
+          }
+        },
+        "required": [
+          "id",
+          "itemReference",
+          "equipmentName",
+          "shortName",
+          "label",
+          "category",
+          "isDisplayData",
+          "equipmentUrl",
+          "objectUrl",
+          "attribute"
+        ]
+      }
+    },
+    "next": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "A link to the next page of results.",
+      "format": "uri"
+    },
+    "previous": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "A link to the previous page of results.",
+      "format": "uri"
+    },
+    "self": {
+      "type": "string",
+      "description": "A link to this equipment point mapping collection.",
+      "format": "uri"
+    }
+  },
+  "required": [
+    "total",
+    "items",
+    "next",
+    "previous",
+    "self"
+  ]
+}

@@ -1,0 +1,53 @@
+generated: '2026-10-20'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/johnson-controls-metasys-openapi.yml
+format: custom
+envelope:
+  media_type: application/vnd.metasysapi.v6
+  schema: errorMessage
+coverage:
+  operations: 70
+  statuses_declared: 6
+problems:
+- status: 400
+  title: Bad Request
+  description: There are many unique scenarios that can result in a 400.
+  operations: 6
+  media_types:
+  - application/vnd.metasysapi.v6+json
+  schema: errorMessage
+- status: 401
+  title: Unauthorized
+  description: Unauthorized.
+  operations: 1
+  media_types: []
+  schema: null
+- status: 403
+  title: Forbidden
+  description: Operation is forbidden. This could be one of several reasons.
+  operations: 6
+  media_types:
+  - application/vnd.metasysapi.v6
+  - application/vnd.metasysapi.v6+json
+  schema: errorMessage
+- status: 404
+  title: Not Found
+  description: The provided identifier does not match any known equipment.
+  operations: 5
+  media_types:
+  - application/vnd.metasysapi.v6
+  schema: errorMessage
+- status: 405
+  title: Method Not Allowed
+  description: Method not allowed. The audit is already discarded.
+  operations: 1
+  media_types: []
+  schema: null
+- status: 409
+  title: Conflict
+  description: The specified device cannot be deleted because it is not offline.
+  operations: 1
+  media_types: []
+  schema: null

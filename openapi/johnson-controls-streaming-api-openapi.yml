@@ -1,0 +1,305 @@
+openapi: 3.2.0
+info:
+  title: Johnson Controls Streaming API
+  version: Version 6 for 16.0
+  x-logo:
+    url: source/images/logo.svg
+    href: https://jci-metasys.github.io/
+  x-releases:
+  - '14.0'
+  - '14.1'
+  - '15.0'
+  - '16.0'
+  x-revision: 'Commit ID: 4b227676a'
+  description: 'Operations tagged streaming across 2 of this provider''s published API definitions: metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{hostname}/api/v6
+  description: The base URL of all API routes
+  variables:
+    hostname:
+      default: metasys-server.example.com
+      description: This is the name of your site director device
+security:
+- Bearer-Authentication: []
+tags:
+- name: Streaming
+  description: 'Your Metasys system works continuously: sensors report current conditions,
+
+    algorithms make adjustments, and alarms alert operators to potential issues. Streaming is how the Metasys API provides access to these _events_ using the
+
+    HTML standard
+
+    server-sent events
+
+    (SSE). For further information, refer to
+
+    Mozilla developer guide. In this document, _Streaming_ typically refers to the Metasys feature and
+
+    _stream_ refers to the concept of the HTTP connection and the flow of data. Per the standard, a server-sent event usually contains three components,
+
+    separated by newline, with the last component having a second newline to mark
+
+    the end of the event. ```text
+
+    id: \n
+
+    event: \n
+
+    data: \n\n
+
+    ```
+
+
+    | Line Prefix | Explanation |
+
+    | ----------- | ------------------------------------------------------------------- |
+
+    | `id` | ordering id to enable the "pick up where you left off" reconnection |
+
+    | `event` | message type |
+
+    | `data` | message payload as a JSON string |
+
+
+    Example:
+
+
+    ```text
+
+    id: b6d184ee-e137-44aa-b9b1-14bc704cd25d:1\n
+
+    event: hello\n
+
+    data: b6d184ee-e137-44aa-b9b1-14bc704cd25d\n\n
+
+    ```
+
+
+    ## Getting Started
+
+
+    To get started, you first need a client. There are SSE clients available in many
+
+    languages. Begin by getting a stream. Only one stream is needed
+
+    regardless of the number of subscriptions you later create. As explained in the
+
+    documentation for getting a stream, the first event, `hello`, is a special event
+
+    because the `data` field contains your _stream ID_. Some operations support the `METASYS-SUBSCRIBE` header which transforms them
+
+    from being a single request/response operations into a streaming subscription. The value of the header is the _stream ID_ from the `data` field of the `hello`
+
+    event described above. As an example, refer to the
+
+    Get Activities operation for more details about this
+
+    technique. This technique does not apply to every operation. See each
+
+    operation''s description to understand its Streaming capability. Not all _event_ data is currently exposed by Streaming. Future versions of the
+
+    API will add further Streaming capabilities. ## Streaming Connection Maintenance
+
+
+    There are a few behaviors to be aware of if you want your stream to work beyond
+
+    the lifetime of the access token used to
+
+    get your stream. ### Keep Events Flowing After Initial Access Token Expiration
+
+
+    Recall that your access token has an expiration time. To keep the stream longer
+
+    than the lifetime of that access token, be sure to
+
+    refresh your token just as you would when using
+
+    non-Streaming portions of the API. Not only will you get a fresh token to use,
+
+    but internally, your stream expirations are updated to match the expiration time
+
+    of the new token. ### Reconnect and Using the Current Access Token in Reconnect Requests
+
+
+    The server-sent events standard has a provision for reconnecting a lost
+
+    connection. Call the same get a stream operation but
+
+    also add the `Last-Event-Id` header with the `id` of the last event received. Most clients handle this for you. Metasys continues to buffer events for at
+
+    least thirty seconds after the connection failure is detected, so you can resume
+
+    streams that experienced brief outages. If Metasys has cleaned up your buffer or
+
+    cannot find that `id` in the recently sent buffer, you will get a 204 response
+
+    per the SSE specification. Because your existing stream is not resumable, your
+
+    `Last-Event-Id` is no longer valid. The recovery path is to start anew by
+
+    calling get a stream without the `Last-Event-Id` and
+
+    subscribe again to data of interest. One critical aspect of reconnect is ensuring that the reconnect request is done
+
+    with the current access token. As covered by
+
+    get a stream, Streaming lets you specify the token in
+
+    either the `Authorization` header or query string. This flexibility accommodates
+
+    a variety of clients. For example, the web browser client, `EventSource`, does
+
+    not provide access to request headers, so you have to use the query string.'
+paths:
+  /stream:
+    get:
+      summary: Get a stream
+      description: Opens or reconnects a Server Sent Event stream which is a prerequisite for subscribing to any dynamic updates
+      operationId: getStream
+      security:
+      - Bearer-Authentication: []
+      - API-Key-Authentication: []
+      parameters:
+      - in: header
+        name: Last-Event-Id
+        schema:
+          type: string
+        example: b6d184ee-e137-44aa-b9b1-14bc704cd25d:5
+        description: Providing the ID of the last event received enables a briefly broken stream to be resumed
+      responses:
+        '200':
+          description: 'Stream connection successful. If this was a new connection, the first
+
+            message has an _event_ type of `hello` and a special purpose. If this
+
+            was a reconnect attempt, the first event will be subscribed data
+
+            updates.
+
+
+            **First event explanation**<br/> _id_ - Use in the `Last-Event-Id`
+
+            header to attempt restoration of a briefly broken connection. In the
+
+            case of web browsers, the EventSource automatically handles this for
+
+            you.<br/> _event_ - Conveys the type of information in the _data_ field.
+
+            Each feature and operation within that feature has a distinct
+
+            _event_.<br/> _data_ - Your stream ID to provide in requests for dynamic
+
+            update subscriptions.
+
+
+            **First event example**
+
+
+            ```
+
+            id: b6d184ee-e137-44aa-b9b1-14bc704cd25d:\n
+
+            event: hello\n
+
+            data: b6d184ee-e137-44aa-b9b1-14bc704cd25d\n\n
+
+            ```
+
+
+            _For more information about Server Sent Events (SSE), please refer to
+
+            the [HTML
+
+            Specification](https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events\)
+
+            and [Mozilla
+
+            pages](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events\)_
+
+            '
+        '204':
+          description: Stream reconnect failed. Please open a new stream and recreate your subscriptions.
+      tags:
+      - Streaming
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/stream \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/stream\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/stream\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /stream'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/stream', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/stream\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/stream\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+components:
+  securitySchemes:
+    Bearer-Authentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Most of the calls in the API use bearer token authentication. What this
+
+        means is that these requests require an `Authorization` header to be set to
+
+        a value with the following format: `Bearer: {accessToken}`. Use the
+
+        [`/login`](#operation/createToken) operation to request an `accessToken`. An
+
+        example of the full header would look like the following:
+
+        `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...`.
+
+
+        **Note:** This example access token is truncated.
+
+
+        The expiration time of the access token is based on the user''s Metasys
+
+        profile.
+
+        '
+    API-Key-Authentication:
+      type: apiKey
+      in: query
+      name: access_token
+      description: 'The [Streaming operation](#operation/getStream) is the only operation to use
+
+        API key authentication, because web browsers do not allow setting custom
+
+        headers when initiating Server Sent Event connections.
+
+        '
+x-refined-from:
+- metasys-api-v6-16.json
+- johnson-controls-metasys-openapi.yml
+x-servers:
+  apps:
+    url: https://{hostname}/apps
+    description: The base url for accessing APIs of non-core applications
+    variables:
+      hostname:
+        default: metasys-server.example.com
+        description: This is the name of your site

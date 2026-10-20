@@ -1,0 +1,1123 @@
+openapi: 3.2.0
+info:
+  title: Johnson Controls network devices API
+  version: Version 6 for 16.0
+  x-logo:
+    url: source/images/logo.svg
+    href: https://jci-metasys.github.io/
+  x-releases:
+  - '14.0'
+  - '14.1'
+  - '15.0'
+  - '16.0'
+  x-revision: 'Commit ID: 4b227676a'
+  description: 'Operations tagged network devices across 2 of this provider''s published API definitions: metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{hostname}/api/v6
+  description: The base URL of all API routes
+  variables:
+    hostname:
+      default: metasys-server.example.com
+      description: This is the name of your site director device
+security:
+- Bearer-Authentication: []
+tags:
+- name: network devices
+  description: 'This section describes the operations you can perform on network devices.
+
+    Network devices are physical devices such as coordinators and routers that
+
+    are required for communication between hardware on a computer network. Use
+
+    network device operations to get, list, and delete network devices. Apply
+
+    filters, sorting, and paging to further refine the results.'
+paths:
+  /networkDevices:
+    get:
+      summary: List network devices
+      description: Retrieves a collection of network devices.
+      operationId: getNetworkDevices
+      parameters:
+      - $ref: '#/components/parameters/objectType'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/devicesSort'
+      - $ref: '#/components/parameters/classification'
+      - $ref: '#/components/parameters/includeIncomplete'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/networkDevices'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/networkDevices'
+      tags:
+      - network devices
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/networkDevices \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/networkDevices\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/networkDevices\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /networkDevices'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/networkDevices', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/networkDevices\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/networkDevices\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /networkDevices/{networkDeviceId}:
+    get:
+      summary: Get a single network device
+      description: Retrieves the specified network device.
+      operationId: getNetworkDevice
+      parameters:
+      - $ref: '#/components/parameters/networkDeviceId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/networkDevice'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/networkDevice'
+      tags:
+      - network devices
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7 \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    delete:
+      summary: Deletes a network device
+      description: 'Deletes an engine or a server which is a child device of the site director.
+
+        Cannot be used to delete controllers, integrations, or the site director.
+
+
+        **Note:** The device must be offline for the operation to succeed.'
+      operationId: deleteNetworkDevice
+      parameters:
+      - $ref: '#/components/parameters/networkDeviceId'
+      responses:
+        '204':
+          description: Success.
+        '400':
+          description: The specified device is not a child engine or a child server.
+        '403':
+          description: The user does not have the Manage Devices & Sites privilege.
+        '409':
+          description: The specified device cannot be deleted because it is not offline.
+      tags:
+      - network devices
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request DELETE \\\n  --url https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7 \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .DeleteAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7\" `\n  -Method Delete `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7 `\n  -Method Delete"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.delete(\n  '/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"DELETE\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"DELETE\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /networkDevices/{networkDeviceId}/networkDevices:
+    get:
+      summary: List network device children
+      description: Retrieves the collection of network devices that are children of the specified network device.
+      operationId: getChildNetworkDevices
+      parameters:
+      - $ref: '#/components/parameters/networkDeviceId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/devicesSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/networkDevices'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/childNetworkDevices'
+      tags:
+      - network devices
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/networkDevices \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/networkDevices\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/networkDevices\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/networkDevices'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/networkDevices', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/networkDevices\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/networkDevices\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /equipment/{equipmentId}/networkDevices:
+    get:
+      summary: List network devices hosting an equipment instance
+      description: Retrieves the collection of network devices that host the specified equipment instance, along with the parents of those network devices. A network device hosts an equipment when the equipment defines points that map to an attribute of any object contained on the network device.
+      operationId: getNetworkDevicesHostingEquipment
+      parameters:
+      - $ref: '#/components/parameters/equipmentId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/devicesSort'
+      - name: classification
+        x-releases:
+          implementedAt: '15.0'
+        in: query
+        description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+          The classification to filter devices on. One or more values are
+
+          supported.
+
+
+          The `classification` query parameter cannot be used in conjunction with
+
+          the `objectType` query parameter.
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - device
+            - integration
+            - server
+            - controller
+        style: form
+        explode: true
+        examples:
+          onlyDevices:
+            summary: Only devices (excludes integrations)
+            description: Includes servers, supervisory engines, and controllers (excludes integrations).
+            value:
+            - device
+            - server
+            - controller
+          engines:
+            summary: Only supervisory engines
+            value:
+            - device
+          serversAndEngines:
+            summary: Servers and supervisory engines
+            value:
+            - server
+            - device
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/networkDevices'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/networkDevicesHostingEquipment'
+      tags:
+      - network devices
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /spaces/{spaceId}/networkDevices:
+    get:
+      summary: List network devices serving a space
+      description: Retrieves the collection of network devices that serve the specified space. A space serves a network device when any equipment instance serving the space defines points that map to an attribute of any object contained on the network device.
+      operationId: getNetworkDevicesServingSpace
+      parameters:
+      - $ref: '#/components/parameters/spaceId'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/devicesSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/networkDevices'
+              examples:
+                spaces:
+                  $ref: '#/components/examples/networkDevicesServingSpace'
+      tags:
+      - network devices
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+components:
+  parameters:
+    networkDeviceId:
+      name: networkDeviceId
+      description: The identifier of a network device.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: d9bf66bd-22f8-425b-82a4-44ba153d79c7
+    page:
+      name: page
+      in: query
+      description: The page number of items to return.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      example: 1
+    spaceId:
+      name: spaceId
+      description: The identifier of a space.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: bf254f63-2cbb-4195-8c53-a1d6fcbe54f6
+    pageSize:
+      name: pageSize
+      in: query
+      description: The maximum number of items to return in the response.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 100
+      example: 100
+    objectType:
+      name: objectType
+      in: query
+      description: 'The type of network device to return.
+
+
+        The `objectType` query parameter cannot be used in conjunction with the
+
+        `classification` query parameter.
+
+
+
+        The acceptable values for this parameter come from the `objectTypeEnumSet` enumeration.
+
+        Only the long name of the object type (for example, `objectTypeEnumSet.bacnetIntegrationClass` instead of `bacnetIntegrationClass`) is accepted.
+
+        Find the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      schema:
+        type: string
+      example: objectTypeEnumSet.bacnetIntegrationClass
+      x-metasysType: enum
+      x-metasysEnum: objectTypeEnumSet
+    classification:
+      name: classification
+      in: query
+      description: 'The classification to filter devices on. One or more values are supported.
+
+
+        The `classification` query parameter cannot be used in conjunction with the
+
+        `objectType` query parameter.
+
+        '
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - device
+          - integration
+          - server
+          - controller
+      style: form
+      explode: true
+      examples:
+        onlyDevices:
+          summary: Only devices (excludes integrations)
+          description: Includes servers, supervisory engines, and controllers (excludes integrations).
+          value:
+          - device
+          - server
+          - controller
+        engines:
+          summary: Only supervisory engines
+          value:
+          - device
+        serversAndEngines:
+          summary: Servers and supervisory engines
+          value:
+          - server
+          - device
+    devicesSort:
+      name: sort
+      in: query
+      description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+      schema:
+        type: string
+        default: name
+        enum:
+        - categoryId
+        - -categoryId
+        - firmwareVersion
+        - -firmwareVersion
+        - itemReference
+        - -itemReference
+        - name
+        - -name
+        - typeId
+        - -typeId
+      example: name
+    includeIncomplete:
+      name: includeIncomplete
+      in: query
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        Set to true to include incomplete devices and servers in the response. An
+
+        incomplete network device is one that has not yet synchronized its archive
+
+        with the site director. As a result, these devices have minimal information
+
+        available. When set to true, incomplete devices will be returned using the
+
+        incompleteNetworkDevice schema. (You can use the _Sync Engine_ command on a
+
+        network engine to force synchronization with the site director.)
+
+        '
+      x-releases:
+        implementedAt: '15.0'
+      schema:
+        type: boolean
+        default: false
+      examples:
+        allowOffline:
+          summary: Include incomplete devices
+          description: Include incomplete devices
+          value: true
+    equipmentId:
+      name: equipmentId
+      in: path
+      description: The identifier of the equipment instance.
+      required: true
+      schema:
+        type: string
+      example: b78fa672-3ec9-4794-bd00-7aeafeb9cde0
+  examples:
+    networkDevicesServingSpace:
+      summary: Network Device Collection
+      description: A page of network devices.
+      value:
+        total: 1
+        items:
+        - id: 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          itemReference: '{hostname}:{deviceHostname}'
+          name: My Site Director
+          objectType: objectTypeEnumSet.oasClass
+          description: ''
+          firmwareVersion: 12.0.0.0
+          objectCategory: objectCategoryEnumSet.systemCategory
+          timeZone: timeZoneEnumSet.centralTime
+          self: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          parentUrl: null
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/networkDevices
+          equipmentUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/equipment
+          spacesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/spaces
+          objectsUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/objects
+          trendedAttributesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/trendedAttributes
+          alarmsUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/alarms
+          ipAddress: 192.168.0.1
+          certificateExpirationDate: '2023-10-27T13:11:35.0000000Z'
+          pairing:
+            supported: true
+            paired: false
+          objectTypeVersion: '37.0'
+          productVersion: '11.7'
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/spaces/bf254f63-2cbb-4195-8c53-a1d6fcbe54f6/networkDevices?page=1&pageSize=100&sort=name
+        effectivePermissions:
+          canDelete: []
+          canView:
+          - 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          canModify:
+          - 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+    networkDevice:
+      summary: Network Device
+      description: A single network device.
+      value:
+        id: 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+        itemReference: '{hostname}:{deviceHostname}'
+        name: My Site Director
+        objectType: objectTypeEnumSet.oasClass
+        description: ''
+        firmwareVersion: 12.0.0.0
+        objectCategory: objectCategoryEnumSet.systemCategory
+        timeZone: timeZoneEnumSet.centralTime
+        self: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce
+        parentUrl: null
+        networkDevicesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/networkDevices
+        equipmentUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/equipment
+        spacesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/spaces
+        objectsUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/objects
+        trendedAttributesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/trendedAttributes
+        alarmsUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/alarms
+        ipAddress: 192.168.0.1
+        certificateExpirationDate: '2023-10-27T13:11:35.0000000Z'
+        pairing:
+          supported: true
+          paired: false
+        objectTypeVersion: '37.0'
+        productVersion: '11.7'
+    networkDevices:
+      summary: Network Device Collection
+      description: A page of network devices.
+      value:
+        total: 1
+        items:
+        - id: 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          itemReference: '{hostname}:{deviceHostname}'
+          name: My Site Director
+          objectType: objectTypeEnumSet.oasClass
+          description: ''
+          firmwareVersion: 12.0.0.0
+          objectCategory: objectCategoryEnumSet.systemCategory
+          timeZone: timeZoneEnumSet.centralTime
+          self: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          parentUrl: null
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/networkDevices
+          equipmentUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/equipment
+          spacesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/spaces
+          objectsUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/objects
+          trendedAttributesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/trendedAttributes
+          alarmsUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/alarms
+          ipAddress: 192.168.0.1
+          certificateExpirationDate: '2023-10-27T13:11:35.0000000Z'
+          pairing:
+            supported: true
+            paired: false
+          objectTypeVersion: '37.0'
+          productVersion: '11.7'
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/networkDevices?page=1&pageSize=100&sort=name
+        effectivePermissions:
+          canDelete: []
+          canView:
+          - 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          canModify:
+          - 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+    networkDevicesHostingEquipment:
+      summary: Network Device Collection
+      description: A page of network devices.
+      value:
+        total: 1
+        items:
+        - id: 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          itemReference: '{hostname}:{deviceHostname}'
+          name: My Site Director
+          objectType: objectTypeEnumSet.oasClass
+          description: ''
+          firmwareVersion: 12.0.0.0
+          objectCategory: objectCategoryEnumSet.systemCategory
+          timeZone: timeZoneEnumSet.centralTime
+          self: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          parentUrl: null
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/networkDevices
+          equipmentUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/equipment
+          spacesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/spaces
+          objectsUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/objects
+          trendedAttributesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/trendedAttributes
+          alarmsUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/alarms
+          ipAddress: 192.168.0.1
+          certificateExpirationDate: '2023-10-27T13:11:35.0000000Z'
+          pairing:
+            supported: true
+            paired: false
+          objectTypeVersion: '37.0'
+          productVersion: '11.7'
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/equipment/b78fa672-3ec9-4794-bd00-7aeafeb9cde0/networkDevices?page=1&pageSize=100&sort=name
+        effectivePermissions:
+          canDelete: []
+          canView:
+          - 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          canModify:
+          - 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+    childNetworkDevices:
+      summary: Network Device Collection
+      description: A page of network devices.
+      value:
+        total: 1
+        items:
+        - id: 33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          itemReference: '{hostname}:{deviceHostname}'
+          name: My Site Director
+          objectType: objectTypeEnumSet.oasClass
+          description: ''
+          firmwareVersion: 12.0.0.0
+          objectCategory: objectCategoryEnumSet.systemCategory
+          timeZone: timeZoneEnumSet.centralTime
+          self: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce
+          parentUrl: null
+          networkDevicesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/networkDevices
+          equipmentUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/equipment
+          spacesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/spaces
+          objectsUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/objects
+          trendedAttributesUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/trendedAttributes
+          alarmsUrl: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/alarms
+          ipAddress: 192.168.0.1
+          certificateExpirationDate: '2023-10-27T13:11:35.0000000Z'
+          pairing:
+            supported: true
+            paired: false
+          objectTypeVersion: '37.0'
+          productVersion: '11.7'
+        next: null
+        previous: null
+        self: https://metasys-server.example.com/api/v6/networkDevices/33b9d23d-198c-414a-980b-1ff1dca1d7ce/networkDevices?page=1&pageSize=100&sort=name
+        effectivePermissions:
+          canDelete: []
+          canView:
+          - 88cc68b1-ddaf-48c9-b15e-6ea112be848f
+          canModify:
+          - 88cc68b1-ddaf-48c9-b15e-6ea112be848f
+  schemas:
+    networkDevice:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier of the network device.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the network device.
+        name:
+          type: string
+          description: The full name of the network device.
+        objectType:
+          type: string
+          description: 'The type of this network device as defined by the `objectTypeEnumSet`.
+
+
+            The values for this property come from the `objectTypeEnumSet` enumeration.
+
+            Find the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: objectTypeEnumSet
+        objectTypeVersion:
+          type: string
+          description: The version of `objectType` that is used for this object.
+          readOnly: true
+        productVersion:
+          type: string
+          description: The product version of the object.
+          readOnly: true
+        description:
+          type: string
+          description: The description for the network device.
+        firmwareVersion:
+          type: string
+          description: The firmware version for the network device. This property will be an empty string "" if the device does not support a firmware version.
+        objectCategory:
+          type: string
+          description: 'The authorization category for the network device.
+
+
+            The values for this property come from the `objectCategoryEnumSet` enumeration.
+
+            Find the definition of `objectCategoryEnumSet` at the relative URL of `/schemas/enums/objectCategoryEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: objectCategoryEnumSet
+        timeZone:
+          type:
+          - string
+          - 'null'
+          description: 'The time zone for the network device. This property will be `null` if the device does not support a time zone.
+
+
+            The values for this property come from the `timeZoneEnumSet` enumeration.
+
+            Find the definition of `timeZoneEnumSet` at the relative URL of `/schemas/enums/timeZoneEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: timeZoneEnumSet
+        self:
+          type: string
+          description: The link to the network device.
+          format: uri
+        parentUrl:
+          type:
+          - string
+          - 'null'
+          description: A link to the network device that is the parent of this network device.
+          format: uri
+        networkDevicesUrl:
+          type: string
+          description: A link to the network devices that are children of this network device.
+          format: uri
+        equipmentUrl:
+          type: string
+          description: A link to the equipment instances hosted by this network device.
+          format: uri
+        spacesUrl:
+          type: string
+          description: A link to the spaces that are served by this network device.
+          format: uri
+        objectsUrl:
+          type: string
+          description: A link to the objects contained within this network device.
+          format: uri
+        trendedAttributesUrl:
+          type: string
+          description: A link to the attributes on this network device for which samples are available.
+          format: uri
+        alarmsUrl:
+          type: string
+          description: A link to the alarms available for this network device.
+          format: uri
+        allowHttp:
+          x-releases:
+            implementedAt: '15.0'
+          type: boolean
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            Indicates if the network device allows HTTP communication. This property will be `false` if the device has blocked the HTTP port (port 80).'
+        jciIpCommMode:
+          x-releases:
+            implementedAt: '15.0'
+          type: string
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            The BACnet IP communication mode for the network device.
+
+
+            The values for this property come from the `ipCommModeEnumSet` enumeration.
+
+            Find the definition of `ipCommModeEnumSet` at the relative URL of `/schemas/enums/ipCommModeEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: ipCommModeEnumSet
+        ipAddress:
+          type:
+          - string
+          - 'null'
+          description: The IPv4 address of the network device. This will be `null` if the device does not support an IP address.
+          format: ipv4
+        deviceIpv6Address:
+          x-releases:
+            implementedAt: '15.0'
+          type:
+          - string
+          - 'null'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+            The IPv6 address of the network device. This will be `null` if the device does not support an IPv6 address.'
+          format: ipv6
+        certificateExpirationDate:
+          type:
+          - string
+          - 'null'
+          description: 'The expiration date & time of the device''s HTTPS certificate. This will
+
+            be `null` if the device does not support HTTPS certificates or there is
+
+            no certificate present.
+
+            '
+          format: date-time
+        pairing:
+          type: object
+          description: Provides indicators to the pairing capabilities of the network device.
+          properties:
+            supported:
+              type: boolean
+              description: Indicates if the device supports the pairing operation.
+            paired:
+              type: boolean
+              description: Indicates if the device has been authenticated with the site director. This property will always be `false` if `supported` is `false`.
+          required:
+          - supported
+          - paired
+        ethernetMacAddress:
+          x-releases:
+            implementedAt: '16.0'
+          type: string
+          description: '<span style="color: #92989b; font-size: 13px">RELEASE</span>:<span style="color: #186faf;"> <strong>16.0</strong></span>\
+
+            The MAC address of the network device.'
+          format: mac-address
+        modelName:
+          x-releases:
+            implementedAt: '16.0'
+          type: string
+          description: '<span style="color: #92989b; font-size: 13px">RELEASE</span>:<span style="color: #186faf;"> <strong>16.0</strong></span>\
+
+            The model name of the network device.'
+      required:
+      - id
+      - itemReference
+      - name
+      - objectType
+      - description
+      - firmwareVersion
+      - objectCategory
+      - timeZone
+      - self
+      - parentUrl
+      - networkDevicesUrl
+      - equipmentUrl
+      - spacesUrl
+      - objectsUrl
+      - trendedAttributesUrl
+      - alarmsUrl
+      - ipAddress
+      - certificateExpirationDate
+      - pairing
+    incompleteNetworkDevice:
+      type: object
+      x-releases:
+        implementedAt: '15.0'
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>15.0 and later</strong></span>\
+
+        An incomplete network device is a network device that has not been fully
+
+        populated with all of its properties. This is typically the case when the
+
+        network device is not reachable or when the API is unable to retrieve all of
+
+        the properties of the network device.
+
+        '
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: The identifier of the network device.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the network device.
+        name:
+          type: string
+          description: The full name of the network device.
+        self:
+          type: string
+          description: The link to the network device.
+          format: uri
+        networkDevicesUrl:
+          type: string
+          description: A link to the network devices that are children of this network device.
+          format: uri
+        equipmentUrl:
+          type: string
+          description: A link to the equipment instances hosted by this network device.
+          format: uri
+        spacesUrl:
+          type: string
+          description: A link to the spaces that are served by this network device.
+          format: uri
+        objectsUrl:
+          type: string
+          description: A link to the objects contained within this network device.
+          format: uri
+        trendedAttributesUrl:
+          type: string
+          description: A link to the attributes on this network device for which samples are available.
+          format: uri
+        alarmsUrl:
+          type: string
+          description: A link to the alarms available for this network device.
+          format: uri
+      required:
+      - id
+      - itemReference
+      - name
+      - self
+      - networkDevicesUrl
+      - equipmentUrl
+      - spacesUrl
+      - objectsUrl
+      - trendedAttributesUrl
+      - alarmsUrl
+    networkDevices:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: 'The collection of network devices. Incomplete network devices are only
+
+            included if the `includeIncomplete` query parameter is set to `true` and
+
+            the API is at release 15.0 or greater.
+
+            '
+          items:
+            oneOf:
+            - $ref: '#/components/schemas/networkDevice'
+            - $ref: '#/components/schemas/incompleteNetworkDevice'
+        next:
+          type:
+          - string
+          - 'null'
+          description: A link to the next page of results.
+          format: uri
+        previous:
+          type:
+          - string
+          - 'null'
+          description: A link to the previous page of results.
+          format: uri
+        self:
+          type: string
+          description: A link to this equipment collection.
+          format: uri
+        effectivePermissions:
+          type: object
+          description: Describes the effective permissions the client has for the network devices in the response.
+          properties:
+            canDelete:
+              type: array
+              description: The IDs of devices that can be deleted by the client.
+              items:
+                type: string
+            canView:
+              type: array
+              description: The IDs of devices that can be viewed by the client.
+              items:
+                type: string
+            canModify:
+              type: array
+              description: The IDs of devices that can be edited by the client.
+              items:
+                type: string
+          required:
+          - canDelete
+          - canView
+          - canModify
+      required:
+      - total
+      - items
+      - next
+      - previous
+      - self
+      - effectivePermissions
+  securitySchemes:
+    Bearer-Authentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Most of the calls in the API use bearer token authentication. What this
+
+        means is that these requests require an `Authorization` header to be set to
+
+        a value with the following format: `Bearer: {accessToken}`. Use the
+
+        [`/login`](#operation/createToken) operation to request an `accessToken`. An
+
+        example of the full header would look like the following:
+
+        `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...`.
+
+
+        **Note:** This example access token is truncated.
+
+
+        The expiration time of the access token is based on the user''s Metasys
+
+        profile.
+
+        '
+    API-Key-Authentication:
+      type: apiKey
+      in: query
+      name: access_token
+      description: 'The [Streaming operation](#operation/getStream) is the only operation to use
+
+        API key authentication, because web browsers do not allow setting custom
+
+        headers when initiating Server Sent Event connections.
+
+        '
+x-refined-from:
+- metasys-api-v6-16.json
+- johnson-controls-metasys-openapi.yml
+x-servers:
+  apps:
+    url: https://{hostname}/apps
+    description: The base url for accessing APIs of non-core applications
+    variables:
+      hostname:
+        default: metasys-server.example.com
+        description: This is the name of your site

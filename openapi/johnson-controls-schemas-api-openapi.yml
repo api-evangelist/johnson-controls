@@ -1,0 +1,1185 @@
+openapi: 3.2.0
+info:
+  title: Johnson Controls Schemas API
+  version: Version 6 for 16.0
+  x-logo:
+    url: source/images/logo.svg
+    href: https://jci-metasys.github.io/
+  x-releases:
+  - '14.0'
+  - '14.1'
+  - '15.0'
+  - '16.0'
+  x-revision: 'Commit ID: 4b227676a'
+  description: 'Operations tagged schemas across 2 of this provider''s published API definitions: metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{hostname}/api/v6
+  description: The base URL of all API routes
+  variables:
+    hostname:
+      default: metasys-server.example.com
+      description: This is the name of your site director device
+security:
+- Bearer-Authentication: []
+tags:
+- name: Schemas
+  description: A collection of JSON schemas for describing enumerations and object types.
+paths:
+  /schemas/enums/{enumId}:
+    get:
+      tags:
+      - Schemas
+      summary: Get enumeration
+      description: 'This operation retrieves the specified enumeration as a JSON schema. The
+
+        path of this operation appears in several schemas of object payloads.
+
+
+        To get a list of all enumerations fetch the `enumerationSetNamesEnumSet`:
+
+
+        ```text
+
+        GET /schemas/enums/enumerationSetNamesEnumSet
+
+        ```
+
+
+        **See also:**
+
+
+        - Get an object'
+      operationId: getEnumerationAsJsonSchema
+      security: []
+      parameters:
+      - name: enumId
+        in: path
+        description: 'The enumeration to retrieve.
+
+
+          The acceptable values for this parameter come from the
+
+          `enumerationSetNamesEnumSet` enumeration. It is acceptable to use the
+
+          short name of the value (for example, `writePriorityEnumSet` instead of
+
+          `enumerationSetNamesEnumSet.writePriorityEnumSet`) because the
+
+          enumeration set is known from context. Find the definition of
+
+          `enumerationSetNamesEnumSet` at the relative URL of
+
+          `/schemas/enums/enumerationSetNamesEnumSet`.
+
+          '
+        required: true
+        schema:
+          type: string
+        x-metasysType: enum
+        examples:
+          priority:
+            summary: The write priority enumeration
+            value: writePriorityEnumSet
+          precision:
+            summary: The display precision enumeration
+            value: displayPrecisionEnumSet
+          all:
+            summary: The set of all sets
+            value: enumerationSetNamesEnumSet
+      - name: Accept-Language
+        description: The language to use for display text of enumeration name and members. If no language is specified the client's default language as specified in their user profile will be used.
+        in: header
+        schema:
+          type: string
+        examples:
+          english:
+            summary: English
+            value: en-US
+          spanish:
+            summary: Spanish
+            value: es-ES
+            x-use-in-snippets: true
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                type: object
+                description: A JSON schema that describes the members of an enumeration.
+              examples:
+                priority:
+                  $ref: '#/components/examples/get-enumeration-write-priority-enum-set'
+                precision:
+                  $ref: '#/components/examples/get-enumeration-display-precision-enum-set'
+                all:
+                  $ref: '#/components/examples/get-enumeration-enumeration-set-names-enum-set'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "curl --request GET \\\n  --url https://metasys-server.example.com/api/v6/schemas/enums/writePriorityEnumSet \\\n  --header 'Accept-Language: es-ES'"
+      - lang: csharp
+        label: C# + Flurl
+        source: "var response = await \"https://metasys-server.example.com/api/v6/schemas/enums/writePriorityEnumSet\"\n    .WithHeader(\"Accept-Language\", \"es-ES\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "Invoke-RestMethod \"https://metasys-server.example.com/api/v6/schemas/enums/writePriorityEnumSet\" `\n  -Headers @{\n    'Accept-Language' = 'es-ES'\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /schemas/enums/writePriorityEnumSet `\n  -Headers @{ 'Accept-Language' = 'es-ES' }"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variable `axiosClient`\n\nconst headers = {\n  'Accept-Language': 'es-ES',\n};\n\nconst response = await axiosClient.get(\n  '/schemas/enums/writePriorityEnumSet', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object\nurl = \"/api/v6/schemas/enums/writePriorityEnumSet\"\nheaders = {\n    \"Accept-Language\": \"es-ES\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "HttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/schemas/enums/writePriorityEnumSet\"))\n    .header(\"Accept-Language\", \"es-ES\")\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /schemas/objectTypes/{objectType}:
+    get:
+      tags:
+      - Schemas
+      summary: Get object type schema
+      description: 'This endpoint retrieves a schema for a specific `objectType`. The schema
+
+        describes the properties that can be set when creating an object of the
+
+        specific type.'
+      operationId: getObjectTypeSchema
+      parameters:
+      - $ref: '#/components/parameters/schemasObjectType'
+      - name: parentId
+        description: The object under which this new object will be created.
+        required: true
+        in: query
+        schema:
+          type: string
+        example: 2993aed9-5765-5641-889c-40ec968c8a82
+      - $ref: '#/components/parameters/extendedProperty'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                type: object
+                properties:
+                  schema:
+                    type: object
+                    description: A JSON schema that describes valid payloads for creating an object of the specified type.
+                  views:
+                    $ref: '#/components/schemas/views'
+              examples:
+                avClass:
+                  $ref: '#/components/examples/get-object-type-schema-for-av.schema'
+                mvClass:
+                  $ref: '#/components/examples/get-object-type-schema-for-mv.schema'
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url 'https://metasys-server.example.com/api/v6/schemas/objectTypes/objectTypeEnumSet.avClass?parentId=2993aed9-5765-5641-889c-40ec968c8a82' \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/schemas/objectTypes/objectTypeEnumSet.avClass?parentId=2993aed9-5765-5641-889c-40ec968c8a82\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/schemas/objectTypes/objectTypeEnumSet.avClass?parentId=2993aed9-5765-5641-889c-40ec968c8a82\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /schemas/objectTypes/objectTypeEnumSet.avClass?parentId=2993aed9-5765-5641-889c-40ec968c8a82'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/schemas/objectTypes/objectTypeEnumSet.avClass?parentId=2993aed9-5765-5641-889c-40ec968c8a82', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/schemas/objectTypes/objectTypeEnumSet.avClass?parentId=2993aed9-5765-5641-889c-40ec968c8a82\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/schemas/objectTypes/objectTypeEnumSet.avClass?parentId=2993aed9-5765-5641-889c-40ec968c8a82\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+components:
+  examples:
+    get-enumeration-display-precision-enum-set:
+      summary: The Display Precision enumeration
+      value:
+        $schema: http://json-schema.org/draft-07/schema#
+        title: Display Precision
+        $id: https://metasys-server.example.com/api/v6/schemas/enums/displayPrecisionEnumSet
+        setId: 0
+        oneOf:
+        - const: displayPrecisionEnumSet.displayPrecisionPt000001
+          title: 1000000ths
+          memberId: 0
+        - const: displayPrecisionEnumSet.displayPrecisionPt00001
+          title: 100000ths
+          memberId: 1
+        - const: displayPrecisionEnumSet.displayPrecisionPt0001
+          title: 10000ths
+          memberId: 2
+        - const: displayPrecisionEnumSet.displayPrecisionPt001
+          title: 1000ths
+          memberId: 3
+        - const: displayPrecisionEnumSet.displayPrecisionPt01
+          title: 100ths
+          memberId: 4
+        - const: displayPrecisionEnumSet.displayPrecisionPt1
+          title: 10ths
+          memberId: 5
+        - const: displayPrecisionEnumSet.displayPrecision1
+          title: 1s
+          memberId: 6
+        - const: displayPrecisionEnumSet.displayPrecision10
+          title: 10s
+          memberId: 7
+        - const: displayPrecisionEnumSet.displayPrecision100
+          title: 100s
+          memberId: 8
+        - const: displayPrecisionEnumSet.displayPrecision1000
+          title: 1000s
+          memberId: 9
+        - const: displayPrecisionEnumSet.displayPrecision10000
+          title: 10000s
+          memberId: 10
+        - const: displayPrecisionEnumSet.displayPrecision100000
+          title: 100000s
+          memberId: 11
+        - const: displayPrecisionEnumSet.displayPrecision1000000
+          title: 1000000s
+          memberId: 12
+    get-enumeration-write-priority-enum-set:
+      summary: The Write Priority enumeration
+      value:
+        $schema: http://json-schema.org/draft-07/schema#
+        title: Write Priority
+        $id: https://metasys-server.example.com/api/v6/schemas/enums/writePriorityEnumSet
+        setId: 1
+        oneOf:
+        - const: writePriorityEnumSet.priorityNone
+          title: 0 (No Priority)
+          memberId: 0
+        - const: writePriorityEnumSet.priorityManualEmergency
+          title: 1 (Manual Life Safety)
+          memberId: 1
+        - const: writePriorityEnumSet.priorityFireApplications
+          title: 2 (Auto Life Safety)
+          memberId: 2
+        - const: writePriorityEnumSet.priority3
+          title: 3 (Application)
+          memberId: 3
+        - const: writePriorityEnumSet.priority4
+          title: 4 (Application)
+          memberId: 4
+        - const: writePriorityEnumSet.priorityCriticalEquipment
+          title: 5 (Critical Equipment)
+          memberId: 5
+        - const: writePriorityEnumSet.priorityMinimumOnOff
+          title: 6 (Minimum On Off)
+          memberId: 6
+        - const: writePriorityEnumSet.priorityHeavyEquipDelay
+          title: 7 (Heavy Equip Delay)
+          memberId: 7
+        - const: writePriorityEnumSet.priorityOperatorOverride
+          title: 8 (Operator Override)
+          memberId: 8
+        - const: writePriorityEnumSet.priority9
+          title: 9 (Application)
+          memberId: 9
+        - const: writePriorityEnumSet.priority10
+          title: 10 (Application)
+          memberId: 10
+        - const: writePriorityEnumSet.priorityDemandLimiting
+          title: 11 (Demand Limiting)
+          memberId: 11
+        - const: writePriorityEnumSet.priority12
+          title: 12 (Application)
+          memberId: 12
+        - const: writePriorityEnumSet.priorityLoadRolling
+          title: 13 (Load Rolling)
+          memberId: 13
+        - const: writePriorityEnumSet.priority14
+          title: 14 (Application)
+          memberId: 14
+        - const: writePriorityEnumSet.prioritySchedulingOst
+          title: 15 (Scheduling)
+          memberId: 15
+        - const: writePriorityEnumSet.priorityDefault
+          title: 16 (Default)
+          memberId: 16
+    get-enumeration-enumeration-set-names-enum-set:
+      summary: The Set Names enumeration
+      description: 'This is the enumeration that includes the names of all of the sets (including
+
+        itself).
+
+
+        **Note:** The set has been truncated for size reasons in this example.
+
+        '
+      value:
+        $schema: http://json-schema.org/draft-07/schema#
+        title: Enum Set Names
+        $id: https://metasys-server.example.com/api/v6/schemas/enums/enumerationSetNamesEnumSet
+        setId: 800
+        oneOf:
+        - const: enumerationSetNamesEnumSet.displayPrecisionEnumSet
+          title: Display Precision
+          memberId: 0
+        - const: enumerationSetNamesEnumSet.writePriorityEnumSet
+          title: Write Priority
+          memberId: 1
+        - const: enumerationSetNamesEnumSet.bosetupEnumSet
+          title: BO Setup
+          memberId: 2
+          setSize: 4
+        - const: enumerationSetNamesEnumSet.bacpolarityEnumSet
+          title: Normal Reverse
+          memberId: 3
+          setSize: 3
+        - const: enumerationSetNamesEnumSet.multicastBehaviorEnumSet
+          title: Multicast Behavior
+          memberId: 40542
+        - const: enumerationSetNamesEnumSet.guideline36Occupancy
+          title: Guideline 36 Effective Occupancy
+          memberId: 40543
+          setSize: 6
+        - const: enumerationSetNamesEnumSet.freezeProtectionState
+          title: Freeze Protection State
+          memberId: 40544
+          setSize: 4
+        - const: enumerationSetNamesEnumSet.demandLimit
+          title: Demand Limit
+          memberId: 40545
+          setSize: 4
+        - const: enumerationSetNamesEnumSet.customEnumSet30000
+          title: Chillers Required
+          memberId: 30000
+          setSize: 8
+        - const: enumerationSetNamesEnumSet.customEnumSet30001
+          title: ESPanel
+          memberId: 30001
+          setSize: 9
+        - const: enumerationSetNamesEnumSet.customEnumSet30002
+          title: Access Status
+          memberId: 30002
+          setSize: 3
+        - const: enumerationSetNamesEnumSet.customEnumSet30003
+          title: Door Status
+          memberId: 30003
+        - const: enumerationSetNamesEnumSet.customEnumSet30004
+          title: Door Unlock Lock
+          memberId: 30004
+        - const: enumerationSetNamesEnumSet.customEnumSet30005
+          title: Fan State
+          memberId: 30005
+          setSize: 3
+        - const: enumerationSetNamesEnumSet.customEnumSet30006
+          title: Molex Beacon Colors
+          memberId: 30006
+          setSize: 8
+        - const: enumerationSetNamesEnumSet.customEnumSet30007
+          title: VRF System Status
+          memberId: 30007
+          setSize: 4
+    get-object-type-schema-for-av.schema:
+      summary: Schema for avClass
+      description: This schema describes the properties that can be configured when creating an object of the type avClass.
+      value:
+        schema:
+          $comment: Some parts of this schema have been truncated for space reasons. Where this has been done it has been noted.
+          type: object
+          $schema: http://json-schema.org/draft-07/schema#
+          title: JCI AV
+          language: en-us
+          version: '1.0'
+          $id: https://metasys-server.example.com/api/v6/schemas/objectTypes/avClass
+          properties:
+            name:
+              title: Name
+              category: attributeCategoryEnumSet.nameCategory
+              type: string
+              metasysType: string
+              maxLength: 400
+              default: ''
+            description:
+              title: Description
+              oneOf:
+              - type: string
+              - type: 'null'
+              metasysType: string
+              maxLength: 64
+            bacnetObjectType:
+              title: Object Type
+              readOnly: true
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: '#objectTypeEnumSet'
+              default: objectTypeEnumSet.bacAvClass
+            objectCategory:
+              title: Authorization Category
+              category: attributeCategoryEnumSet.objectCategoryCategory
+              numberOfStates: 250
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: '#objectCategoryEnumSet'
+              default: objectCategoryEnumSet.generalCategory
+            prioritySupported:
+              title: Priority Supported
+              type: boolean
+              metasysType: bool
+              default: true
+            minPresValue:
+              title: Min Value
+              displayPrecisionSource: displayPrecision
+              unitsSource: units
+              metasysType: float
+              type: number
+              displayPrecision:
+                id: displayPrecisionEnumSet.displayPrecisionPt1
+                displayMultipleOf: 0.1
+              default: -1.69999997607218e+38
+            maxPresValue:
+              title: Max Value
+              displayPrecisionSource: displayPrecision
+              unitsSource: units
+              metasysType: float
+              type: number
+              displayPrecision:
+                id: displayPrecisionEnumSet.displayPrecisionPt1
+                displayMultipleOf: 0.1
+              default: 1.69999997607218e+38
+            units:
+              title: Units
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: '#unitEnumSet'
+              default: unitEnumSet.noUnits
+            displayPrecision:
+              title: Display Precision
+              numberOfStates: 13
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: '#displayPrecisionEnumSet_endAt_13'
+              default: displayPrecisionEnumSet.displayPrecisionPt1
+            covIncrement:
+              title: COV Increment
+              unitsSource: units
+              metasysType: float
+              type: number
+              minimum: 0
+              default: 0.01
+            relinquishDefault:
+              title: Relinquish Default
+              displayPrecisionSource: displayPrecision
+              maxPresValueSource: maxPresValue
+              minPresValueSource: minPresValue
+              unitsSource: units
+              metasysType: float
+              type: number
+              minimum: -1.69999997607218e+38
+              maximum: 1.69999997607218e+38
+              displayPrecision:
+                id: displayPrecisionEnumSet.displayPrecisionPt1
+                displayMultipleOf: 0.1
+              default: 0
+            restoreCommandPriority:
+              title: Restore Command Priority
+              category: attributeCategoryEnumSet.restoreCommandPriorityCategory
+              type: array
+              metasysType: flags
+              maxItems: 4
+              minItems: 4
+              items:
+                type: array
+                items:
+                - $ref: '#restorePriorityEnumSet'
+                - type: boolean
+              uniqueItems: true
+              default:
+              - - restorePriorityEnumSet.7
+                - true
+              - - restorePriorityEnumSet.10
+                - false
+              - - restorePriorityEnumSet.12
+                - false
+              - - restorePriorityEnumSet.15
+                - false
+            connectedTo:
+              title: Connected To
+              oneOf:
+              - type: 'null'
+              - $ref: '#attribute-reference'
+              metasysType: attributeReference
+              attributeFilter: basic
+            direction:
+              title: Direction
+              numberOfStates: 3
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: '#connectionDirectionSet_endAt_3'
+              default: connectionDirectionSet.notConnected
+            priorityForWritingToConnected:
+              title: Priority For Writing to Connected Object
+              metasysType: byte
+              type: integer
+              minimum: 1
+              maximum: 16
+              default: 16
+          definitions:
+            objectTypeEnumSet:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Object Type
+              $id: '#objectTypeEnumSet'
+              allOf:
+              - oneOf:
+                - const: objectTypeEnumSet.bacAvClass
+                  title: AV
+                  memberId: 2
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/objectTypeEnumSet
+              setId: 508
+            objectCategoryEnumSet:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Authorization Category
+              $id: '#objectCategoryEnumSet'
+              allOf:
+              - $comment: The following list was truncated down to one entry for space reasons. Normally it would contain more entries.
+                oneOf:
+                - const: objectCategoryEnumSet.hvacCategory
+                  title: HVAC
+                  memberId: 0
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/objectCategoryEnumSet
+              setId: 33
+            unitEnumSet:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Unit
+              $id: '#unitEnumSet'
+              allOf:
+              - $comment: The following list was truncated down to one entry for space reasons. Normally it would contain more entries.
+                oneOf:
+                - const: unitEnumSet.squareMeters
+                  title: sq meter
+                  memberId: 0
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/unitEnumSet
+              setId: 507
+            displayPrecisionEnumSet_endAt_13:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Display Precision
+              $id: '#displayPrecisionEnumSet_endAt_13'
+              allOf:
+              - $comment: The following list was truncated down to one entry for space reasons. Normally it would contain more entries.
+                oneOf:
+                - const: displayPrecisionEnumSet.displayPrecisionPt000001
+                  title: 1000000ths
+                  memberId: 0
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/displayPrecisionEnumSet
+              setId: 0
+            restorePriorityEnumSet:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Restore Priority
+              $id: '#restorePriorityEnumSet'
+              allOf:
+              - $comment: The following list was truncated down to one entry for space reasons. Normally it would contain more entries.
+                oneOf:
+                - const: restorePriorityEnumSet.7
+                  title: Operator Override
+                  memberId: 7
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/restorePriorityEnumSet
+              setId: 357
+            object-reference:
+              $schema: http://json-schema.org/draft-07/schema#
+              $id: '#object-reference'
+              title: Object reference data type
+              type: object
+              properties:
+                objectReference:
+                  format: fully-qualified-reference
+                  type: string
+                referencedObject:
+                  type: object
+                  properties:
+                    objectName:
+                      type: string
+                    objectUrl:
+                      type: string
+                      format: uri
+                  readOnly: true
+            attribute-reference:
+              $schema: http://json-schema.org/draft-07/schema#
+              $id: '#attribute-reference'
+              title: Attribute reference data type
+              allOf:
+              - type: object
+                properties:
+                  attribute:
+                    $ref: https://metasys-server.example.com/api/v6/schemas/enums/attributeEnumSet
+                  attributeTitle:
+                    type: string
+                  referencedObject:
+                    properties:
+                      attributeUrl:
+                        type: string
+                        format: uri
+              - $ref: '#object-reference'
+            connectionDirectionSet_endAt_3:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Connection Value Direction
+              $id: '#connectionDirectionSet_endAt_3'
+              allOf:
+              - $comment: The following list was truncated down to one entry for space reasons. Normally it would contain more entries.
+                oneOf:
+                - const: connectionDirectionSet.sendsValueTo
+                  title: Sends Value To
+                  memberId: 0
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/connectionDirectionSet
+              setId: 3102
+          required:
+          - name
+          - objectCategory
+          - prioritySupported
+          - minPresValue
+          - maxPresValue
+          - units
+          - displayPrecision
+          - covIncrement
+          - relinquishDefault
+          - restoreCommandPriority
+          - direction
+          - priorityForWritingToConnected
+        views:
+        - title: Configuration
+          views:
+          - title: Basic
+            views:
+            - title: Object
+              properties:
+              - name
+              - description
+              - bacnetObjectType
+              - objectCategory
+              id: viewGroupEnumSet.objectGrp
+            - title: Engineering Values
+              properties:
+              - prioritySupported
+              - minPresValue
+              - maxPresValue
+              id: viewGroupEnumSet.engValuesGrp
+            - title: Display
+              properties:
+              - units
+              - displayPrecision
+              - covIncrement
+              id: viewGroupEnumSet.displayGrp
+            - title: Default State
+              properties:
+              - relinquishDefault
+              id: viewGroupEnumSet.defaultStateGrp
+            - title: Restart Options
+              properties:
+              - restoreCommandPriority
+              id: viewGroupEnumSet.restartOptionsGrp
+            - title: Connection Status
+              properties:
+              - connectedTo
+              - direction
+              - priorityForWritingToConnected
+              id: viewGroupEnumSet.connectionStatusGrp
+            id: groupTypeEnumSet.basicGrpType
+          - title: Advanced
+            views: []
+            id: groupTypeEnumSet.advancedGrpType
+          id: viewNameEnumSet.configView
+    get-object-type-schema-for-mv.schema:
+      summary: Schema for an mvClass
+      description: This schema describes the properties that can be configured when creating an object of the type mvClass.
+      value:
+        schema:
+          type: object
+          $schema: http://json-schema.org/draft-07/schema#
+          title: JCI MV
+          language: en-us
+          version: '1.0'
+          $id: https://metasys-server.example.com/api/v6/schemas/objectTypes/mvClass
+          properties:
+            name:
+              title: Name
+              category: attributeCategoryEnumSet.nameCategory
+              type: string
+              metasysType: string
+              maxLength: 400
+              default: ''
+            description:
+              title: Description
+              oneOf:
+              - type: string
+              - type: 'null'
+              metasysType: string
+              maxLength: 64
+            bacnetObjectType:
+              title: Object Type
+              readOnly: true
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: '#objectTypeEnumSet'
+              default: objectTypeEnumSet.bacMvClass
+            objectCategory:
+              title: Authorization Category
+              category: attributeCategoryEnumSet.objectCategoryCategory
+              numberOfStates: 250
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: '#objectCategoryEnumSet'
+              default: objectCategoryEnumSet.generalCategory
+            prioritySupported:
+              title: Priority Supported
+              type: boolean
+              metasysType: bool
+              default: true
+            numberOfStates:
+              title: Number Of States
+              category: attributeCategoryEnumSet.multistateNumberOfStatesCategory
+              metasysType: ushort
+              type: integer
+              minimum: 2
+              maximum: 500
+              default: 4
+            statesText:
+              title: States Text
+              category: attributeCategoryEnumSet.multistateStatesTextCategory
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: '#multistateEnumSet'
+              default: multistateEnumSet.statesEnumSet
+            relinquishDefault:
+              title: Relinquish Default
+              enumSetSource: statesText
+              numberOfStatesSource: numberOfStates
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: '#statesEnumSet_endAt_4'
+              default: statesEnumSet.state0
+            restoreCommandPriority:
+              title: Restore Command Priority
+              category: attributeCategoryEnumSet.restoreCommandPriorityCategory
+              type: array
+              metasysType: flags
+              maxItems: 4
+              minItems: 4
+              items:
+                type: array
+                items:
+                - $ref: '#restorePriorityEnumSet'
+                - type: boolean
+              uniqueItems: true
+              default:
+              - - restorePriorityEnumSet.7
+                - true
+              - - restorePriorityEnumSet.10
+                - false
+              - - restorePriorityEnumSet.12
+                - false
+              - - restorePriorityEnumSet.15
+                - false
+            connectedTo:
+              title: Connected To
+              oneOf:
+              - type: 'null'
+              - $ref: '#attribute-reference'
+              metasysType: attributeReference
+              attributeFilter: basic
+            direction:
+              title: Direction
+              numberOfStates: 3
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: '#connectionDirectionSet_endAt_3'
+              default: connectionDirectionSet.notConnected
+            priorityForWritingToConnected:
+              title: Priority For Writing to Connected Object
+              metasysType: byte
+              type: integer
+              minimum: 1
+              maximum: 16
+              default: 16
+          definitions:
+            objectTypeEnumSet:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Object Type
+              $id: '#objectTypeEnumSet'
+              allOf:
+              - oneOf:
+                - const: objectTypeEnumSet.bacMvClass
+                  title: MV
+                  memberId: 19
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/objectTypeEnumSet
+              setId: 508
+            objectCategoryEnumSet:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Authorization Category
+              $id: '#objectCategoryEnumSet'
+              allOf:
+              - $comment: The following list was truncated down to one entry for space reasons. Normally it would contain more entries.
+                oneOf:
+                - const: objectCategoryEnumSet.hvacCategory
+                  title: HVAC
+                  memberId: 0
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/objectCategoryEnumSet
+              setId: 33
+            multistateEnumSet:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Multi State
+              $id: '#multistateEnumSet'
+              allOf:
+              - $comment: The following list was truncated down to one entry for space reasons. Normally it would contain more entries.
+                oneOf:
+                - const: multistateEnumSet.bosetupEnumSet
+                  title: BO Setup
+                  memberId: 2
+                  setSize: 4
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/multistateEnumSet
+              setId: 802
+            statesEnumSet_endAt_4:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: States
+              $id: '#statesEnumSet_endAt_4'
+              allOf:
+              - $comment: The following list was truncated down to one entry for space reasons. Normally it would contain more entries.
+                oneOf:
+                - const: statesEnumSet.state0
+                  title: State 0
+                  memberId: 0
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/statesEnumSet
+              setId: 102
+            restorePriorityEnumSet:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Restore Priority
+              $id: '#restorePriorityEnumSet'
+              allOf:
+              - $comment: The following list was truncated down to one entry for space reasons. Normally it would contain more entries.
+                oneOf:
+                - const: restorePriorityEnumSet.7
+                  title: Operator Override
+                  memberId: 7
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/restorePriorityEnumSet
+              setId: 357
+            object-reference:
+              $schema: http://json-schema.org/draft-07/schema#
+              $id: '#object-reference'
+              title: Object reference data type
+              type: object
+              properties:
+                objectReference:
+                  format: fully-qualified-reference
+                  type: string
+                referencedObject:
+                  type: object
+                  properties:
+                    objectName:
+                      type: string
+                    objectUrl:
+                      type: string
+                      format: uri
+                  readOnly: true
+            attribute-reference:
+              $schema: http://json-schema.org/draft-07/schema#
+              $id: '#attribute-reference'
+              title: Attribute reference data type
+              allOf:
+              - type: object
+                properties:
+                  attribute:
+                    $ref: https://metasys-server.example.com/api/v6/schemas/enums/attributeEnumSet
+                  attributeTitle:
+                    type: string
+                  referencedObject:
+                    properties:
+                      attributeUrl:
+                        type: string
+                        format: uri
+              - $ref: '#object-reference'
+            connectionDirectionSet_endAt_3:
+              $schema: http://json-schema.org/draft-07/schema#
+              title: Connection Value Direction
+              $id: '#connectionDirectionSet_endAt_3'
+              allOf:
+              - oneOf:
+                - const: connectionDirectionSet.sendsValueTo
+                  title: Sends Value To
+                  memberId: 0
+                - const: connectionDirectionSet.receivesValueFrom
+                  title: Receives Value From
+                  memberId: 1
+                - const: connectionDirectionSet.notConnected
+                  title: Not Connected
+                  memberId: 2
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/connectionDirectionSet
+              setId: 3102
+          required:
+          - name
+          - objectCategory
+          - prioritySupported
+          - numberOfStates
+          - statesText
+          - relinquishDefault
+          - restoreCommandPriority
+          - direction
+          - priorityForWritingToConnected
+        views:
+        - title: Configuration
+          views:
+          - title: Basic
+            views:
+            - title: Object
+              properties:
+              - name
+              - description
+              - bacnetObjectType
+              - objectCategory
+              id: viewGroupEnumSet.objectGrp
+            - title: Engineering Values
+              properties:
+              - prioritySupported
+              id: viewGroupEnumSet.engValuesGrp
+            - title: Display
+              properties:
+              - numberOfStates
+              - statesText
+              id: viewGroupEnumSet.displayGrp
+            - title: Default State
+              properties:
+              - relinquishDefault
+              id: viewGroupEnumSet.defaultStateGrp
+            - title: Restart Options
+              properties:
+              - restoreCommandPriority
+              id: viewGroupEnumSet.restartOptionsGrp
+            - title: Connection Status
+              properties:
+              - connectedTo
+              - direction
+              - priorityForWritingToConnected
+              id: viewGroupEnumSet.connectionStatusGrp
+            id: groupTypeEnumSet.basicGrpType
+          - title: Advanced
+            views: []
+            id: groupTypeEnumSet.advancedGrpType
+          id: viewNameEnumSet.configView
+  parameters:
+    extendedProperty:
+      name: extendedProperty
+      x-metasysEnum: attributeEnumSet
+      description: 'The attribute to extend.
+
+
+        Indicates which attribute of the parent object the extension should be
+
+        linked to. Used only for extension objects (like alarm extensions).
+
+
+
+        The acceptable values for this parameter come from the `attributeEnumSet` enumeration.
+
+        It is acceptable to use the short name of the attribute (for example, `presentValue` instead of `attributeEnumSet.presentValue`) because the enumeration set is known from context.
+
+        Find the definition of `attributeEnumSet` at the relative URL of `/schemas/enums/attributeEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      required: false
+      in: query
+      schema:
+        type: string
+      examples:
+        presentValue:
+          summary: Present Value
+          description: The present value of an object.
+          value: attributeEnumSet.presentValue
+        reliability:
+          summary: Reliability
+          description: The reliability value of an object.
+          value: attributeEnumSet.reliability
+    schemasObjectType:
+      name: objectType
+      x-metasysEnum: objectTypeEnumSet
+      description: 'The type of object
+
+
+        The acceptable values for this parameter come from the `objectTypeEnumSet` enumeration.
+
+        It is acceptable to use the short name of the object type (for example, `avClass` instead of `objectTypeEnumSet.avClass`) because the enumeration set is known from context.
+
+        Find the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      in: path
+      required: true
+      schema:
+        type: string
+      examples:
+        av:
+          summary: AV
+          description: An analog value object.
+          value: objectTypeEnumSet.avClass
+        bv:
+          summary: BV
+          description: A binary value object
+          value: objectTypeEnumSet.bvClass
+        mv:
+          summary: MV
+          description: A multistate value object.
+          value: objectTypeEnumSet.mvClass
+  schemas:
+    views:
+      description: A nested collection of logical property groupings used for display purposes only.
+      type: array
+      items:
+        type: object
+        readOnly: true
+        properties:
+          id:
+            type: string
+            x-metasysType: enum
+            x-metasysEnum: viewNameEnumSet
+            description: 'The values for this property come from the `viewNameEnumSet` enumeration.
+
+              Find the definition of `viewNameEnumSet` at the relative URL of `/schemas/enums/viewNameEnumSet`.
+
+
+              **See also:**
+
+              * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          title:
+            type: string
+          views:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  x-metasysType: enum
+                  x-metasysEnum: groupTypeEnumSet
+                  description: 'The values for this property come from the `groupTypeEnumSet` enumeration.
+
+                    Find the definition of `groupTypeEnumSet` at the relative URL of `/schemas/enums/groupTypeEnumSet`.
+
+
+                    **See also:**
+
+                    * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                title:
+                  type: string
+                views:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        x-metasysType: enum
+                        x-metasysEnum: viewGroupEnumSet
+                        description: 'The values for this property come from the `viewGroupEnumSet` enumeration.
+
+                          Find the definition of `viewGroupEnumSet` at the relative URL of `/schemas/enums/viewGroupEnumSet`.
+
+
+                          **See also:**
+
+                          * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                      title:
+                        type: string
+                      properties:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - id
+                    - title
+                    - properties
+              required:
+              - id
+              - title
+              - views
+        required:
+        - id
+        - title
+        - views
+  securitySchemes:
+    Bearer-Authentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Most of the calls in the API use bearer token authentication. What this
+
+        means is that these requests require an `Authorization` header to be set to
+
+        a value with the following format: `Bearer: {accessToken}`. Use the
+
+        [`/login`](#operation/createToken) operation to request an `accessToken`. An
+
+        example of the full header would look like the following:
+
+        `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...`.
+
+
+        **Note:** This example access token is truncated.
+
+
+        The expiration time of the access token is based on the user''s Metasys
+
+        profile.
+
+        '
+    API-Key-Authentication:
+      type: apiKey
+      in: query
+      name: access_token
+      description: 'The [Streaming operation](#operation/getStream) is the only operation to use
+
+        API key authentication, because web browsers do not allow setting custom
+
+        headers when initiating Server Sent Event connections.
+
+        '
+x-refined-from:
+- metasys-api-v6-16.json
+- johnson-controls-metasys-openapi.yml
+x-servers:
+  apps:
+    url: https://{hostname}/apps
+    description: The base url for accessing APIs of non-core applications
+    variables:
+      hostname:
+        default: metasys-server.example.com
+        description: This is the name of your site

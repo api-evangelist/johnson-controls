@@ -1,0 +1,1737 @@
+openapi: 3.2.0
+info:
+  title: Johnson Controls Alarms API
+  version: Version 6 for 16.0
+  x-logo:
+    url: source/images/logo.svg
+    href: https://jci-metasys.github.io/
+  x-releases:
+  - '14.0'
+  - '14.1'
+  - '15.0'
+  - '16.0'
+  x-revision: 'Commit ID: 4b227676a'
+  description: 'Operations tagged alarms across 2 of this provider''s published API definitions: metasys-api-v6-16.json, johnson-controls-metasys-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://{hostname}/api/v6
+  description: The base URL of all API routes
+  variables:
+    hostname:
+      default: metasys-server.example.com
+      description: This is the name of your site director device
+security:
+- Bearer-Authentication: []
+tags:
+- name: Alarms
+  description: 'Alarms alert users to potential problems identified by a Metasys system, for
+
+    example high zone temperatures. Use alarms operations to get object alarms,
+
+    network device alarms, single alarms, alarm collections, and alarm annotations.
+
+    Acknowledge or discard alarms with the edit patch operation. Filter the results
+
+    with the query parameters time, priority, type, category, acknowledgement, and
+
+    page. Sort the results by creation time and priority.'
+paths:
+  /objects/{objectId}/alarms:
+    get:
+      summary: Get alarms for an object
+      description: Retrieves a collection of alarms for the specified object.
+      operationId: getObjectAlarms
+      parameters:
+      - $ref: '#/components/parameters/objectId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/priorityRange'
+      - $ref: '#/components/parameters/type'
+      - $ref: '#/components/parameters/includeAcknowledged'
+      - $ref: '#/components/parameters/includeDiscarded'
+      - $ref: '#/components/parameters/includeAcknowledgementRequired'
+      - $ref: '#/components/parameters/includeAcknowledgementNotRequired'
+      - $ref: '#/components/parameters/category'
+      - $ref: '#/components/parameters/page'
+      - name: pageSize
+        in: query
+        description: The maximum number of items to return in the response.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          default: 100
+        example: 100
+      - $ref: '#/components/parameters/alarmsSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/objectAlarms'
+              examples:
+                tenAlarms:
+                  $ref: '#/components/examples/first-two-object-alarms'
+      tags:
+      - Alarms
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url 'https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit' \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod "/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit"'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/objects/32cfddc0-411f-5b9e-9a6d-442cb62fecbb/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /networkDevices/{networkDeviceId}/alarms:
+    get:
+      summary: Get alarms for a network device
+      description: Retrieves a collection of alarms for the specified network device.
+      operationId: getNetworkDeviceAlarms
+      parameters:
+      - $ref: '#/components/parameters/networkDeviceId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/priorityRange'
+      - $ref: '#/components/parameters/type'
+      - $ref: '#/components/parameters/includeAcknowledged'
+      - $ref: '#/components/parameters/includeDiscarded'
+      - $ref: '#/components/parameters/includeAcknowledgementRequired'
+      - $ref: '#/components/parameters/includeAcknowledgementNotRequired'
+      - $ref: '#/components/parameters/equipment'
+      - $ref: '#/components/parameters/object'
+      - $ref: '#/components/parameters/space'
+      - $ref: '#/components/parameters/category'
+      - $ref: '#/components/parameters/page'
+      - name: pageSize
+        in: query
+        description: The maximum number of items to return in the response.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          default: 100
+        example: 100
+      - $ref: '#/components/parameters/alarmsSort'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/deviceAlarms'
+              examples:
+                tenAlarms:
+                  $ref: '#/components/examples/first-two-device-alarms'
+      tags:
+      - Alarms
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url 'https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit' \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod "/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit"'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/networkDevices/d9bf66bd-22f8-425b-82a4-44ba153d79c7/alarms?type=alarmValueEnumSet.avHighLimit&type=alarmValueEnumSet.avLowLimit\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /alarms/{alarmId}:
+    get:
+      summary: Get an alarm
+      description: Retrieves the specified alarm.
+      operationId: getAlarm
+      parameters:
+      - $ref: '#/components/parameters/alarmId'
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/alarm'
+              examples:
+                avAlarm:
+                  $ref: '#/components/examples/av-alarm'
+                bacnetAvAlarm:
+                  $ref: '#/components/examples/bacnet-alarm'
+      tags:
+      - Alarms
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5 \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    patch:
+      summary: Edit an alarm
+      description: Allows for acknowledging or discarding an alarm.
+      operationId: patchAlarm
+      parameters:
+      - $ref: '#/components/parameters/alarmId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activityManagementStatus:
+                  type: string
+                  description: "The new activity management status of the alarm.\n\nThe values of this property are described as follows:\n\n- `acknowledged` - The alarm has been recognized and viewed by a\n  user. An alarm may only be acknowledged if\n  `activityManagementStatus` is currently `pending` and\n  `isAckRequired` is `true`.\n- `discarded` - The alarm has been acted upon and addressed by a\n  user. Once an alarm is discarded, it cannot be changed to any\n  other state.\n"
+                  enum:
+                  - acknowledged
+                  - discarded
+                annotationText:
+                  type:
+                  - string
+                  - 'null'
+                  description: The annotation associated with the change of alarm state.
+              required:
+              - activityManagementStatus
+              example:
+                activityManagementStatus: acknowledged
+            examples:
+              acknowledgeAlarm:
+                summary: Acknowledge an alarm
+                value:
+                  activityManagementStatus: acknowledged
+              discardAlarm:
+                summary: Discard an alarm
+                value:
+                  activityManagementStatus: discarded
+        required: true
+      responses:
+        '204':
+          description: Success.
+        '400':
+          description: "Bad request. Changing the state of an alarm may fail for a few reasons:\n\n- Acknowledging an alarm may fail if it does not require acknowledgment.\n- Acknowledging an alarm may fail if it is already acknowledged or\n  already discarded.\n- Discarding an alarm may fail if it is already discarded.\n"
+        '403':
+          $ref: '#/components/responses/general403'
+      tags:
+      - Alarms
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request PATCH \\\n  --url https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5 \\\n  --header \"Authorization: Bearer $accessToken\" \\\n  --header 'Content-Type: application/json' \\\n  --data '{\"activityManagementStatus\":\"acknowledged\"}'"
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .WithHeader(\"Content-Type\", \"application/json\")\n    .PatchStringAsync(\"{\\\"activityManagementStatus\\\":\\\"acknowledged\\\"}\");"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5\" `\n  -Method Patch `\n  -Body '{\"activityManagementStatus\":\"acknowledged\"}' `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n    'Content-Type' = 'application/json'\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: "# Login with Connect-MetasysAccount first.\n# See PS Metasys Rest Client example for \"authentication | Request access token\".\nInvoke-MetasysMethod /alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5 `\n  -Method Patch `\n  -Body '{\"activityManagementStatus\":\"acknowledged\"}'"
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n  'Content-Type': 'application/json',\n};\n\nconst response = await axiosClient.patch(\n  '/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5',\n  '{\"activityManagementStatus\":\"acknowledged\"}', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\" ,\n    \"Content-Type\": \"application/json\"\n}\npayload = \"{\\\"activityManagementStatus\\\":\\\"acknowledged\\\"}\"\n\nconn.request(\"PATCH\", url, payload, headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .header(\"content-type\", \"application/json\")\n    .method(\"PATCH\", HttpRequest.BodyPublishers.ofString(\"{\\\"activityManagementStatus\\\":\\\"acknowledged\\\"}\"))\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+  /alarms/{alarmId}/annotations:
+    get:
+      summary: Get alarm annotations
+      description: Retrieves the collection of annotations available for the specified alarm.
+      operationId: getAlarmAnnotations
+      parameters:
+      - $ref: '#/components/parameters/alarmId'
+      - $ref: '#/components/parameters/startTime'
+      - $ref: '#/components/parameters/endTime'
+      - $ref: '#/components/parameters/page'
+      - name: pageSize
+        in: query
+        description: The maximum number of items to return in the response.
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 10000
+          default: 100
+        example: 100
+      - name: sort
+        in: query
+        description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+        schema:
+          type: string
+          default: creationTime
+          enum:
+          - creationTime
+          - -creationTime
+          - user
+          - -user
+        example: creationTime
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/vnd.metasysapi.v6+json:
+              schema:
+                $ref: '#/components/schemas/alarmAnnotations'
+              examples:
+                tenAlarms:
+                  $ref: '#/components/examples/alarm-annotations'
+      tags:
+      - Alarms
+      x-codeSamples:
+      - lang: shell
+        label: Shell + Curl
+        source: "# To set accessToken see the Shell + Curl example for \"authentication | Request access token\"\ncurl --request GET \\\n  --url https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations \\\n  --header \"Authorization: Bearer $accessToken\""
+      - lang: csharp
+        label: C# + Flurl
+        source: "// See CSharp + Flurl example for \"authentication | Request access token\"\n// to see how to import Flurl and set `accessToken` variable\nvar response = await \"https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations\"\n    .WithHeader(\"Authorization\", $\"Bearer {accessToken}\")\n    .GetAsync();"
+      - lang: text
+        label: Powershell
+        source: "# To set $accessToken see the Powershell example of \"authentication | Request a token\"\nInvoke-RestMethod \"https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations\" `\n  -Headers @{\n    Authorization = \"Bearer $accessToken\"\n  }"
+      - lang: text
+        label: PS Metasys Rest Client
+        source: '# Login with Connect-MetasysAccount first.
+
+          # See PS Metasys Rest Client example for "authentication | Request access token".
+
+          Invoke-MetasysMethod /alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations'
+      - lang: javascript
+        label: Node + Axios
+        source: "// See Node + Axios example of \"authentication | Request access token\"\n// to see how to initialize the variables `axiosClient` and `accessToken`\n\nconst headers = {\n  'Authorization': `Bearer ${accessToken}`,\n};\n\nconst response = await axiosClient.get(\n  '/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations', {\n  headers\n});"
+      - lang: python
+        label: Python
+        source: "# See Python example for \"authentication | Request access token\"\n# to see how to create conn object and set `access_token` variable\nurl = \"/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations\"\nheaders = {\n    \"Authorization\": f\"Bearer {access_token}\"\n}\n\nconn.request(\"GET\", url, headers=headers)\n\nres = conn.getresponse()"
+      - lang: java
+        label: Java
+        source: "// See Java example for \"authentication | Request access token\"\n// to see how to set `accessToken` variable\nHttpRequest request = HttpRequest.newBuilder()\n    .uri(URI.create(\"https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations\"))\n    .header(\"Authorization\", \"Bearer \" + accessToken)\n    .method(\"GET\", HttpRequest.BodyPublishers.noBody())\n    .build();\nHttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());"
+    servers:
+    - url: https://{hostname}/api/v6
+      description: The base URL of all API routes
+      variables:
+        hostname:
+          default: metasys-server.example.com
+          description: This is the name of your site director device
+components:
+  parameters:
+    networkDeviceId:
+      name: networkDeviceId
+      description: The identifier of a network device.
+      in: path
+      required: true
+      schema:
+        type: string
+      example: d9bf66bd-22f8-425b-82a4-44ba153d79c7
+    endTime:
+      name: endTime
+      in: query
+      description: Only include results generated on or before this date-time.
+      schema:
+        type: string
+        format: date-time
+      example: '2018-05-21T13:58:20.243Z'
+    category:
+      name: category
+      in: query
+      description: 'The authorization category of the requested activities.
+
+
+
+        The acceptable values for the elements of this parameter come from the `objectCategoryEnumSet` enumeration.
+
+        Only the long name of the object category (for example, `objectCategoryEnumSet.hvacCategory` instead of `hvacCategory`) is accepted.
+
+        Find the definition of `objectCategoryEnumSet` at the relative URL of `/schemas/enums/objectCategoryEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      examples:
+        singleCategory:
+          summary: HVAC category
+          value:
+          - objectCategoryEnumSet.hvacCategory
+        multiplesCategories:
+          summary: Multiple Categories
+          value:
+          - objectCategoryEnumSet.hvacCategory
+          - objectCategoryEnumSet.fireCategory
+      x-metasysEnum: objectCategoryEnumSet
+      schema:
+        type: array
+        items:
+          type: string
+          x-metasysType: enum
+          x-metasysEnum: objectCategoryEnumSet
+    object:
+      name: object
+      in: query
+      description: Filter by list of object identifiers.
+      example:
+      - 06d77c63-6357-467a-a306-5e1ab3eb3aa7
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+    includeAcknowledgementRequired:
+      name: includeAcknowledgementRequired
+      in: query
+      description: Determines whether alarms which can be acknowledged are included in the results. When the value is `true`, alarms which can be acknowledged will be included in the results. When `false`, alarms which can be acknowledged will not be included in the results.
+      example: true
+      schema:
+        type: boolean
+        default: true
+    page:
+      name: page
+      in: query
+      description: The page number of items to return.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      example: 1
+    space:
+      name: space
+      in: query
+      description: Filter by list of space identifiers.
+      example:
+      - 214f52d1-0c56-4a29-a690-abe5656d1647
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+    equipment:
+      name: equipment
+      in: query
+      description: Filter by list of equipment identifiers.
+      example:
+      - b7ed8b3e-cb95-410d-aaa7-37158852c398
+      schema:
+        type: array
+        maxItems: 100
+        items:
+          type: string
+    includeAcknowledgementNotRequired:
+      name: includeAcknowledgementNotRequired
+      in: query
+      description: Determines whether alarms which can not be acknowledged are included in the results. When the value is `true` then the results will include alarms which cannot be acknowledged. When the value is `false` then the results will not include alarms which cannot be acknowledged.
+      example: true
+      schema:
+        type: boolean
+        default: true
+    priorityRange:
+      name: priorityRange
+      in: query
+      description: Includes only results within the specified alarm priority range, from 0 to 255 inclusive.
+      schema:
+        type: string
+        pattern: ^\d+,\d+$
+      example: 0,255
+    alarmId:
+      name: alarmId
+      in: path
+      description: The identifier of the alarm.
+      required: true
+      schema:
+        type: string
+      example: 4d0598d4-2836-4efd-84b8-6f39754b1fc5
+    objectId:
+      name: objectId
+      in: path
+      description: The identifier of the object.
+      example: 32cfddc0-411f-5b9e-9a6d-442cb62fecbb
+      required: true
+      schema:
+        type: string
+    alarmsSort:
+      name: sort
+      in: query
+      description: The criteria to use when sorting results (see [rules](#section/Sorting-Rules)).
+      schema:
+        type: string
+        default: creationTime
+        enum:
+        - creationTime
+        - -creationTime
+        - priority
+        - -priority
+      example: creationTime
+    includeDiscarded:
+      name: includeDiscarded
+      in: query
+      description: "Determines whether discarded alarms will be included in the results or be\nthe only type of alarm in the results. Discarded alarms are those for which\nthe `activityManagementStatus` is `discarded`. This parameter can produce 3\ndifferent types of results.\n\n- `true` - Return only discarded alarms in the response.\n- `false` - Do not include any discarded alarms in the response.\n- _missing_ - (default) Discarded status is ignored; both discarded and\n  non-discarded alarms are returned.\n"
+      example: false
+      schema:
+        type: boolean
+    type:
+      name: type
+      in: query
+      description: 'Limits the alarms returned to specified types.
+
+
+
+        The acceptable values for the elements of this parameter come from the `alarmValueEnumSet` enumeration.
+
+        Only the long name of the alarm value (for example, `alarmValueEnumSet.avHighLimit` instead of `avHighLimit`) is accepted.
+
+        Find the definition of `alarmValueEnumSet` at the relative URL of `/schemas/enums/alarmValueEnumSet`.
+
+
+        **See also:**
+
+        * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      examples:
+        multiple:
+          summary: Multiple Types
+          value:
+          - alarmValueEnumSet.avHighLimit
+          - alarmValueEnumSet.avLowLimit
+          x-use-in-snippets: true
+      x-metasysEnum: alarmValueEnumSet
+      schema:
+        type: array
+        items:
+          type: string
+          maxItems: 100
+          x-metasysType: enum
+          x-metasysEnum: alarmValueEnumSet
+    includeAcknowledged:
+      name: includeAcknowledged
+      in: query
+      description: "Determines whether acknowledged alarms will be included in the results or be\nthe only type of alarm in the results. Acknowledged alarms are those which\nhave an `acknowledgedTime` value set.\n\nThis parameter can produce 3 different types of results.\n\n- `true` - Return only acknowledged alarms in the response.\n- `false` - Do not include any acknowledged alarms in the response.\n- _missing_ - (default) Acknowledged status is ignored; both acknowledged\n  and non-acknowledged alarms are returned.\n"
+      example: false
+      schema:
+        type: boolean
+    startTime:
+      name: startTime
+      in: query
+      description: Only include results generated on or after this date-time.
+      schema:
+        type: string
+        format: date-time
+      example: '2018-05-21T13:58:20.243Z'
+  examples:
+    alarm-annotations:
+      summary: Acknowledged annotation
+      value:
+        total: 1
+        next: null
+        previous: null
+        items:
+        - id: 1
+          text: Looks okay
+          user: jane-doe
+          creationTime: '2021-09-28T17:11:57.95Z'
+          action: acknowledged
+          signature: null
+          alarmUrl: https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5
+        self: https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations?pageSize=100&page=1
+    bacnet-alarm:
+      summary: BACnet AV Alarm
+      x-releases:
+        implementedAt: '14.1'
+      description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>14.1 and later</strong></span>\
+
+        An alarm for an analog value object with BACnet related properties.'
+      value:
+        self: https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5
+        id: 4d0598d4-2836-4efd-84b8-6f39754b1fc5
+        itemReference: '{hostname}:{deviceHostname}/AV2'
+        description: ''
+        name: AV2
+        message: ''
+        isAckRequired: false
+        type: alarmValueEnumSet.avNormal
+        priority: 200
+        triggerValue:
+          item: '1.0'
+          schema:
+            type: string
+            metasysType: string
+            units:
+              id: unitEnumSet.noUnits
+              title: ''
+        creationTime: '2024-10-12T01:21:16Z'
+        discardedTime: null
+        acknowledgedTime: null
+        activityManagementStatus: pending
+        category: objectCategoryEnumSet.administrativeCategory
+        objectUrl: https://metasys-server.example.com/api/v6/objects/d818a738-d4c0-52ee-a035-f6dd8c6cb3a0
+        annotationsUrl: https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations
+        annotationsCount: 0
+        signedAnnotationsCount: 0
+        spaces:
+        - id: d4c025db-db0e-56dc-910b-aa1d7bdbd723
+          itemReference: '{hostname}:{deviceHostname}/Campus.Building.Floor 1'
+          name: Floor 1
+          spaceUrl: https://metasys-server.example.com/api/v6/space/d4c025db-db0e-56dc-910b-aa1d7bdbd723
+        equipment:
+        - id: d40e96c6-d474-5aaf-be85-cfcbabb30334
+          itemReference: '{hostname}:{deviceHostname}/equipment.My Engine'
+          equipmentName: AHU
+          shortName: AV2
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/d40e96c6-d474-5aaf-be85-cfcbabb30334
+        associatedGraphic: null
+        alarmGeneratorObject: null
+        bacnet:
+          deviceId:
+            bacnetObjectType: objectTypeEnumSet.bacdeviceClass
+            instance: 4194208
+          objectId:
+            bacnetObjectType: objectTypeEnumSet.bacAvClass
+            instance: 2
+          notificationClassId:
+            bacnetObjectType: objectTypeEnumSet.bacNotificClass
+            instance: 0
+          timestamp:
+            dateTime: '2024-10-11T20:21:16'
+          notifyType: bacNotifyTypeEnumSet.bacNotifyEvent
+    first-two-device-alarms:
+      summary: Device alarms
+      value:
+        total: 9027
+        next: https://metasys-server.example.com/api/v6/networkDevices/088333f5-f76e-5177-85aa-73aa32f1c8b3alarms?pageSize=10&page=2
+        previous: null
+        items:
+        - self: https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5
+          id: 4d0598d4-2836-4efd-84b8-6f39754b1fc5
+          itemReference: '{hostname}:{deviceHostname}/AV2'
+          description: ''
+          name: AV2
+          message: ''
+          isAckRequired: false
+          type: alarmValueEnumSet.avNormal
+          priority: 200
+          triggerValue:
+            item: '1.0'
+            schema:
+              type: string
+              metasysType: string
+              units:
+                id: unitEnumSet.noUnits
+                title: ''
+          creationTime: '2021-09-01T17:00:07Z'
+          activityManagementStatus: acknowledged
+          category: objectCategoryEnumSet.administrativeCategory
+          objectUrl: https://metasys-server.example.com/api/v6/objects/d818a738-d4c0-52ee-a035-f6dd8c6cb3a0
+          annotationsUrl: https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations
+          annotationsCount: 1
+          signedAnnotationsCount: 1
+          spaces:
+          - id: d4c025db-db0e-56dc-910b-aa1d7bdbd723
+            itemReference: '{hostname}:{deviceHostname}/Campus.Building.Floor 1'
+            name: Floor 1
+            spaceUrl: https://metasys-server.example.com/api/v6/space/d4c025db-db0e-56dc-910b-aa1d7bdbd723
+          equipment:
+          - id: d40e96c6-d474-5aaf-be85-cfcbabb30334
+            itemReference: '{hostname}:{deviceHostname}/equipment.My Engine'
+            equipmentName: AHU
+            shortName: AV2
+            equipmentUrl: https://metasys-server.example.com/api/v6/equipment/d40e96c6-d474-5aaf-be85-cfcbabb30334
+          discardedTime: null
+          acknowledgedTime: null
+          associatedGraphic: null
+          alarmGeneratorObject: null
+        - self: https://metasys-server.example.com/api/v6/alarms/cbc0a848-9231-4608-b958-276d3f2e9f3e
+          id: cbc0a848-9231-4608-b958-276d3f2e9f3e
+          itemReference: '{hostname}:{deviceHostname}'
+          description: ''
+          name: My Engine
+          message: ''
+          isAckRequired: false
+          type: alarmValueEnumSet.avNormal
+          priority: 200
+          triggerValue:
+            item: jciSystemStatusEnumSet.jciOperational
+            schema:
+              type: string
+              metasysType: enum
+              oneOf:
+              - $ref: https://metasys-server.example.com/api/v6/schemas/enums/jciSystemStatusEnumSet
+              units:
+                id: unitEnumSet.noUnits
+                title: ''
+          creationTime: '2021-09-01T05:02:03Z'
+          activityManagementStatus: pending
+          category: objectCategoryEnumSet.systemCategory
+          objectUrl: https://metasys-server.example.com/api/v6/objects/088333f5-f76e-5177-85aa-73aa32f1c8b3
+          annotationsUrl: https://metasys-server.example.com/api/v6/alarms/cbc0a848-9231-4608-b958-276d3f2e9f3e/annotations
+          annotationsCount: 0
+          signedAnnotationsCount: 0
+          discardedTime: null
+          acknowledgedTime: null
+          associatedGraphic: null
+          alarmGeneratorObject: null
+        effectivePermissions:
+        - id: 4d0598d4-2836-4efd-84b8-6f39754b1fc5
+          canAcknowledge: true
+          canDiscard: false
+          canAnnotate: true
+        - id: cbc0a848-9231-4608-b958-276d3f2e9f3e
+          canAcknowledge: true
+          canDiscard: false
+          canAnnotate: true
+        networkDeviceUrl: https://metasys-server.example.com/api/v6/networkDevices/088333f5-f76e-5177-85aa-73aa32f1c8b3
+        self: https://metasys-server.example.com/api/v6/networkDevices/088333f5-f76e-5177-85aa-73aa32f1c8b3/alarms?pageSize=10&page=1
+    av-alarm:
+      summary: AV Alarm
+      description: An alarm for an analog value object.
+      value:
+        self: https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5
+        id: 4d0598d4-2836-4efd-84b8-6f39754b1fc5
+        itemReference: '{hostname}:{deviceHostname}/AV2'
+        description: ''
+        name: AV2
+        message: ''
+        isAckRequired: false
+        type: alarmValueEnumSet.avNormal
+        priority: 200
+        triggerValue:
+          item: '1.0'
+          schema:
+            type: string
+            metasysType: string
+            units:
+              id: unitEnumSet.noUnits
+              title: ''
+        creationTime: '2021-09-01T17:00:07Z'
+        discardedTime: null
+        acknowledgedTime: null
+        activityManagementStatus: pending
+        category: objectCategoryEnumSet.administrativeCategory
+        objectUrl: https://metasys-server.example.com/api/v6/objects/d818a738-d4c0-52ee-a035-f6dd8c6cb3a0
+        annotationsUrl: https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations
+        annotationsCount: 0
+        signedAnnotationsCount: 0
+        spaces:
+        - id: d4c025db-db0e-56dc-910b-aa1d7bdbd723
+          itemReference: '{hostname}:{deviceHostname}/Campus.Building.Floor 1'
+          name: Floor 1
+          spaceUrl: https://metasys-server.example.com/api/v6/space/d4c025db-db0e-56dc-910b-aa1d7bdbd723
+        equipment:
+        - id: d40e96c6-d474-5aaf-be85-cfcbabb30334
+          itemReference: '{hostname}:{deviceHostname}/equipment.My Engine'
+          equipmentName: AHU
+          shortName: AV2
+          equipmentUrl: https://metasys-server.example.com/api/v6/equipment/d40e96c6-d474-5aaf-be85-cfcbabb30334
+        associatedGraphic: null
+        alarmGeneratorObject: null
+    first-two-object-alarms:
+      summary: Object alarms
+      value:
+        total: 403
+        next: https://metasys-server.example.com/api/v6/objects/d818a738-d4c0-52ee-a035-f6dd8c6cb3a0/alarms?pageSize=10&page=2
+        previous: null
+        items:
+        - self: https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5
+          id: 4d0598d4-2836-4efd-84b8-6f39754b1fc5
+          itemReference: '{hostname}:{deviceHostname}/AV2'
+          description: ''
+          name: AV2
+          message: ''
+          isAckRequired: false
+          type: alarmValueEnumSet.avNormal
+          priority: 200
+          triggerValue:
+            item: '1.0'
+            schema:
+              type: string
+              metasysType: string
+              units:
+                id: unitEnumSet.noUnits
+                title: ''
+          creationTime: '2021-09-01T17:00:07Z'
+          activityManagementStatus: acknowledged
+          category: objectCategoryEnumSet.administrativeCategory
+          objectUrl: https://metasys-server.example.com/api/v6/objects/d818a738-d4c0-52ee-a035-f6dd8c6cb3a0
+          annotationsUrl: https://metasys-server.example.com/api/v6/alarms/4d0598d4-2836-4efd-84b8-6f39754b1fc5/annotations
+          annotationsCount: 1
+          signedAnnotationsCount: 1
+          spaces:
+          - id: d4c025db-db0e-56dc-910b-aa1d7bdbd723
+            itemReference: '{hostname}:{deviceHostname}/Campus.Building.Floor 1'
+            name: Floor 1
+            spaceUrl: https://metasys-server.example.com/api/v6/space/d4c025db-db0e-56dc-910b-aa1d7bdbd723
+          equipment:
+          - id: d40e96c6-d474-5aaf-be85-cfcbabb30334
+            itemReference: '{hostname}:{deviceHostname}/equipment.My Engine'
+            equipmentName: AHU
+            shortName: AV2
+            equipmentUrl: https://metasys-server.example.com/api/v6/equipment/d40e96c6-d474-5aaf-be85-cfcbabb30334
+          discardedTime: null
+          acknowledgedTime: null
+          associatedGraphic: null
+          alarmGeneratorObject: null
+        - self: https://metasys-server.example.com/api/v6/alarms/999235c5-9f4a-42f9-8ea5-863cc6a08eed
+          id: 999235c5-9f4a-42f9-8ea5-863cc6a08eed
+          itemReference: '{hostname}:{deviceHostname}/AV2'
+          description: ''
+          name: AV2
+          alarmGeneratorObject:
+            objectReference: '{hostname}:{deviceHostname}/AV2.Alarm1'
+            referencedObject:
+              objectUrl: https://metasys-server.example.com/api/v6/objects/39e52c43-e0f9-5681-bbab-ef802f90eb78
+          message: ''
+          isAckRequired: true
+          type: alarmValueEnumSet.avLoAlarm
+          priority: 70
+          triggerValue:
+            item: '0.0'
+            schema:
+              type: string
+              metasysType: string
+              units:
+                id: unitEnumSet.noUnits
+                title: ''
+          creationTime: '2021-09-01T05:00:00Z'
+          activityManagementStatus: pending
+          category: objectCategoryEnumSet.administrativeCategory
+          objectUrl: https://metasys-server.example.com/api/v6/objects/d818a738-d4c0-52ee-a035-f6dd8c6cb3a0
+          annotationsUrl: https://metasys-server.example.com/api/v6/alarms/999235c5-9f4a-42f9-8ea5-863cc6a08eed/annotations
+          annotationsCount: 0
+          signedAnnotationsCount: 0
+          spaces:
+          - id: d4c025db-db0e-56dc-910b-aa1d7bdbd723
+            itemReference: '{hostname}:{deviceHostname}/Campus.Building.Floor 1'
+            name: Floor 1
+            spaceUrl: https://metasys-server.example.com/api/v6/space/d4c025db-db0e-56dc-910b-aa1d7bdbd723
+          equipment:
+          - id: d40e96c6-d474-5aaf-be85-cfcbabb30334
+            itemReference: '{hostname}:{deviceHostname}/equipment.My Engine'
+            equipmentName: AHU
+            shortName: AV2
+            equipmentUrl: https://metasys-server.example.com/api/v6/equipment/d40e96c6-d474-5aaf-be85-cfcbabb30334
+          discardedTime: null
+          acknowledgedTime: null
+          associatedGraphic: null
+        effectivePermissions:
+        - id: 4d0598d4-2836-4efd-84b8-6f39754b1fc5
+          canAcknowledge: true
+          canDiscard: false
+          canAnnotate: true
+        - id: 999235c5-9f4a-42f9-8ea5-863cc6a08eed
+          canAcknowledge: true
+          canDiscard: false
+          canAnnotate: true
+        objectUrl: https://metasys-server.example.com/api/v6/objects/d818a738-d4c0-52ee-a035-f6dd8c6cb3a0
+        self: https://metasys-server.example.com/api/v6/objects/d818a738-d4c0-52ee-a035-f6dd8c6cb3a0/alarms?pageSize=10&page=1
+  schemas:
+    alarm:
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: The identifier of the alarm.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the object.
+        name:
+          type: string
+          description: The name of the object.
+        description:
+          type: string
+          description: 'A more detailed description of the triggered alarm, either describing
+
+            the object that triggered the alarm or the alarm itself.
+
+            '
+        activityManagementStatus:
+          type: string
+          description: "The activity management status of this item.\n\nThe values of this property are described as follows:\n\n- `pending` - Indicates the activity has not yet been acted upon by a\n  user.\n- `acknowledged` - Indicates that the activity has been recognized and\n  viewed by a user.\n- `discarded` - Indicates that the activity has been acted upon or\n  deemed invalid by a user.\n"
+          enum:
+          - pending
+          - acknowledged
+          - discarded
+        discardedTime:
+          type:
+          - string
+          - 'null'
+          description: 'The date-time representing the time when this activity message was
+
+            discarded.
+
+            '
+          format: date-time
+        creationTime:
+          type: string
+          description: The date-time for when the alarm was detected.
+          format: date-time
+        acknowledgedTime:
+          type:
+          - string
+          - 'null'
+          description: 'The date-time representing the time when this activity message was
+
+            acknowledged.
+
+            '
+          format: date-time
+        objectUrl:
+          type: string
+          description: A link to the object from which this alarm was generated.
+          format: uri
+        message:
+          type: string
+          description: The alarm message.
+        isAckRequired:
+          type: boolean
+          description: 'Indicates whether the alarm can be acknowledged. You will get an error
+
+            response if you attempt to acknowledge an alarm for which this property
+
+            is `false`.
+
+            '
+        type:
+          type: string
+          description: 'The type of alarm.
+
+
+            The values for this property come from the `alarmValueEnumSet` enumeration.
+
+            Find the definition of `alarmValueEnumSet` at the relative URL of `/schemas/enums/alarmValueEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: alarmValueEnumSet
+        priority:
+          type: integer
+          description: The priority of the alarm.
+        category:
+          type: string
+          description: 'The authorization category of the object when the alarm was generated.
+
+
+
+            The values for this property come from the `objectCategoryEnumSet` enumeration.
+
+            Find the definition of `objectCategoryEnumSet` at the relative URL of `/schemas/enums/objectCategoryEnumSet`.
+
+
+            **See also:**
+
+            * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+          x-metasysType: enum
+          x-metasysEnum: objectCategoryEnumSet
+        annotationsUrl:
+          type: string
+          description: A link to the annotations available on the alarms.
+          format: uri
+        annotationsCount:
+          type: integer
+          description: The total number of annotations associated with the alarm.
+        signedAnnotationsCount:
+          type: integer
+          description: 'The total number of MVE Annotations associated with the alarm.
+
+            '
+        self:
+          type: string
+          description: A link to this alarm.
+          format: uri
+        triggerValue:
+          description: 'The digital value of the attribute of the object on which the alarm was
+
+            triggered.
+
+            '
+          allOf:
+          - type: object
+            properties:
+              item:
+                oneOf:
+                - type: number
+                - type: string
+              schema:
+                type: object
+            required:
+            - item
+            - schema
+          - $ref: '#/components/schemas/anyDataTypeSchemaRequired'
+        spaces:
+          type: array
+          description: 'The collection of spaces associated with the object on which the
+
+            activity occurred.
+
+            '
+          items:
+            $ref: '#/components/schemas/space'
+        equipment:
+          type: array
+          description: 'The collection of equipment associated with the object on which the
+
+            activity occurred.
+
+            '
+          items:
+            $ref: '#/components/schemas/equipment'
+        alarmGeneratorObject:
+          description: 'Reference information to the object which generated the alarm.
+
+            '
+          allOf:
+          - $ref: '#/components/schemas/nullableObjectReferenceDefinition'
+        associatedGraphic:
+          type:
+          - object
+          - 'null'
+          description: 'Reference information for the graphic associated with the alarm.
+
+            '
+          properties:
+            reference:
+              description: 'Provides the fully qualified reference to the graphic associated
+
+                with the alarm.
+
+                '
+              allOf:
+              - $ref: '#/components/schemas/objectReferenceDefinition'
+            url:
+              type: string
+              description: A link to the associated alarm graphic.
+              format: uri
+            alias:
+              type: string
+              description: 'The object alias to apply to the associated alarm graphic.
+
+                '
+            aliasUrl:
+              type: string
+              description: 'A link to the associated alarm graphic resource, with the alias
+
+                information included.
+
+                '
+              format: uri
+          required:
+          - reference
+          - url
+          - alias
+          - aliasUrl
+        bacnet:
+          type: object
+          x-releases:
+            implementedAt: '14.1'
+          description: '<span style="color: #92989b; font-size: 13px">RELEASES</span>:<span style="color: #186faf;"> <strong>14.1 and later</strong></span>\
+
+            BACnet calls this type of record an event notification. The properties under
+
+            this key are specific to BACnet event notifications. This property will only
+
+            be present on a BACnet Advanced Workstation site.
+
+            '
+          properties:
+            deviceId:
+              type: object
+              x-metasysType: bacOid
+              properties:
+                bacnetObjectType:
+                  type: string
+                  x-metasysType: enum
+                  x-metasysEnum: objectTypeEnumSet
+                  description: 'The values for this property come from the `objectTypeEnumSet` enumeration.
+
+                    Find the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.
+
+
+                    **See also:**
+
+                    * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                instance:
+                  type: integer
+                  minimum: 0
+                  maximum: 4194302
+              description: The BACoid of the device where the event initiated.
+              example:
+                bacnetObjectType: objectTypeEnumSet.bacdeviceClass
+                instance: 100
+            objectId:
+              type: object
+              x-metasysType: bacOid
+              properties:
+                bacnetObjectType:
+                  type: string
+                  x-metasysType: enum
+                  x-metasysEnum: objectTypeEnumSet
+                  description: 'The values for this property come from the `objectTypeEnumSet` enumeration.
+
+                    Find the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.
+
+
+                    **See also:**
+
+                    * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+                instance:
+                  type: integer
+                  minimum: 0
+                  maximum: 4194302
+              description: The BACoid of the object initiating the event.
+              example:
+                bacnetObjectType: objectTypeEnumSet.bacAiClass
+                instance: 200
+            notificationClassId:
+              description: 'The notifier class that was responsible for distributing the alarm.
+
+                '
+              properties:
+                bacnetObjectType:
+                  type: string
+                  enum:
+                  - objectTypeEnumSet.bacNotificClass
+                  description: Will always be the Notification Class
+                instance:
+                  type: integer
+                  minimum: 0
+                  maximum: 4194302
+              example:
+                bacnetObjectType: objectTypeEnumSet.bacNotificClass
+                instance: 205
+            timestamp:
+              description: 'For devices with a clock this property will specify the time or date and
+
+                time of the alarm. For devices without a clock this will convey a
+
+                sequence number that indicates the relative ordering of alarms. A BACnet
+
+
+                Check for the existence of the properties `time`, `dateTime` and
+
+                `sequenceNumber` to determine which is used for an instance of alarm.
+
+                '
+              oneOf:
+              - type: object
+                title: Time
+                properties:
+                  time:
+                    type: string
+                    format: time
+                    example: '19:49:23'
+                    description: 'The local time the alarm was generated. (The time is local with
+
+                      respect to the device that generated the alarm.) An example
+
+                      value is `"19:49:23"`
+
+                      '
+              - type: object
+                title: Sequence Number
+                properties:
+                  sequenceNumber:
+                    type: integer
+                    minimum: 0
+                    maximum: 65535
+                    example: 345
+                    description: 'The sequence number associated with this alarm. An example is
+
+                      `345`
+
+                      '
+              - type: object
+                title: Date and Time
+                properties:
+                  dateTime:
+                    type: string
+                    format: date-time
+                    example: '2024-10-11T19:49:23'
+                    description: 'The local date and time when the alarm was generated. (The value
+
+                      is local with respect to the device that generated the alarm.)
+
+                      An example value is `"2024-10-11T19:49:23"`
+
+                      '
+            notifyType:
+              type: string
+              x-metasysType: enum
+              x-metasysEnum: bacNotifyTypeEnumSet
+              description: 'The type of notification. This indicates if the notification is an
+
+                alarm, an event or an acknowledgement. An example value is
+
+                `bacNotifyTypeEnumSet.bacNotifyAlarm`
+
+
+
+                The values for this property come from the `bacNotifyTypeEnumSet` enumeration.
+
+                Find the definition of `bacNotifyTypeEnumSet` at the relative URL of `/schemas/enums/bacNotifyTypeEnumSet`.
+
+
+                **See also:**
+
+                * [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.'
+      required:
+      - id
+      - itemReference
+      - name
+      - description
+      - activityManagementStatus
+      - creationTime
+      - objectUrl
+      - message
+      - isAckRequired
+      - type
+      - priority
+      - category
+      - annotationsUrl
+      - annotationsCount
+      - self
+      - triggerValue
+      - discardedTime
+      - acknowledgedTime
+      - alarmGeneratorObject
+      - associatedGraphic
+    objectAlarms:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: Collection of alarms.
+          items:
+            $ref: '#/components/schemas/alarm'
+        objectUrl:
+          type: string
+          description: A link to the object which generated the alarms.
+          format: uri
+        effectivePermissions:
+          type: array
+          description: 'A collection of permissions that apply to the alarms in `items`.
+
+            '
+          items:
+            $ref: '#/components/schemas/effectivePermission'
+        next:
+          type:
+          - string
+          - 'null'
+          description: A link to the next page of results.
+          format: uri
+        previous:
+          type:
+          - string
+          - 'null'
+          description: A link to the previous page of results.
+          format: uri
+        self:
+          type: string
+          description: A link to this alarm collection.
+          format: uri
+      required:
+      - total
+      - items
+      - objectUrl
+      - effectivePermissions
+      - next
+      - previous
+      - self
+    alarmAnnotations:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: Collection of annotations.
+          items:
+            $ref: '#/components/schemas/alarmAnnotation'
+        next:
+          type:
+          - string
+          - 'null'
+          description: A link to the next page of results.
+          format: uri
+        previous:
+          type:
+          - string
+          - 'null'
+          description: A link to the previous page of results.
+          format: uri
+        self:
+          type: string
+          description: A link to this annotation collection.
+          format: uri
+      required:
+      - total
+      - items
+      - next
+      - previous
+      - self
+    standardErrorMessage:
+      title: Standard Error
+      description: A general error of the API.
+      type: object
+      additionalProperties: false
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+          description: 'A Metasys specific status code. The format of this code is variable. It
+
+            uses namespace/qualified format for `statusName` values. If the value is
+
+            qualified with just an enumeration
+
+            ("{namespace}:{enumeration}.{member}", e.g.
+
+            "enum.core:statusEnumSet.attributeNotFound"), then the display text
+
+            comes from the enumeration schema available at
+
+            `/schemas/enums/{enumeration}`. If the value is qualified with a
+
+            namespace ("{namespace}:{enumeration}.{member}", e.g.
+
+            "api.diagram:error.saveFailed"), then the display text is the
+
+            responsibility of the client.
+
+            '
+        message:
+          type: string
+          description: The display string message that correlates to `statusName`.
+        details:
+          type:
+          - object
+          - 'null'
+          description: 'An object containing specific details to the type of error. Each type of
+
+            error may have different detail properties and value types.
+
+            '
+        innerError:
+          allOf:
+          - description: 'An error that is more detailed or a cause of the containing error.
+
+              This allows for a recursive error structure which a client can
+
+              digest to as much detail as they understand. This is mutually
+
+              exclusive with `innerErrors`.
+
+              '
+          - $ref: '#/components/schemas/standardErrorMessage'
+        innerErrors:
+          description: 'A collection of errors that is more detailed or causes of the containing
+
+            error. This allows for a recursive error structure which a client can
+
+            digest to as much detail as they understand. This is mutually exclusive
+
+            with `innerError`.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/standardErrorMessage'
+    effectivePermission:
+      type: object
+      description: 'Indicates the ability for the current user to take action on a given alarm.
+
+        '
+      properties:
+        id:
+          type: string
+          description: The ID of the alarm that these permissions apply to.
+        canAcknowledge:
+          type: boolean
+          description: 'Indicates whether the alarm can be acknowledged by the current user.
+
+            '
+        canDiscard:
+          type: boolean
+          description: 'Indicates whether the alarm can be discarded by the current user.
+
+            '
+        canAnnotate:
+          type: boolean
+          description: 'Indicates whether the alarm can be annotated by the current user. This
+
+            may be absent if the current platform does not support annotations.
+
+            '
+      required:
+      - id
+      - canAcknowledge
+      - canDiscard
+    objectReferenceDefinition:
+      type: object
+      additionalProperties: false
+      description: A reference to an object in the system.
+      properties:
+        objectReference:
+          type: string
+          description: The fully qualified referenced of the object.
+        referencedObject:
+          type: object
+          description: Meta-data about the referenced object.
+          properties:
+            objectName:
+              type: string
+              description: The name of the object.
+            objectUrl:
+              type: string
+              description: A link to the object.
+              format: uri
+      required:
+      - objectReference
+      x-metasysType: objectReference
+    anyDataTypeSchemaRequired:
+      type: object
+      description: A variant data type that can hold a value of any of the built-in data types of the Metasys object model.
+      x-metasysType: any
+      properties:
+        item: {}
+        schema:
+          $ref: '#/components/schemas/dataTypeMetaSchema'
+      required:
+      - item
+      - schema
+    alarmAnnotation:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: The identifier of the annotation.
+        text:
+          type:
+          - string
+          - 'null'
+          description: The annotation text.
+        user:
+          type: string
+          description: The user who annotated the alarm.
+        creationTime:
+          type: string
+          description: The date-time for when the annotation was created.
+          format: date-time
+        signature:
+          type:
+          - object
+          - 'null'
+          description: The signature associated with the activity.
+          properties:
+            fullName:
+              type: string
+              description: The full name of the person signing the annotation.
+            reason:
+              type: string
+              description: The reason for the action requiring an annotation.
+        action:
+          type: string
+          description: "The action on which the annotation was created. In the case that the\nannotation was not created during an action, the default value will be\n`none`.\n\nThe description for the values of this property are as follows:\n\n- **`none`** - Indicates an annotation that was added as part of a\n  non-user action.\n- **`acknowledged`** - Indicates an annotation that was added as part of\n  an acknowledged action.\n- **`discarded`** - Indicates an annotation that was added as part of a\n  discarded action.\n- **`snoozed`** - Indicates an annotation that was added as part of a\n  snooze action.\n"
+          enum:
+          - none
+          - acknowledged
+          - discarded
+          - snoozed
+        alarmUrl:
+          type: string
+          description: A link to the alarm.
+          format: uri
+      required:
+      - id
+      - user
+      - creationTime
+      - action
+      - alarmUrl
+    nullableObjectReferenceDefinition:
+      type:
+      - object
+      - 'null'
+      additionalProperties: false
+      description: A reference to an object in the system.
+      properties:
+        objectReference:
+          type: string
+          description: The fully qualified referenced of the object.
+        referencedObject:
+          type: object
+          description: Meta-data about the referenced object.
+          properties:
+            objectName:
+              type: string
+              description: The name of the object.
+            objectUrl:
+              type: string
+              description: A link to the object.
+              format: uri
+      required:
+      - objectReference
+      x-metasysType: objectReference
+    deviceAlarms:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The total number of items in the collection.
+        items:
+          type: array
+          description: Collection of alarms.
+          items:
+            $ref: '#/components/schemas/alarm'
+        networkDeviceUrl:
+          type: string
+          description: A link to the associated network device of the alarms.
+          format: uri
+        effectivePermissions:
+          type: array
+          description: 'A collection of permissions that apply to the alarms in `items`.
+
+            '
+          items:
+            $ref: '#/components/schemas/effectivePermission'
+        next:
+          type:
+          - string
+          - 'null'
+          description: A link to the next page of results.
+          format: uri
+        previous:
+          type:
+          - string
+          - 'null'
+          description: A link to the previous page of results.
+          format: uri
+        self:
+          type: string
+          description: A link to this alarm collection.
+          format: uri
+      required:
+      - total
+      - items
+      - networkDeviceUrl
+      - effectivePermissions
+      - next
+      - previous
+      - self
+    space:
+      type: object
+      description: 'A space associated with the object on which the activity occurred.
+
+        '
+      properties:
+        id:
+          type: string
+          description: The identifier of the space.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the space.
+        name:
+          type: string
+          description: The name of the space.
+        spaceUrl:
+          type: string
+          description: The URL to the space.
+          format: uri
+      required:
+      - id
+      - itemReference
+      - name
+      - spaceUrl
+    equipment:
+      type: object
+      description: 'An equipment instance associated with the object on which the activity
+
+        occurred.
+
+        '
+      properties:
+        id:
+          type: string
+          description: The identifier of the equipment instance.
+        itemReference:
+          type: string
+          description: The fully qualified reference of the equipment instance.
+        equipmentName:
+          type: string
+          description: The name of the equipment instance.
+        shortName:
+          type: string
+          description: The name of the mapped point.
+        equipmentUrl:
+          type: string
+          description: The URL to the equipment instance.
+          format: uri
+      required:
+      - id
+      - itemReference
+      - equipmentName
+      - shortName
+      - equipmentUrl
+    dataTypeMetaSchema:
+      type: object
+      properties:
+        type:
+          type: string
+        metasysType:
+          type: string
+          enum:
+          - any
+          - array
+          - attributeReference
+          - bitString
+          - bacOid
+          - bool
+          - byte
+          - choice
+          - date
+          - double
+          - enum
+          - enumMemberId
+          - flags
+          - float
+          - list
+          - listof
+          - long
+          - none
+          - numeric
+          - objectReference
+          - octetString
+          - oid
+          - short
+          - string
+          - struct
+          - time
+          - ulong
+          - ushort
+      additionalProperties: true
+  responses:
+    general403:
+      description: "Operation is forbidden. This could be one of several reasons.\n\n- User does not have privilege to perform this operation.\n- This device is validated and requires a validated request unsupported by\n  this operation.\n"
+      content:
+        application/vnd.metasysapi.v6+json:
+          schema:
+            $ref: '#/components/schemas/standardErrorMessage'
+  securitySchemes:
+    Bearer-Authentication:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Most of the calls in the API use bearer token authentication. What this
+
+        means is that these requests require an `Authorization` header to be set to
+
+        a value with the following format: `Bearer: {accessToken}`. Use the
+
+        [`/login`](#operation/createToken) operation to request an `accessToken`. An
+
+        example of the full header would look like the following:
+
+        `Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1...`.
+
+
+        **Note:** This example access token is truncated.
+
+
+        The expiration time of the access token is based on the user''s Metasys
+
+        profile.
+
+        '
+    API-Key-Authentication:
+      type: apiKey
+      in: query
+      name: access_token
+      description: 'The [Streaming operation](#operation/getStream) is the only operation to use
+
+        API key authentication, because web browsers do not allow setting custom
+
+        headers when initiating Server Sent Event connections.
+
+        '
+x-refined-from:
+- metasys-api-v6-16.json
+- johnson-controls-metasys-openapi.yml
+x-servers:
+  apps:
+    url: https://{hostname}/apps
+    description: The base url for accessing APIs of non-core applications
+    variables:
+      hostname:
+        default: metasys-server.example.com
+        description: This is the name of your site

@@ -1,0 +1,777 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/johnson-controls/main/json-schema/johnson-controls-activities-schema.json",
+  "title": "activities",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/johnson-controls-metasys-openapi.yml#/components/schemas/activities",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "total": {
+      "type": "integer",
+      "description": "The total number of activities in the collection."
+    },
+    "items": {
+      "type": "array",
+      "description": "Collection of activities.",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "title": "Alarm activity",
+            "description": "An alarm activity.",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The identifier of the activity."
+              },
+              "itemReference": {
+                "type": "string",
+                "description": "The fully qualified reference of the object."
+              },
+              "objectName": {
+                "type": "string",
+                "description": "The name of the object."
+              },
+              "objectId": {
+                "type": "string",
+                "description": "The identifier of the object that generated this activity."
+              },
+              "objectUrl": {
+                "type": "string",
+                "description": "A link to the object that generated this activity.",
+                "format": "uri"
+              },
+              "discardedTime": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "The date-time representing the time when a user discarded the activity.\nThis property will only be present if the `activityManagementStatus` of\nthe alarm or audit for the activity is `discarded`.\n",
+                "format": "date-time"
+              },
+              "creationTime": {
+                "type": "string",
+                "description": "The date-time for when the activity was detected.",
+                "format": "date-time"
+              },
+              "spaces": {
+                "type": "array",
+                "description": "The collection of spaces associated with the object on which the\nactivity occurred.\n",
+                "items": {
+                  "$ref": "#/$defs/space"
+                }
+              },
+              "equipment": {
+                "type": "array",
+                "description": "The collection of equipment associated with the object on which the\nactivity occurred.\n",
+                "items": {
+                  "$ref": "#/$defs/equipment"
+                }
+              },
+              "activityManagementStatus": {
+                "type": "string",
+                "description": "The activity management status of this alarm. The values of this\nproperty are:\n\n- `pending` - Indicates a user has not yet acted upon the alarm.\n- `acknowledged` - Indicates a user recognized and viewed the alarm.\n- `discarded` - Indicates a user acted upon or dismissed the alarm.\n"
+              },
+              "alarm": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": "string",
+                    "description": "A more detailed description of the triggered alarm, either\ndescribing the object that triggered the alarm or the alarm itself.\n"
+                  },
+                  "acknowledgedTime": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The date-time representing the time when this activity message was\nacknowledged.\n",
+                    "format": "date-time"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "The alarm message."
+                  },
+                  "isAckRequired": {
+                    "type": "boolean",
+                    "description": "Indicates whether the alarm can be acknowledged. You will get an\nerror response if you attempt to acknowledge an alarm for which this\nproperty is `false`.\n"
+                  },
+                  "type": {
+                    "type": "string",
+                    "description": "The type of alarm.\n\nThe values for this property come from the `alarmValueEnumSet` enumeration.\nFind the definition of `alarmValueEnumSet` at the relative URL of `/schemas/enums/alarmValueEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+                    "x-metasysType": "enum",
+                    "x-metasysEnum": "alarmValueEnumSet"
+                  },
+                  "priority": {
+                    "type": "integer",
+                    "description": "The priority of the alarm."
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "The authorization category of the object when the alarm was\ngenerated\n\n\nThe values for this property come from the `objectCategoryEnumSet` enumeration.\nFind the definition of `objectCategoryEnumSet` at the relative URL of `/schemas/enums/objectCategoryEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+                    "x-metasysType": "enum",
+                    "x-metasysEnum": "objectCategoryEnumSet"
+                  },
+                  "annotationsUrl": {
+                    "type": "string",
+                    "description": "A link to the annotations available on the alarms.",
+                    "format": "uri"
+                  },
+                  "annotationsCount": {
+                    "type": "integer",
+                    "description": "The total number of annotations associated with this alarm.\n"
+                  },
+                  "signedAnnotationsCount": {
+                    "type": "integer",
+                    "description": "The total number of MVE Annotations associated with this audit.\n"
+                  },
+                  "self": {
+                    "type": "string",
+                    "description": "A link to this alarm.",
+                    "format": "uri"
+                  },
+                  "triggerValue": {
+                    "description": "The value of the attribute of the object that triggered the alarm.\n",
+                    "allOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "item": {
+                            "oneOf": [
+                              {
+                                "type": "string"
+                              },
+                              {
+                                "type": "number"
+                              }
+                            ]
+                          },
+                          "schema": {
+                            "type": "object"
+                          }
+                        },
+                        "required": [
+                          "item",
+                          "schema"
+                        ]
+                      },
+                      {
+                        "$ref": "#/$defs/anyDataTypeSchemaRequired"
+                      }
+                    ]
+                  },
+                  "alarmGeneratorObject": {
+                    "description": "Reference information to the object which generated the alarm.\n",
+                    "allOf": [
+                      {
+                        "$ref": "#/$defs/nullableObjectReferenceDefinition"
+                      }
+                    ]
+                  },
+                  "associatedGraphic": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Reference information for the graphic associated with the alarm.\n",
+                    "properties": {
+                      "reference": {
+                        "description": "Provides the fully qualified reference to the graphic associated\nwith the alarm.\n",
+                        "allOf": [
+                          {
+                            "$ref": "#/$defs/objectReferenceDefinition"
+                          }
+                        ]
+                      },
+                      "url": {
+                        "type": "string",
+                        "description": "A link to the graphic resource associated with the alarm.\n",
+                        "format": "uri"
+                      },
+                      "alias": {
+                        "type": "string",
+                        "description": "The object alias to apply to the graphic for which this alarm is\nassociated to.\n"
+                      },
+                      "aliasUrl": {
+                        "type": "string",
+                        "description": "A link to the graphic resource associated with the alarm, with\nthe alias information included.\n",
+                        "format": "uri"
+                      }
+                    },
+                    "required": [
+                      "reference",
+                      "url",
+                      "alias",
+                      "aliasUrl",
+                      "discardedTime"
+                    ]
+                  },
+                  "bacnet": {
+                    "$ref": "#/$defs/alarmBacnetProps"
+                  }
+                },
+                "required": [
+                  "description",
+                  "message",
+                  "isAckRequired",
+                  "type",
+                  "priority",
+                  "category",
+                  "annotationsUrl",
+                  "annotationsCount",
+                  "self",
+                  "triggerValue",
+                  "acknowledgedTime",
+                  "alarmGeneratorObject",
+                  "associatedGraphic"
+                ]
+              }
+            },
+            "required": [
+              "activityManagementStatus",
+              "alarm",
+              "id",
+              "itemReference",
+              "objectName",
+              "objectId",
+              "objectUrl",
+              "creationTime"
+            ]
+          },
+          {
+            "type": "object",
+            "title": "Audit activity",
+            "description": "An audit activity.",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The identifier of the activity."
+              },
+              "itemReference": {
+                "type": "string",
+                "description": "The fully qualified reference of the object."
+              },
+              "objectName": {
+                "type": "string",
+                "description": "The name of the object."
+              },
+              "objectId": {
+                "type": "string",
+                "description": "The identifier of the object that generated this activity."
+              },
+              "objectUrl": {
+                "type": "string",
+                "description": "A link to the object that generated this activity.",
+                "format": "uri"
+              },
+              "discardedTime": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "The date-time representing the time when a user discarded the activity.\nThis property will only be present if the `activityManagementStatus` of\nthe alarm or audit for the activity is `discarded`.\n",
+                "format": "date-time"
+              },
+              "creationTime": {
+                "type": "string",
+                "description": "The date-time for when the activity was detected.",
+                "format": "date-time"
+              },
+              "spaces": {
+                "type": "array",
+                "description": "The collection of spaces associated with the object on which the\nactivity occurred.\n",
+                "items": {
+                  "$ref": "#/$defs/space"
+                }
+              },
+              "equipment": {
+                "type": "array",
+                "description": "The collection of equipment associated with the object on which the\nactivity occurred.\n",
+                "items": {
+                  "$ref": "#/$defs/equipment"
+                }
+              },
+              "activityManagementStatus": {
+                "type": "string",
+                "description": "The activity management status of the audit. The values of this property\nare:\n\n- `pending` - Indicates a user has not yet acted upon the audit.\n- `discarded` - Indicates a user has acted upon or dismissed the audit.\n",
+                "enum": [
+                  "pending",
+                  "discarded"
+                ]
+              },
+              "audit": {
+                "type": "object",
+                "properties": {
+                  "description": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "A more detailed description of the audited action."
+                  },
+                  "originApplication": {
+                    "type": "string",
+                    "description": "The Metasys application or component that generated the audit.\n\n\nThe values for this property come from the `auditOriginAppEnumSet` enumeration.\nFind the definition of `auditOriginAppEnumSet` at the relative URL of `/schemas/enums/auditOriginAppEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+                    "x-metasysType": "enum",
+                    "x-metasysEnum": "auditOriginAppEnumSet"
+                  },
+                  "actionType": {
+                    "type": "string",
+                    "description": "The type of action audited by the system.\n\nThe values for this property come from the `auditActionTypeEnumSet` enumeration.\nFind the definition of `auditActionTypeEnumSet` at the relative URL of `/schemas/enums/auditActionTypeEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+                    "x-metasysType": "enum",
+                    "x-metasysEnum": "auditActionTypeEnumSet"
+                  },
+                  "parameters": {
+                    "type": [
+                      "array",
+                      "null"
+                    ],
+                    "items": {
+                      "$ref": "#/$defs/anyDataTypeSchemaRequired"
+                    },
+                    "description": "Parameters passed for commands or writes."
+                  },
+                  "user": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The username of the user that initiated the action."
+                  },
+                  "signature": {
+                    "x-releases": {
+                      "implementedAt": "15.0"
+                    },
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nThe signature associated with the activity.",
+                    "properties": {
+                      "fullName": {
+                        "type": "string",
+                        "description": "The full name of the person signing the annotation."
+                      },
+                      "reason": {
+                        "type": "string",
+                        "description": "The reason for the action requiring an annotation."
+                      }
+                    }
+                  },
+                  "classLevel": {
+                    "type": "string",
+                    "description": "The level at which the system generated the audit.\n\nThe values for this property come from the `auditClassesEnumSet` enumeration.\nFind the definition of `auditClassesEnumSet` at the relative URL of `/schemas/enums/auditClassesEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+                    "x-metasysType": "enum",
+                    "x-metasysEnum": "auditClassesEnumSet"
+                  },
+                  "status": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "The status of the action.\n\nThe values for this property come from the `statusEnumSet` enumeration.\nFind the definition of `statusEnumSet` at the relative URL of `/schemas/enums/statusEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+                    "x-metasysType": "enum",
+                    "x-metasysEnum": "statusEnumSet"
+                  },
+                  "errorString": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Error message for the action."
+                  },
+                  "preData": {
+                    "description": "The old value before the command or edit.",
+                    "anyOf": [
+                      {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      {
+                        "$ref": "#/$defs/anyDataTypeSchemaRequired"
+                      }
+                    ]
+                  },
+                  "postData": {
+                    "description": "The new value after the command or edit.",
+                    "anyOf": [
+                      {
+                        "type": [
+                          "object",
+                          "null"
+                        ]
+                      },
+                      {
+                        "$ref": "#/$defs/anyDataTypeSchemaRequired"
+                      }
+                    ]
+                  },
+                  "annotationsUrl": {
+                    "type": "string",
+                    "description": "A link to the available annotations available for the audit.\n",
+                    "format": "uri"
+                  },
+                  "annotationsCount": {
+                    "type": "integer",
+                    "description": "The total number of annotations associated with this audit.\n"
+                  },
+                  "signedAnnotationsCount": {
+                    "type": "integer",
+                    "description": "The total number of MVE Annotations associated with this audit.\n"
+                  },
+                  "self": {
+                    "type": "string",
+                    "description": "A link to the audit.",
+                    "format": "uri"
+                  }
+                },
+                "required": [
+                  "originApplication",
+                  "actionType",
+                  "user",
+                  "classLevel",
+                  "status",
+                  "annotationsUrl",
+                  "annotationsCount",
+                  "errorString",
+                  "preData",
+                  "postData",
+                  "self"
+                ]
+              }
+            },
+            "required": [
+              "activityManagementStatus",
+              "audit",
+              "id",
+              "itemReference",
+              "objectName",
+              "objectId",
+              "objectUrl",
+              "creationTime",
+              "discardedTime"
+            ]
+          }
+        ]
+      }
+    },
+    "effectivePermissions": {
+      "type": "array",
+      "description": "A collection of permissions that apply to the activities in `items`.\n",
+      "items": {
+        "type": "object",
+        "description": "Indicates the ability for the current user to take action on a given\nactivity.\n",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The ID of the activity that these permissions apply to."
+          },
+          "canAcknowledge": {
+            "type": "boolean",
+            "description": "Indicates whether the current user can acknowledge the activity. This\nproperty will only be present for an alarm activity.\n"
+          },
+          "canDiscard": {
+            "type": "boolean",
+            "description": "Indicates whether the current user can discard the activity."
+          },
+          "canAnnotate": {
+            "type": "boolean",
+            "description": "Indicates whether the current user can annotate the activity. This\nproperty will only be present if the current platform supports\nannotations.\n"
+          }
+        },
+        "required": [
+          "id",
+          "canDiscard"
+        ]
+      }
+    },
+    "next": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "A link to the next set of results. This link contains the continuation\ntoken used to retrieve the next set.\n",
+      "format": "uri"
+    },
+    "self": {
+      "type": "string",
+      "description": "A link to this list of activities.",
+      "format": "uri"
+    }
+  },
+  "required": [
+    "total",
+    "items",
+    "effectivePermissions",
+    "next",
+    "self"
+  ],
+  "$defs": {
+    "alarmBacnetProps": {
+      "type": "object",
+      "x-releases": {
+        "implementedAt": "14.1"
+      },
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>14.1 and later</strong></span>\\\nBACnet calls this type of record an event notification. The properties under\nthis key are specific to BACnet event notifications. This property will only\nbe present on a BACnet Advanced Workstation site.\n",
+      "properties": {
+        "deviceId": {
+          "type": "object",
+          "x-metasysType": "bacOid",
+          "properties": {
+            "bacnetObjectType": {
+              "type": "string",
+              "x-metasysType": "enum",
+              "x-metasysEnum": "objectTypeEnumSet",
+              "description": "The values for this property come from the `objectTypeEnumSet` enumeration.\nFind the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration."
+            },
+            "instance": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4194302
+            }
+          },
+          "description": "The BACoid of the device where the event initiated."
+        },
+        "objectId": {
+          "type": "object",
+          "x-metasysType": "bacOid",
+          "properties": {
+            "bacnetObjectType": {
+              "type": "string",
+              "x-metasysType": "enum",
+              "x-metasysEnum": "objectTypeEnumSet",
+              "description": "The values for this property come from the `objectTypeEnumSet` enumeration.\nFind the definition of `objectTypeEnumSet` at the relative URL of `/schemas/enums/objectTypeEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration."
+            },
+            "instance": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4194302
+            }
+          },
+          "description": "The BACoid of the object initiating the event."
+        },
+        "notificationClassId": {
+          "description": "The notifier class that was responsible for distributing the alarm.\n",
+          "properties": {
+            "bacnetObjectType": {
+              "type": "string",
+              "enum": [
+                "objectTypeEnumSet.bacNotificClass"
+              ],
+              "description": "Will always be the Notification Class"
+            },
+            "instance": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4194302
+            }
+          }
+        },
+        "timestamp": {
+          "description": "For devices with a clock this property will specify the time or date and\ntime of the alarm. For devices without a clock this will convey a\nsequence number that indicates the relative ordering of alarms. A BACnet\n\nCheck for the existence of the properties `time`, `dateTime` and\n`sequenceNumber` to determine which is used for an instance of alarm.\n",
+          "oneOf": [
+            {
+              "type": "object",
+              "title": "Time",
+              "properties": {
+                "time": {
+                  "type": "string",
+                  "format": "time",
+                  "description": "The local time the alarm was generated. (The time is local with\nrespect to the device that generated the alarm.) An example\nvalue is `\"19:49:23\"`\n"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "title": "Sequence Number",
+              "properties": {
+                "sequenceNumber": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 65535,
+                  "description": "The sequence number associated with this alarm. An example is\n`345`\n"
+                }
+              }
+            },
+            {
+              "type": "object",
+              "title": "Date and Time",
+              "properties": {
+                "dateTime": {
+                  "type": "string",
+                  "format": "date-time",
+                  "description": "The local date and time when the alarm was generated. (The value\nis local with respect to the device that generated the alarm.)\nAn example value is `\"2024-10-11T19:49:23\"`\n"
+                }
+              }
+            }
+          ]
+        },
+        "notifyType": {
+          "type": "string",
+          "x-metasysType": "enum",
+          "x-metasysEnum": "bacNotifyTypeEnumSet",
+          "description": "The type of notification. This indicates if the notification is an\nalarm, an event or an acknowledgement. An example value is\n`bacNotifyTypeEnumSet.bacNotifyAlarm`\n\n\nThe values for this property come from the `bacNotifyTypeEnumSet` enumeration.\nFind the definition of `bacNotifyTypeEnumSet` at the relative URL of `/schemas/enums/bacNotifyTypeEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration."
+        }
+      }
+    },
+    "anyDataTypeSchemaRequired": {
+      "type": "object",
+      "description": "A variant data type that can hold a value of any of the built-in data types of the Metasys object model.",
+      "x-metasysType": "any",
+      "properties": {
+        "item": {},
+        "schema": {
+          "$ref": "#/$defs/dataTypeMetaSchema"
+        }
+      },
+      "required": [
+        "item",
+        "schema"
+      ]
+    },
+    "dataTypeMetaSchema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "metasysType": {
+          "type": "string",
+          "enum": [
+            "any",
+            "array",
+            "attributeReference",
+            "bitString",
+            "bacOid",
+            "bool",
+            "byte",
+            "choice",
+            "date",
+            "double",
+            "enum",
+            "enumMemberId",
+            "flags",
+            "float",
+            "list",
+            "listof",
+            "long",
+            "none",
+            "numeric",
+            "objectReference",
+            "octetString",
+            "oid",
+            "short",
+            "string",
+            "struct",
+            "time",
+            "ulong",
+            "ushort"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "equipment": {
+      "type": "object",
+      "description": "An equipment instance associated with the object on which the activity\noccurred.\n",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The identifier of the equipment instance."
+        },
+        "itemReference": {
+          "type": "string",
+          "description": "The fully qualified reference of the equipment instance."
+        },
+        "equipmentName": {
+          "type": "string",
+          "description": "The name of the equipment instance."
+        },
+        "shortName": {
+          "type": "string",
+          "description": "The name of the mapped point."
+        },
+        "equipmentUrl": {
+          "type": "string",
+          "description": "The URL to the equipment instance.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "itemReference",
+        "equipmentName",
+        "shortName",
+        "equipmentUrl"
+      ]
+    },
+    "nullableObjectReferenceDefinition": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "description": "A reference to an object in the system.",
+      "properties": {
+        "objectReference": {
+          "type": "string",
+          "description": "The fully qualified referenced of the object."
+        },
+        "referencedObject": {
+          "type": "object",
+          "description": "Meta-data about the referenced object.",
+          "properties": {
+            "objectName": {
+              "type": "string",
+              "description": "The name of the object."
+            },
+            "objectUrl": {
+              "type": "string",
+              "description": "A link to the object.",
+              "format": "uri"
+            }
+          }
+        }
+      },
+      "required": [
+        "objectReference"
+      ],
+      "x-metasysType": "objectReference"
+    },
+    "space": {
+      "type": "object",
+      "description": "A space associated with the object on which the activity occurred.\n",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The identifier of the space."
+        },
+        "itemReference": {
+          "type": "string",
+          "description": "The fully qualified reference of the space."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the space."
+        },
+        "spaceUrl": {
+          "type": "string",
+          "description": "The URL to the space.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "itemReference",
+        "name",
+        "spaceUrl"
+      ]
+    }
+  }
+}

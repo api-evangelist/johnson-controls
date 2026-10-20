@@ -1,0 +1,6 @@
+name: Johnson Controls agent skills
+generated: '2026-10-20'
+method: generated
+skills:
+  - {name: read-object-attributes, file: johnson-controls-read-object-attributes.md}
+  - {name: command-an-object, file: johnson-controls-command-an-object.md}

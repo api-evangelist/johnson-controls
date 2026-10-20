@@ -1,0 +1,441 @@
+generated: '2026-10-20'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/johnson-controls-metasys-openapi.yml
+vocabulary:
+  name: Johnson Controls Domain Vocabulary
+  description: 'Terms declared by Johnson Controls''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-20'
+  terms:
+  - term: activities
+    definition: 'This section describes the operations you can perform on activities. Activities are a superset of all alarms and audits in a
+      Metasys system. Use activities operations to view audits and alarms. Apply filters to further refine the results. ## Activities Event Subscriptions
+      Subscribe for activity-related events to receive updates when activities are created, discarded, acknowledged, or annotated. ##'
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: alarms
+    definition: Alarms alert users to potential problems identified by a Metasys system, for example high zone temperatures. Use alarms operations
+      to get object alarms, network device alarms, single alarms, alarm collections, and alarm annotations. Acknowledge or discard alarms with
+      the edit patch operation. Filter the results with the query parameters time, priority, type, category, acknowledgement, and page. So
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: audits
+    definition: 'How to retrieve, discard, and annotate audits. ### Relationships Audits have relationships to other resources in the system.
+      Find information about the most important below. - **objects** When users or the system affect objects in the Metasys system, such as analog
+      inputs, multistate objects, or binary outputs, audits are generated. Those "acted upon" objects then relate to those audits. That rela'
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: authentication
+    definition: Operations to get and refresh an access token.
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: equipment
+    definition: This section describes the operations you can perform on equipment. Equipment is a broad term for anything that makes a building
+      run, including boilers, chillers, air handling units, lights, meters, and security systems. Use equipment operations to get equipment instances
+      and to list equipment points. Apply filters, sorting, and paging to further refine the results.
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: network devices
+    definition: This section describes the operations you can perform on network devices. Network devices are physical devices such as coordinators
+      and routers that are required for communication between hardware on a computer network. Use network device operations to get, list, and
+      delete network devices. Apply filters, sorting, and paging to further refine the results.
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: objects
+    definition: This section describes the operations you can perform on objects. Objects are self-contained functional items in the Metasys system,
+      for a full definition refer to the [Metasys System Glossary](https://docs.johnsoncontrols.com/bas/r/Metasys/en-US/Metasys-System-Glossary/11.0/O).
+      Use objects operations to list, create, edit, and delete objects. Apply filters, sorting, and paging to further refine t
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: schemas
+    definition: A collection of JSON schemas for describing enumerations and object types.
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: spaces
+    definition: Operations on space-related resources.
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: streaming
+    definition: 'Your Metasys system works continuously: sensors report current conditions, algorithms make adjustments, and alarms alert operators
+      to potential issues. Streaming is how the Metasys API provides access to these _events_ using the HTML standard [server-sent events](https://html.spec.whatwg.org/multipage/server-sent-events.html#server-sent-events)
+      (SSE). For further information, refer to [Mozilla dev'
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: time series
+    definition: 'This section describes the operations you can perform on time series sample data. ### Origin of Time Series data The Metasys
+      system has two locations from which time series samples can be retrieved. The first is from the _trend_ or _log_ object, itself. Each object
+      on the Metasys site whose responsibility is to generate samples will have its own _buffer_ to store them. When samples are retrieved f'
+    tags:
+    - Resource Group
+    source: openapi/johnson-controls-metasys-openapi.yml
+  - term: activitiesStreamHeartbeat
+    definition: Payload sent periodically to indicate that one or more subscriptions exist for the current stream.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/activitiesStreamHeartbeat
+  - term: objectsStreamValuesHeartbeatImproved
+    definition: A periodic event that indicates that one or more COV subscriptions are active.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/objectsStreamValuesHeartbeatImproved
+  - term: objectsStreamValuesNotification
+    definition: Payload sent when the value of an object attribute changes, but the attribute does not allow for direct reporting of the value
+      in the notification. A client may use the notification to later read the attribute to get the new value.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/objectsStreamValuesNotification
+  - term: objectsStreamValuesUpdate
+    definition: Payload sent when the value of an object attribute changes.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/objectsStreamValuesUpdate
+  - term: timeSeriesStreamError
+    definition: Indicates an error occurred with regards to an active samples subscription.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/timeSeriesStreamError
+  - term: timeSeriesStreamCancelled
+    definition: Indicates when a subscription has been cancelled for objects samples.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/timeSeriesStreamCancelled
+  - term: timeSeriesStreamEstablished
+    definition: Indicates when a subscription has been established or started for objects samples.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/timeSeriesStreamEstablished
+  - term: timeSeriesStreamUpdate
+    definition: Indicates new samples have been generated. Sample updates from multiple objects and attributes can be contained in a single event
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/timeSeriesStreamUpdate
+  - term: timeSeriesStreamAsyncError
+    definition: Indicates an error occurred with regards to an active samples async response subscription.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/timeSeriesStreamAsyncError
+  - term: timeSeriesStreamAsyncCompleted
+    definition: Indicates that a samples async response is complete.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/timeSeriesStreamAsyncCompleted
+  - term: loginRequest
+    definition: 'Object declared by the contract with fields: username, password.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/loginRequest
+  - term: loginResponse
+    definition: 'Object declared by the contract with fields: accessToken, expires.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/loginResponse
+  - term: space
+    definition: A space associated with the object on which the activity occurred.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/space
+  - term: dataTypeMetaSchema
+    definition: 'Object declared by the contract with fields: type, metasysType.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/dataTypeMetaSchema
+  - term: anyDataTypeSchemaRequired
+    definition: A variant data type that can hold a value of any of the built-in data types of the Metasys object model.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/anyDataTypeSchemaRequired
+  - term: nullableObjectReferenceDefinition
+    definition: A reference to an object in the system.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/nullableObjectReferenceDefinition
+  - term: objectReferenceDefinition
+    definition: A reference to an object in the system.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/objectReferenceDefinition
+  - term: alarmBacnetProps
+    definition: 'RELEASES: 14.1 and later\ BACnet calls this type of record an event notification. The properties under this key are specific
+      to BACnet event notifications. This property will only be present on a BACnet Advanced Workstation site.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/alarmBacnetProps
+  - term: Standard Error
+    definition: A general error of the API.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/standardErrorMessage
+  - term: self
+    definition: A link to this object.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/self
+  - term: parentUrl
+    definition: A link to the parent of this object. All objects except the root object have a value for this property.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/parentUrl
+  - term: networkDeviceUrl
+    definition: A link to the network device that contains this object.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/networkDeviceUrl
+  - term: pointsUrl
+    definition: A link to all equipment point mappings defined for this object.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/pointsUrl
+  - term: objectsUrl
+    definition: A link to the children of this object. You can use the `depth` parameter to this URL to get more than the immediate children of
+      this object.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/objectsUrl
+  - term: alarmsUrl
+    definition: A link to the alarms generated by this object.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/alarmsUrl
+  - term: auditsUrl
+    definition: A link to the audits generated for this object.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/auditsUrl
+  - term: trendedAttributesUrl
+    definition: A link to the list of attributes on this object for which samples are available.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/trendedAttributesUrl
+  - term: objectType
+    definition: The type of this object as defined by the `objectTypeEnumSet`.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/objectType
+  - term: objectTypeVersion
+    definition: The version of `objectType` that is used for this object.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/objectTypeVersion
+  - term: classification
+    definition: A classification system that groups related objects together.
+    tags:
+    - Enumeration
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/classification
+  - term: Object (minimal, tree)
+    definition: A minimal representation of an object with an `items` property for child objects.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/objectEntityInTree
+  - term: Object Tree
+    definition: 'Object declared by the contract with fields: self, items, effectivePermissions.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/getObjectsResponse
+  - term: post-objects-request
+    definition: 'Object declared by the contract with fields: parentId, localUniqueIdentifier, objectType, item.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/post-objects-request
+  - term: schema
+    definition: If included in the response, this is the JSON schema that describes the properties of the `item` property
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/schema
+  - term: condition
+    definition: This property contains condition flags (if any are set) for the properties of `item`. If none of the properties have any condition
+      flags set, then `condition` will not be included in the response or it will be empty.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/condition
+  - term: views
+    definition: A nested collection of logical property groupings used for display purposes only.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/views
+  - term: effectivePermissions
+    definition: Describes the effective permissions the client has for the current object.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/effectivePermissions
+  - term: Get object attribute response
+    definition: 'Object declared by the contract with fields: item, schema, condition.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/get-object-attribute-response
+  - term: write-priority-enum-set
+    definition: 'Enumeration declared by the contract with values: writePriorityEnumSet.priorityNone, writePriorityEnumSet.priorityManualEmergency,
+      writePriorityEnumSet.priorityFireApplications, writePriorityEnumSet.priority3, writePriorityEnumSet.priority4, writePriorityEnumSet.priorityCriticalEquipment,
+      writePriorityEnumSet.priorityMinimumOnOff, writePriorityEnumSet.priorityHeavyEquipDelay, writePriorityEnumSet.priorityOperatorOverride,
+      writePriorityEnumSet.priority9, writePriorityEnumSet.priority10, writePriorityEnumSet.priorityDemandLimiting. (5 more)'
+    tags:
+    - Enumeration
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/write-priority-enum-set
+  - term: put-command-request
+    definition: 'Object declared by the contract with fields: priority, parameters, annotation.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/put-command-request
+  - term: Error
+    definition: A general error of the API.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/errorMessage
+  - term: points
+    definition: 'Object declared by the contract with fields: total, items, next, previous, self.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/points
+  - term: Lookup object identifier error response
+    definition: 'Object declared by the contract with fields: message.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/lookup-object-identifier-error-response
+  - term: alarm
+    definition: 'Object declared by the contract with fields: id, itemReference, name, description, activityManagementStatus, discardedTime, creationTime,
+      acknowledgedTime, objectUrl, message, isAckRequired, type. (12 more)'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/alarm
+  - term: effectivePermission
+    definition: Indicates the ability for the current user to take action on a given alarm.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/effectivePermission
+  - term: objectAlarms
+    definition: 'Object declared by the contract with fields: total, items, objectUrl, effectivePermissions, next, previous, self.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/objectAlarms
+  - term: signature
+    definition: 'RELEASES: 15.0 and later\ The signature associated with the activity.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/signature
+  - term: audit
+    definition: 'Object declared by the contract with fields: id, itemReference, objectName, objectUrl, description, activityManagementStatus,
+      discardedTime, creationTime, originApplication, actionType, parameters, user. (12 more)'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/audit
+  - term: schemas_effectivePermission
+    definition: Indicates the ability for the current user to take action on a given audit.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/schemas_effectivePermission
+  - term: self url
+    definition: A link to this payload
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/schemas_self
+  - term: Time Series Get Trended Attributes Retrieval Success
+    definition: 'Object declared by the contract with fields: total, items, self.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/trendedAttributesResponse
+  - term: Time Series Get Trended Object Retrieval Success
+    definition: 'Object declared by the contract with fields: id, itemReference, name, sampledAttributes, self.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/repoTrendedObjectResponse
+  - term: Time Series Get Trended Attributes Retrieval Success
+    definition: 'Object declared by the contract with fields: total, items, self.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/repoTrendedAttributesResponse
+  - term: Time Series Get Trended Object Retrieval Success
+    definition: 'Object declared by the contract with fields: samplesUrl, attribute, self.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/trendedAttributeResponse
+  - term: Samples
+    definition: 'Object declared by the contract with fields: total, schema, items, self, objectUrl, attribute.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/objectsAttributeSamplesResponse
+  - term: Time Series Samples Retrieval Success
+    definition: 'Object declared by the contract with fields: total, schema, items, previous, next, self, timeSeriesUrl, attribute.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/repoAttributeSamplesResponse
+  - term: Time series streaming subscription request payload
+    definition: 'Object declared by the contract with fields: items.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/timeSeriesStreamingSubscriptionRequest
+  - term: networkDevice
+    definition: 'Object declared by the contract with fields: id, itemReference, name, objectType, objectTypeVersion, productVersion, description,
+      firmwareVersion, objectCategory, timeZone, self, parentUrl. (14 more)'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/networkDevice
+  - term: incompleteNetworkDevice
+    definition: 'RELEASES: 15.0 and later\ An incomplete network device is a network device that has not been fully populated with all of its
+      properties. This is typically the case when the network device is not reachable or when the API is unable to retrieve all of the properties
+      of the network device.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/incompleteNetworkDevice
+  - term: networkDevices
+    definition: 'Object declared by the contract with fields: total, items, next, previous, self, effectivePermissions.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/networkDevices
+  - term: Space
+    definition: 'Object declared by the contract with fields: id, name, type, self, parentUrl, spacesUrl, equipmentUrl, networkDevicesUrl, itemReference,
+      description, area, areaUnits.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/schemas_space
+  - term: equipmentItemLegacy
+    definition: 'Object declared by the contract with fields: id, itemReference, name, type, hasUpstreamEquipment, self, spacesUrl, equipmentUrl,
+      upstreamEquipmentUrl, networkDevicesUrl, pointsUrl.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/equipmentItemLegacy
+  - term: equipmentItemsLegacy
+    definition: 'Object declared by the contract with fields: total, items, next, previous, self.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/equipmentItemsLegacy
+  - term: deviceAlarms
+    definition: 'Object declared by the contract with fields: total, items, networkDeviceUrl, effectivePermissions, next, previous, self.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/deviceAlarms
+  - term: Equipment
+    definition: 'Object declared by the contract with fields: id, name, type, self, spacesUrl, equipmentUrl, equipmentDefinitionId, upstreamEquipmentUrl,
+      networkDevicesUrl, pointsUrl, hasUpstreamEquipment, upstreamEquipment. (5 more)'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/equipmentItem
+  - term: equipmentPoints
+    definition: The collection of points mapped to the equipment.
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/equipmentPoints
+  - term: equipmentTreeFolder
+    definition: 'Object declared by the contract with fields: self, id, name, itemReference, objectType, hasChildren, items.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/equipmentTreeFolder
+  - term: equipmentTreeEquipment
+    definition: 'Object declared by the contract with fields: self, id, name, itemReference, type, objectType, subsystemCategory, equipmentDefinitionId.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/equipmentTreeEquipment
+  - term: equipmentTree
+    definition: 'Object declared by the contract with fields: self, items.'
+    tags:
+    - Object
+    source: openapi/johnson-controls-metasys-openapi.yml#/components/schemas/equipmentTree

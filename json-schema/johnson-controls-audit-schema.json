@@ -1,0 +1,333 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/johnson-controls/main/json-schema/johnson-controls-audit-schema.json",
+  "title": "audit",
+  "x-generated": "2026-10-20",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/johnson-controls-metasys-openapi.yml#/components/schemas/audit",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "The identifier of the audit."
+    },
+    "itemReference": {
+      "type": "string",
+      "description": "The fully qualified reference of the object."
+    },
+    "objectName": {
+      "type": "string",
+      "description": "The name of the object."
+    },
+    "objectUrl": {
+      "type": "string",
+      "description": "A link to the object.",
+      "format": "uri"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "A more detailed description of the audited action."
+    },
+    "activityManagementStatus": {
+      "type": "string",
+      "description": "The activity management status of this item.\n\nThe values of this property are described as follows:\n\n- `pending` - Indicates the activity has yet to be acted upon.\n- `discarded` - Indicates that the activity has been acted upon or\n  deemed invalid by a user.\n",
+      "enum": [
+        "pending",
+        "discarded"
+      ]
+    },
+    "discardedTime": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The date-time representing when the user discarded this activity.\n",
+      "format": "date-time"
+    },
+    "creationTime": {
+      "type": "string",
+      "description": "The date-time when the system audited the action.\n",
+      "format": "date-time"
+    },
+    "originApplication": {
+      "type": "string",
+      "description": "The Metasys application or component that generated the audit.\n\n\nThe values for this property come from the `auditOriginAppEnumSet` enumeration.\nFind the definition of `auditOriginAppEnumSet` at the relative URL of `/schemas/enums/auditOriginAppEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+      "x-metasysType": "enum",
+      "x-metasysEnum": "auditOriginAppEnumSet"
+    },
+    "actionType": {
+      "type": "string",
+      "description": "The type of action audited by the system.\n\nThe values for this property come from the `auditActionTypeEnumSet` enumeration.\nFind the definition of `auditActionTypeEnumSet` at the relative URL of `/schemas/enums/auditActionTypeEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+      "x-metasysType": "enum",
+      "x-metasysEnum": "auditActionTypeEnumSet"
+    },
+    "parameters": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "$ref": "#/$defs/anyDataTypeSchemaRequired"
+      },
+      "description": "Parameters passed for audited commands or writes."
+    },
+    "user": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The username of the user that initiated the audited action."
+    },
+    "signature": {
+      "$ref": "#/$defs/signature"
+    },
+    "classLevel": {
+      "type": "string",
+      "description": "The level at which the system generated this audit.\n\nThe values for this property come from the `auditClassesEnumSet` enumeration.\nFind the definition of `auditClassesEnumSet` at the relative URL of `/schemas/enums/auditClassesEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+      "x-metasysType": "enum",
+      "x-metasysEnum": "auditClassesEnumSet"
+    },
+    "status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "The status of the audited action.\n\nThe values for this property come from the `statusEnumSet` enumeration.\nFind the definition of `statusEnumSet` at the relative URL of `/schemas/enums/statusEnumSet`.\n\n**See also:**\n* [Get enumeration](#operation/getEnumerationAsJsonSchema) for more information on retrieving an enumeration.",
+      "x-metasysType": "enum",
+      "x-metasysEnum": "statusEnumSet"
+    },
+    "errorString": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Error message for the audited action."
+    },
+    "preData": {
+      "description": "The prior value held before this audited command or edit changed it.\n",
+      "anyOf": [
+        {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        {
+          "$ref": "#/$defs/anyDataTypeSchemaRequired"
+        }
+      ]
+    },
+    "postData": {
+      "description": "The new value this audited command or edit changed to.",
+      "anyOf": [
+        {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        {
+          "$ref": "#/$defs/anyDataTypeSchemaRequired"
+        }
+      ]
+    },
+    "spaces": {
+      "type": "array",
+      "description": "The collection of spaces associated with the object on which the\nactivity occurred.\n",
+      "items": {
+        "$ref": "#/$defs/space"
+      }
+    },
+    "equipment": {
+      "type": "array",
+      "description": "The collection of equipment associated with the object on which the\nactivity occurred.\n",
+      "items": {
+        "$ref": "#/$defs/equipment"
+      }
+    },
+    "annotationsUrl": {
+      "type": "string",
+      "description": "A link to the annotations available on the audit.",
+      "format": "uri"
+    },
+    "annotationsCount": {
+      "type": "integer",
+      "description": "The total number of annotations associated with the audit."
+    },
+    "signedAnnotationsCount": {
+      "type": "integer",
+      "description": "The total number of MVE Annotations associated with the audit.\n"
+    },
+    "self": {
+      "type": "string",
+      "description": "A link to this audit.",
+      "format": "uri"
+    }
+  },
+  "required": [
+    "id",
+    "itemReference",
+    "objectName",
+    "objectUrl",
+    "description",
+    "activityManagementStatus",
+    "creationTime",
+    "originApplication",
+    "actionType",
+    "user",
+    "classLevel",
+    "status",
+    "errorString",
+    "preData",
+    "postData",
+    "annotationsUrl",
+    "annotationsCount",
+    "self"
+  ],
+  "$defs": {
+    "anyDataTypeSchemaRequired": {
+      "type": "object",
+      "description": "A variant data type that can hold a value of any of the built-in data types of the Metasys object model.",
+      "x-metasysType": "any",
+      "properties": {
+        "item": {},
+        "schema": {
+          "$ref": "#/$defs/dataTypeMetaSchema"
+        }
+      },
+      "required": [
+        "item",
+        "schema"
+      ]
+    },
+    "dataTypeMetaSchema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "metasysType": {
+          "type": "string",
+          "enum": [
+            "any",
+            "array",
+            "attributeReference",
+            "bitString",
+            "bacOid",
+            "bool",
+            "byte",
+            "choice",
+            "date",
+            "double",
+            "enum",
+            "enumMemberId",
+            "flags",
+            "float",
+            "list",
+            "listof",
+            "long",
+            "none",
+            "numeric",
+            "objectReference",
+            "octetString",
+            "oid",
+            "short",
+            "string",
+            "struct",
+            "time",
+            "ulong",
+            "ushort"
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "equipment": {
+      "type": "object",
+      "description": "An equipment instance associated with the object on which the activity\noccurred.\n",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The identifier of the equipment instance."
+        },
+        "itemReference": {
+          "type": "string",
+          "description": "The fully qualified reference of the equipment instance."
+        },
+        "equipmentName": {
+          "type": "string",
+          "description": "The name of the equipment instance."
+        },
+        "shortName": {
+          "type": "string",
+          "description": "The name of the mapped point."
+        },
+        "equipmentUrl": {
+          "type": "string",
+          "description": "The URL to the equipment instance.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "itemReference",
+        "equipmentName",
+        "shortName",
+        "equipmentUrl"
+      ]
+    },
+    "signature": {
+      "x-releases": {
+        "implementedAt": "15.0"
+      },
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "<span style=\"color: #92989b; font-size: 13px\">RELEASES</span>:<span style=\"color: #186faf;\"> <strong>15.0 and later</strong></span>\\\nThe signature associated with the activity.",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "description": "The full name of the person signing the annotation."
+        },
+        "reason": {
+          "type": "string",
+          "description": "The reason for the action requiring an annotation."
+        }
+      }
+    },
+    "space": {
+      "type": "object",
+      "description": "A space associated with the object on which the activity occurred.\n",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The identifier of the space."
+        },
+        "itemReference": {
+          "type": "string",
+          "description": "The fully qualified reference of the space."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the space."
+        },
+        "spaceUrl": {
+          "type": "string",
+          "description": "The URL to the space.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "itemReference",
+        "name",
+        "spaceUrl"
+      ]
+    }
+  }
+}
