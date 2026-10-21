@@ -17,6 +17,10 @@ checked:
 - https://monid.ai/tools/johnson-controls
 - https://n8n.io/integrations/johnson-controls/
 - https://zapier.com/apps/johnson-controls/integrations
+- https://www.onvif.org/about/member-list/
+- https://www.onvif.org/conformant-products/
+- https://www.onvif.org/member-tools/wp-admin/admin-ajax.php?action=get_companies_list
+- https://www.onvif.org/member-tools?action=product_search
 summary: null
 marketplace_apps: []
 edges:
@@ -230,4 +234,40 @@ edges:
     detected: '2026-10-19'
   detected_by: sweep-building-automation.py
   first_seen: '2026-10-15'
+- partner_name: ONVIF
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.onvif.org/conformant-products/
+  category: video surveillance interface conformance
+  contract_reference:
+    register: ONVIF conformant products (onvif.org/conformant-products)
+    standard: ONVIF
+    spec_file: null
+    role: onvif-conformant-member
+    registered_name: Johnson Controls, Inc.
+    register_id: onvif-company-347589
+    matched_domain: johnsoncontrols.com
+    matched_by: domain
+    detected_by: sweep-onvif-video-analytics.py
+    detected: '2026-10-21'
+    certified_products:
+    - product: ONVIF Profile S
+      lapsed: false
+      roles:
+      - client
+      newest_test: '2023-05-31'
+      products_listed: 1
+    products_sample:
+    - VideoEdge NVR
+    signal_note: certified_products = one entry per ONVIF profile the company holds a conformant product for, never
+      per product; roles, counts and test dates are context. The register carries no expiry and drops withdrawn
+      products, so lapsed is false
+    register_country: United States
+  detected_by: sweep-onvif-video-analytics.py
+  first_seen: '2026-10-21'
+  partner_tier: full
 templates: []
