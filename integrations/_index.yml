@@ -220,3 +220,120 @@
     register_country: United States
   status: not-a-workflow
   arazzo: null
+- slug: johnson-controls-wi-fi-alliance-certified-products
+  label: Wi-Fi Alliance certified products
+  partner_name: Wi-Fi Alliance certified products
+  category: Wi-Fi certification
+  type: register
+  channel: standard-directory
+  evidence: https://www.wi-fi.org/product-finder
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: Wi-Fi Alliance product finder (wi-fi.org/product-finder; prf.cert.wi-fi.org public JSON / CSV)
+    standard: Wi-Fi CERTIFIED
+    spec_file: null
+    role: wi-fi-certified-product
+    registered_name: Johnson Controls
+    register_id: WFA109045
+    matched_domain: null
+    matched_by: register-name
+    register_name_note: register-name 'johnsoncontrols' = johnson-controls; no wikidata P856
+    certified_products:
+    - product: Routers
+      lapsed: false
+      newest_certification: '2021-09-30'
+      generations:
+      - Wi-Fi 7
+      - Wi-Fi 6
+      - Wi-Fi 5 (ac)
+      - Wi-Fi 4 (n)
+    - product: Smart Home
+      lapsed: false
+      newest_certification: '2019-01-14'
+      generations:
+      - Wi-Fi 7
+      - Wi-Fi 6
+      - Wi-Fi 5 (ac)
+      - Wi-Fi 4 (n)
+    products_sample:
+    - LUX KONO SMART THERMOSTAT
+    - LUX PS2100 WiFi Thermostat
+    - Lux CS1 WiFi Thermostat
+    - WiFi 6, Easy Mesh WiFi router with Qolsys expansion card slot
+    signal_note: certified_products = one entry per Wi-Fi Alliance product category, never per product, variant
+      or CID; generations are context. Wi-Fi CERTIFIED does not expire and the finder marks nothing withdrawn, so
+      lapsed is false
+    detected_by: sweep-wireless-connectivity-certification.py
+    detected: '2026-10-22'
+    identity_source: register-name
+    identity_note: register gave only the name; exact normalised match to the repo's apis.yml name, one repo, Wikidata
+      P856 not contradicting (Kin 2026-10-20 decision 2)
+  status: not-a-workflow
+  arazzo: null
+- slug: johnson-controls-us-epa-energy-star
+  label: US EPA ENERGY STAR
+  partner_name: US EPA ENERGY STAR
+  category: ENERGY STAR product certification
+  type: register
+  channel: standard-directory
+  evidence: https://data.energystar.gov/d/8wj2-sec8
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: ENERGY STAR Model Index, all currently certified models (data.energystar.gov/resource/8wj2-sec8)
+    standard: ENERGY STAR (US EPA product specifications)
+    spec_file: null
+    role: energy-star-partner
+    registered_name: Johnson Controls, Inc.
+    register_id: https://data.energystar.gov/d/8wj2-sec8
+    matched_domain: johnsoncontrols.com
+    matched_by: domain
+    certified_products:
+    - product: Central Air Conditioners and Air Source Heat Pumps
+      product_type: Central Air Conditioners and Air Source Heat Pumps
+      lapsed: false
+      brands:
+      - CHAMPION HEATING AND COOLING
+      - COLEMAN BY JOHNSON CONTROLS
+      - Champion
+      - Coleman
+      - EVCON
+      - Fraser-Johnston
+      - GUARDIAN BY JOHNSON CONTROLS
+      - Guardian
+      - Hitachi
+      - Johnson Controls
+      first_certified: '2023-05-12'
+      connected: true
+    - product: Connected Thermostats
+      product_type: Connected Thermostats
+      lapsed: false
+      brands:
+      - LUX
+      first_certified: '2018-04-23'
+    - product: Smart Thermostats
+      product_type: Smart Thermostats
+      lapsed: false
+      connected: true
+      source_note: certified model in the category dataset; not (yet) in the Model Index
+      connected_protocols:
+      - Wi-Fi
+      demand_response:
+      - 'The SHC350 thermostat supports a demand response command from the utility company with following features.
+
+        - The utility can target an individual SHC device wit'
+    connected_product_types:
+    - Central Air Conditioners and Air Source Heat Pumps
+    - Smart Thermostats
+    signal_note: 'certified_products = ONE entry per ENERGY STAR product category with a currently certified model
+      (the Model Index lists current certifications only, so lapsed is False; delisted models drop out); connected:
+      true where the category''s dataset flags connected / network capability for this partner''s models (Smart
+      Thermostats and Connected lighting are connected by definition). Brands are context; model counts are never
+      counted.'
+    detected_by: sweep-energy-star-certified-products.py
+    detected: '2026-10-22'
+    identity: wikidata Q667865 'Johnson Controls' P856 http://www.johnsoncontrols.com/
+    identity_source: wikidata P856 (labelled provenance step; Kin 2026-10-15 decision 1)
+  status: not-a-workflow
+  arazzo: null
