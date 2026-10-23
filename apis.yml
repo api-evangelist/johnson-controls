@@ -60,6 +60,9 @@ maintainers:
   email: kin@apievangelist.com
 
 common:
+- type: CapabilityMap
+  url: capabilities/johnson-controls-capability-edges.yml
+  name: Johnson Controls Business Capability Map
 - type: AgenticAccess
   url: agentic-access/johnson-controls-agentic-access.yml
 - type: Spectral
