@@ -1,4 +1,4 @@
-# Johnson Controls (johnson-controls)
+# Johnson Controls
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,36 +64,150 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Johnson Controls is a global diversified technology and multi-industrial leader serving customers in over 150 countries, providing products, services, and solutions for buildings (HVAC, fire, security, building automation), energy storage, and connected building platforms (Metasys, OpenBlue).
+Johnson Controls is a global diversified technology and multi-industrial leader serving customers in over 150 countries, providing products, services, and solutions for buildings (HVAC, fire, security, building automation), energy storage, and connected building platforms (Metasys, OpenBlue). Its developer surface is the Metasys REST API, served by each customer's own Metasys site director and documented publicly (with a versioned OpenAPI reference) at jci-metasys.github.io/api-landing.
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/johnson-controls/refs/heads/main/apis.yml)
+**Areas:** Building Automation · Energy Storage · Fire & Security · HVAC · Smart Buildings · Fortune 100
 
-## Scope
+## Johnson Controls on APIs.io
 
-- **Type:** Index
-- **Position:** Consumer
-- **Access:** 3rd-Party
+Everything profiled for Johnson Controls is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/johnson-controls/](https://apis.io/providers/johnson-controls/)** — or go straight to one of the APIs or properties below.
 
-## Tags:
+### APIs (11)
 
- - Building Automation, Energy Storage, Fire & Security, HVAC, Smart Buildings
+- [Johnson Controls Activities API](https://apis.io/apis/johnson-controls/johnson-controls-activities-api/) — This section describes the operations you can perform on activities. Activities are a superset of all alarms and audits in a Metasys system. Use activities…
+- [Johnson Controls Alarms API](https://apis.io/apis/johnson-controls/johnson-controls-alarms-api/) — Alarms alert users to potential problems identified by a Metasys system, for example high zone temperatures. Use alarms operations to get object alarms,…
+- [Johnson Controls Audits API](https://apis.io/apis/johnson-controls/johnson-controls-audits-api/) — How to retrieve, discard, and annotate audits. ### Relationships Audits have relationships to other resources in the system. Find information about the most…
+- [Johnson Controls Authentication API](https://apis.io/apis/johnson-controls/johnson-controls-authentication-api/) — Operations to get and refresh an access token.
+- [Johnson Controls Equipment API](https://apis.io/apis/johnson-controls/johnson-controls-equipment-api/) — This section describes the operations you can perform on equipment. Equipment is a broad term for anything that makes a building run, including boilers,…
+- [Johnson Controls network devices API](https://apis.io/apis/johnson-controls/johnson-controls-network-devices-api/) — This section describes the operations you can perform on network devices. Network devices are physical devices such as coordinators and routers that are…
+- [Johnson Controls Objects API](https://apis.io/apis/johnson-controls/johnson-controls-objects-api/) — This section describes the operations you can perform on objects. Objects are self-contained functional items in the Metasys system, for a full definition…
+- [Johnson Controls Schemas API](https://apis.io/apis/johnson-controls/johnson-controls-schemas-api/) — A collection of JSON schemas for describing enumerations and object types.
+- [Johnson Controls Spaces API](https://apis.io/apis/johnson-controls/johnson-controls-spaces-api/) — Operations on space-related resources.
+- [Johnson Controls Streaming API](https://apis.io/apis/johnson-controls/johnson-controls-streaming-api/) — Your Metasys system works continuously: sensors report current conditions, algorithms make adjustments, and alarms alert operators to potential issues.…
+- [Johnson Controls time series API](https://apis.io/apis/johnson-controls/johnson-controls-time-series-api/) — This section describes the operations you can perform on time series sample data. ### Origin of Time Series data The Metasys system has two locations from…
 
-## Timestamps
+### Published properties
 
-- **Created:** 2026-03-24
-- **Modified:** 2026-04-28
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-No public self-service developer portal or OpenAPI specification is currently documented for Johnson Controls. Partner and customer integrations are typically delivered through the OpenBlue and Metasys product lines. Check back for updates.
+Which operations an agent can call, which act, and which need a human in the loop.
 
-## Common Properties
+- [Johnson Controls Agentic Access](https://apis.io/agentic-access/johnson-controls/johnson-controls-agentic-access/)
+
+#### JSON Schema (6)
+
+The data models the API reads and writes.
+
+- [activities](https://apis.io/schemas/johnson-controls/johnson-controls-activities/)
+- [alarm](https://apis.io/schemas/johnson-controls/johnson-controls-alarm/)
+- [audit](https://apis.io/schemas/johnson-controls/johnson-controls-audit/)
+- [Equipment](https://apis.io/schemas/johnson-controls/johnson-controls-equipment-item/)
+- [equipmentPoints](https://apis.io/schemas/johnson-controls/johnson-controls-equipment-points/)
+- [networkDevice](https://apis.io/schemas/johnson-controls/johnson-controls-network-device/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Johnson Controls Context](https://apis.io/jsonld/johnson-controls/johnson-controls-context/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Johnson Controls Metasys Overlay](https://apis.io/overlays/johnson-controls/johnson-controls-metasys-overlay/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Johnson Controls API Rules](https://apis.io/rules/johnson-controls/johnson-controls-rules/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Johnson Controls Authentication](https://apis.io/security/johnson-controls/johnson-controls-authentication/)
+- [Johnson Controls Domain Security](https://apis.io/security/johnson-controls/johnson-controls-domain-security/)
+- [Johnson Controls Trust Center](https://apis.io/security/johnson-controls/johnson-controls-trust-center/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Johnson Controls Plans Pricing](https://apis.io/plans/johnson-controls/johnson-controls-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Johnson Controls Rate Limits](https://apis.io/rate-limits/johnson-controls/johnson-controls-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.johnsoncontrols.com/)
-- [OpenBlue](https://www.johnsoncontrols.com/openblue)
+- [Documentation](https://jci-metasys.github.io/api-landing/)
+- [Getting started](https://www.johnsoncontrols.com/services-and-support/fire-maintenance-and-support/connected-sprinkler-service/onboarding)
+- [Support](https://www.johnsoncontrols.com/services-and-support)
+- [Security](https://www.johnsoncontrols.com/security)
+- [Compliance](https://trust.johnsoncontrols.com/)
+- [Terms of service](https://www.johnsoncontrols.com/legal/terms)
+- [Privacy policy](https://www.johnsoncontrols.com/trust-center/privacy)
+- [GitHub](https://github.com/johnsoncontrols)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
+**Kin Score 57.9** — strong · rubric 0.24.0 · scored 2026-10-20
 
-**Email:** kin@apievangelist.com
+| Facet | Score |
+|---|---|
+| Discoverability | 67.9 |
+| Contract quality | 57.6 |
+| Contract governance | 79.1 |
+| Operational transparency | 28.9 |
+| Developer ergonomics | 58.8 |
+| Access clarity | 50.0 |
+
+**Agent readiness 41.6** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | unknown |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | unknown |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 24.6** — Energy & Utilities
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/johnson-controls/](https://apis.io/providers/johnson-controls/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Johnson Controls: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/johnson-controls/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
