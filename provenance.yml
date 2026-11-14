@@ -5,10 +5,19 @@ artifacts:
   agentic-access/johnson-controls-agentic-access.yml:
     method: generated
     evidence: declared in the artifact
+  ai-preferences/johnson-controls-ai-preferences.yml:
+    method: harvested
+    evidence: declared in the artifact
   authentication/johnson-controls-authentication.yml:
     method: derived
     evidence: declared in the artifact
   capabilities/johnson-controls-capability-edges.yml:
+    method: unknown
+    evidence: no authorship recorded
+  certification/observations-2026-11-11.jsonl:
+    method: unknown
+    evidence: no authorship recorded
+  certification/status.yml:
     method: unknown
     evidence: no authorship recorded
   changelog/johnson-controls-changelog.yml:
@@ -23,8 +32,14 @@ artifacts:
   conventions/johnson-controls-conventions.yml:
     method: searched
     evidence: declared in the artifact
+  data-license/johnson-controls-data-license.yml:
+    method: harvested
+    evidence: declared in the artifact
   data-model/johnson-controls-data-model.yml:
     method: derived
+    evidence: declared in the artifact
+  eligibility/johnson-controls-eligibility.yml:
+    method: harvested
     evidence: declared in the artifact
   errors/johnson-controls-problem-types.yml:
     method: derived
@@ -36,6 +51,9 @@ artifacts:
     method: unknown
     evidence: no authorship recorded
   heartbeat/2026-11-06.yml:
+    method: unknown
+    evidence: no authorship recorded
+  heartbeat/2026-11-13.yml:
     method: unknown
     evidence: no authorship recorded
   hosts/johnson-controls-hosts.yml:
@@ -59,19 +77,67 @@ artifacts:
   json-schema/johnson-controls-audit-schema.json:
     method: unknown
     evidence: no authorship recorded
+  json-schema/johnson-controls-condition-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-effective-permissions-schema.json:
+    method: unknown
+    evidence: no authorship recorded
   json-schema/johnson-controls-equipment-item-schema.json:
     method: unknown
     evidence: no authorship recorded
   json-schema/johnson-controls-equipment-points-schema.json:
     method: unknown
     evidence: no authorship recorded
+  json-schema/johnson-controls-get-objects-response-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-login-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
   json-schema/johnson-controls-network-device-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-objects-attribute-samples-response-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-points-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-post-objects-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-repo-attribute-samples-response-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-repo-trended-object-response-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-schemas-space-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-spaces-in-tree-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-spaces-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-standard-error-message-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-time-series-streaming-subscription-request-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-trended-attributes-response-schema.json:
+    method: unknown
+    evidence: no authorship recorded
+  json-schema/johnson-controls-views-schema.json:
     method: unknown
     evidence: no authorship recorded
   kin/checks-2026-10-23T222754.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
-  kin/checks-2026-11-02T082323.yml:
+  kin/checks-2026-11-06T143934.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-23T000603.yml:
@@ -135,6 +201,9 @@ artifacts:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-11-02T082323.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-11-06T143934.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   lifecycle/johnson-controls-lifecycle.yml:
@@ -214,6 +283,9 @@ artifacts:
   press/2026-05-25-05-scaling-ai-means-delivering-data-centers-on-time.md:
     method: unknown
     evidence: no authorship recorded
+  privacy/johnson-controls-privacy-policy.yml:
+    method: harvested
+    evidence: declared in the artifact
   rate-limits/johnson-controls-rate-limits.yml:
     method: unknown
     evidence: no authorship recorded
@@ -249,6 +321,9 @@ artifacts:
     evidence: declared in the artifact
   skills/johnson-controls-read-object-attributes.md:
     method: generated
+    evidence: declared in the artifact
+  terms/johnson-controls-terms-of-service.yml:
+    method: harvested
     evidence: declared in the artifact
   vendors/johnson-controls-vendors.yml:
     method: unknown
